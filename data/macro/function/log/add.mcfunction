@@ -1,0 +1,13 @@
+# ============================================
+# macro:log/add
+# ============================================
+# INPUT: macro:input { level:"INFO|WARN|ERROR|DEBUG", message:"...", color:"green|yellow|red|gray" }
+# ============================================
+
+execute unless data storage macro:engine log_display run data modify storage macro:engine log_display set value []
+
+$data modify storage macro:engine log_display append value {text:"[$(level)] $(message)",color:"$(color)"}
+
+scoreboard players add $log_count macro.tmp 1
+execute if score $log_count macro.tmp matches 31.. run data remove storage macro:engine log_display[0]
+execute if score $log_count macro.tmp matches 31.. run scoreboard players remove $log_count macro.tmp 1

@@ -6,6 +6,7 @@
 # - Queue işlenir
 # - '/trigger macro_menu' çalışır
 # - '/trigger macro_run' çalışır
+# - '/trigger macro_action' → trigger/bind sistemi ile dispatch
 # - Auto-HUD: macro:engine pb_obj ayarlıysa progress_bar_self otomatik çalışır
 #   Aktif et  : data modify storage macro:engine pb_obj set value "health"
 #               data modify storage macro:engine pb_max set value 20
@@ -30,6 +31,12 @@ execute as @a[scores={macro_run=1..}] run function #macro:run
 scoreboard players set @a[scores={macro_run=1..}] macro_run 0
 scoreboard players enable @a[scores={macro_run=-1..}] macro_run
 
+# ── Gelişmiş trigger dispatch (v1.0.3-pre) ───────────────────────────
+# macro_action > 0 olan oyuncu için trigger/bind listesi taranır.
+# Eşleşen tüm bind'ların fonksiyonları @s olarak çalıştırılır.
+# macro:input'e kesinlikle dokunulmaz (tick context güvenliği).
+execute as @a[scores={macro_action=1..}] run function macro:trigger/internal/dispatch
+
 # ── Auto-HUD: her 4 tick'te bir, pb_obj varsa progress_bar_self çalıştır ──
 # $epoch % 4 = 0 olan tick'lerde tetiklenir — ayrı sayaç yok, sıfırlama hatası yok
 execute if data storage macro:engine pb_obj run scoreboard players operation $pb_mod macro.tmp = $epoch macro.time
@@ -47,3 +54,8 @@ execute as @a[scores={macro.dialog_load=0},tag=macro.dialog_closed] at @s run fu
 # BUG FIX v1.0.1: Doğrudan "/scoreboard players set @s macro.dialog_load N" kullanımı:
 # Tag hiç eklenmeden sadece skor ayarlandıysa da dialog açılsın.
 execute as @a[scores={macro.dialog_load=0},tag=!macro.dialog_closed,tag=!macro.dialog_opened] at @s run function macro:dialog/open
+
+# ── Trigger Etkinleştir ──
+scoreboard players enable @a[tag=macro.admin] macro_menu
+scoreboard players enable @a[tag=macro.admin] macro_run
+scoreboard players enable @a[tag=macro.admin] macro_action

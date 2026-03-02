@@ -1,22 +1,32 @@
 # ============================================
-# macro:load — Advanced Macro Engine v1.0.0
+# macro:load — Advanced Macro Engine v1.0.3-pre
 # ============================================
 # /reload veya sunucu başlangıcında otomatik çalışır.
 # Scoreboard, storage ve schedule başlatır.
 #
-# v1.0.0 değişiklikleri:
-#   + flag/ ve state/ modülleri için storage başlatma
-#   + math/random tohum iyileştirmesi (BUG FIX)
-#   + event/unregister_one eklendi
-#   + event/has, event/count, event/clear_context eklendi
-#   + event/fire_queued eklendi
-#   + lib/queue_clear, lib/schedule_list, lib/schedule_reset eklendi
-#   + math/map, math/wrap, math/log2, math/mod eklendi
-#   + cmd/msg, cmd/msg_raw, cmd/clone, cmd/clone_masked eklendi
-#   + cmd/ride, cmd/ride_dismount, cmd/forceload_add/remove eklendi
-#   + cmd/trigger_set, cmd/spectate, cmd/spectate_stop eklendi
-#   + cmd/place_feature, cmd/place_structure eklendi
+# v1.0.3-pre değişiklikleri:
+#   + log/ modülü: dialog tabanlı log sistemi (log/add, info, warn, error, debug, show, clear)
+#   + lib/tick_guard: entity başına tick-safe guard (çift tetiklenmeyi engeller)
+#   + lib/tick_guard_clear: guard manuel sıfırlama
+#   + trigger/ modülü: macro_action trigger + value→function bind sistemi
+#     (trigger/bind, unbind, unbind_all, enable, disable, list + iç dispatch)
+#   + macro.tick_guard scoreboard objective eklendi
+#   + macro_action trigger objective eklendi
+#   + macro:engine log_display ve trigger_binds storage başlatma eklendi
 # ============================================
+
+# ─── Log storage başlat (önce, log/add çağrılmadan) ─────
+execute unless data storage macro:engine log_display run data modify storage macro:engine log_display set value []
+scoreboard players set $log_count macro.tmp 0
+
+# Başlangıç logu
+data modify storage macro:input level set value "A.M.E."
+data modify storage macro:input message set value "Başlatılıyor..."
+data modify storage macro:input color set value "aqua"
+function macro:log/add with storage macro:input {}
+
+execute if data storage macro:engine global{loaded:1b} run data modify storage macro:input message set value "Zaten yüklü."
+execute if data storage macro:engine global{loaded:1b} run function macro:log/warn with storage macro:input {}
 
 execute if data storage macro:engine global{loaded:1b} run return 0
 
@@ -25,7 +35,10 @@ scoreboard objectives add macro.tmp dummy
 scoreboard objectives add macro.time dummy
 scoreboard objectives add macro_menu trigger
 scoreboard objectives add macro_run trigger
+scoreboard objectives add macro_action trigger
 scoreboard objectives add macro.dialog_load dummy
+# Tick-safe guard: her entity'nin son işlendiği epoch değerini tutar
+scoreboard objectives add macro.tick_guard dummy
 
 # ─── Sayaçları başlat ────────────────────────────────────
 # Auto-HUD modulo sabiti
@@ -42,7 +55,7 @@ scoreboard players set $tick macro.tmp 0
 scoreboard players set $pq_depth macro.tmp 0
 
 # ─── Global storage başlat ───────────────────────────────
-data modify storage macro:engine global set value {version:"1.0.0"}
+data modify storage macro:engine global set value {version:"1.0.3-pre2"}
 
 # ─── Throttle durumunu başlat (yoksa) ────────────────────
 execute unless data storage macro:engine throttle run data modify storage macro:engine throttle set value {}
@@ -50,6 +63,13 @@ execute unless data storage macro:engine throttle run data modify storage macro:
 # ─── Flag/State storage başlat (yoksa) ───────────────────
 execute unless data storage macro:engine flags run data modify storage macro:engine flags set value {}
 execute unless data storage macro:engine states run data modify storage macro:engine states set value {}
+
+# ─── Log storage başlat (yoksa) ──────────────────────────
+execute unless data storage macro:engine log_display run data modify storage macro:engine log_display set value []
+scoreboard players set $log_count macro.tmp 0
+
+# ─── Trigger bind listesini başlat (yoksa) ───────────────
+execute unless data storage macro:engine trigger_binds run data modify storage macro:engine trigger_binds set value []
 
 # ─── sync_tick schedule'ı kur (her 20 tick = 1sn) ───────
 data modify storage macro:input func set value "macro:lib/sync_tick"
@@ -63,12 +83,13 @@ data remove storage macro:input key
 # Trigger'lar
 scoreboard players enable @a[tag=macro.admin] macro_menu
 scoreboard players enable @a[tag=macro.admin] macro_run
+scoreboard players enable @a[tag=macro.admin] macro_action
 
 # Storage ayarla
 data modify storage macro:engine global.loaded set value 1b
 
 # ─── Yükleme mesajı ──────────────────────────────────────
-tellraw @a[tag=macro.debug] {"text":"[Macro Engine v1.0.0] Yüklendi.","color":"green"}
+tellraw @a[tag=macro.debug] {"text":"[Macro Engine v1.0.3-pre] Yüklendi.","color":"green"}
 # BUG FIX v3.5: Makro fonksiyonu "function <name> {nbt}" sözdizimi ile
 # çağrılamaz — "with storage" kullanılmak zorundadır.
 # Ayrıca pitch:0 (duyulamaz ses) → pitch:1 (normal perde) düzeltildi.
@@ -79,3 +100,15 @@ function macro:cmd/sound_all with storage macro:input {}
 data remove storage macro:input sound
 data remove storage macro:input volume
 data remove storage macro:input pitch
+
+# Yüklendi ise logla
+# ─── Log storage başlat (önce, log/add çağrılmadan) ─────
+scoreboard players set $log_count macro.tmp 0
+
+# Final log
+data modify storage macro:input level set value "Advanced Macro Engine v1.0.3-pre2"
+data modify storage macro:input message set value "Yüklendi."
+data modify storage macro:input color set value "green"
+function macro:log/add with storage macro:input {}
+
+execute if data storage macro:engine global{loaded:1b} run return 1

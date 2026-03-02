@@ -85,6 +85,8 @@ data modify storage macro:engine _input_stack[-1].structure set from storage mac
 data modify storage macro:engine _input_stack[-1].loot_table set from storage macro:input loot_table
 data modify storage macro:engine _input_stack[-1].reason set from storage macro:input reason
 data modify storage macro:engine _input_stack[-1].cmd set from storage macro:input cmd
+# ─── Log alanları ─────────────────────────────────────────
+data modify storage macro:engine _input_stack[-1].level set from storage macro:input level
 # ─── Spreadplayers ───────────────────────────────────────
 data modify storage macro:engine _input_stack[-1].cx set from storage macro:input cx
 data modify storage macro:engine _input_stack[-1].cz set from storage macro:input cz

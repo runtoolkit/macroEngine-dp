@@ -41,6 +41,15 @@ data remove storage macro:engine _felist_input
 data remove storage macro:engine _felist_state
 data remove storage macro:engine _felist_current
 data remove storage macro:engine _felist_i
+# Log sistemi
+data remove storage macro:engine log_display
+scoreboard players reset $log_count macro.tmp
+# Trigger sistemi
+data remove storage macro:engine trigger_binds
+data remove storage macro:engine _tc_binds
+data remove storage macro:engine _tc_current
+data remove storage macro:engine _tc_unbind
+data remove storage macro:engine _tc_uval
 # Config korunur — yeniden yükleme sonrası kaybolmasın
 # Genel global bayrağı kaldır
 data remove storage macro:engine global
@@ -51,6 +60,8 @@ scoreboard objectives remove macro.tmp
 scoreboard objectives remove macro.time
 scoreboard objectives remove macro_menu
 scoreboard objectives remove macro_run
+scoreboard objectives remove macro_action
+scoreboard objectives remove macro.tick_guard
 # BUG FIX v1.0.1: macro.dialog_load objective silinmiyordu.
 scoreboard objectives remove macro.dialog_load
 

@@ -5,7 +5,7 @@
 # Minecraft 1.21.11+ uyumlu
 #
 # KULLANIM:
-# data modify storage macro:input player set value "IronCrest"
+# data modify storage macro:input player set value "<Oyuncu Adı>"
 # data modify storage macro:input current set value 15
 # data modify storage macro:input max set value 20
 # data modify storage macro:input label set value "Can"

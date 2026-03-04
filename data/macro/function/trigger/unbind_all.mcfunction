@@ -1,7 +1,7 @@
 # ============================================
 # macro:trigger/unbind_all
 # ============================================
-# Tüm trigger bind'larını temizler.
+# Clears all trigger binds.
 # INPUT: —
 # ============================================
 

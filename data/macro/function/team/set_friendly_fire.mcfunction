@@ -1,8 +1,8 @@
 # ============================================
 # macro:team/set_friendly_fire
 # ============================================
-# Takım içi hasar (friendly fire) ayarı.
-# INPUT: macro:input { team:"<isim>", value:"true" | "false" }
+# Takim ici hasar (friendly fire) ayari.
+# INPUT: macro:input { team:"<name>", value:"true" | "false" }
 # OUTPUT: —
 # ============================================
 

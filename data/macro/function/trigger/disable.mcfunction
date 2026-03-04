@@ -1,12 +1,12 @@
 # ============================================
 # macro:trigger/disable
 # ============================================
-# Bir oyuncunun macro_action trigger'ını devre dışı bırakır.
-# Skor sıfırlanır ve yeniden etkinleştirilmez.
+# Disables the macro_action trigger for a specific player.
+# Score is reset and not re-enabled.
 #
-# INPUT: macro:input { player:"<oyuncu_adı>" }
+# INPUT: macro:input { player:"<player_adi>" }
 #
-# ÖRNEK:
+# EXAMPLE:
 # data modify storage macro:input player set value "Steve"
 # function macro:trigger/disable with storage macro:input {}
 # ============================================

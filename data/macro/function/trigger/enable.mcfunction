@@ -1,16 +1,16 @@
 # ============================================
 # macro:trigger/enable
 # ============================================
-# Belirli bir oyuncuya macro_action trigger'ını açar.
-# Oyuncu /trigger macro_action set <N> yazabilir hâle gelir.
+# Enables the macro_action trigger for a specific player.
+# Player becomes able to type /trigger macro_action set <N>.
 #
-# INPUT: macro:input { player:"<oyuncu_adı>" }
+# INPUT: macro:input { player:"<player_adi>" }
 #
-# ÖRNEK:
+# EXAMPLE:
 # data modify storage macro:input player set value "Steve"
 # function macro:trigger/enable with storage macro:input {}
 #
-# Tüm oyunculara açmak için:
+# To enable for all players:
 # scoreboard players enable @a macro_action
 # ============================================
 

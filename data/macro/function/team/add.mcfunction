@@ -1,8 +1,8 @@
 # ============================================
 # macro:team/add
 # ============================================
-# Oyuncuyu takıma ekler.
-# INPUT: macro:input { team:"<isim>", player:"<oyuncu>" }
+# Playeryu takima addr.
+# INPUT: macro:input { team:"<name>", player:"<player>" }
 # OUTPUT: —
 # ============================================
 

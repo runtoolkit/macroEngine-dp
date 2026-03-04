@@ -1,11 +1,11 @@
 # ============================================
 # macro:team/delete
 # ============================================
-# Takımı oyundan ve storage'dan siler.
-# INPUT: macro:input { team:"<isim>" }
+# Removes the team from the game and from storage.
+# INPUT: macro:input { team:"<name>" }
 # OUTPUT: —
 # ============================================
 
 $team remove $(team)
 $data remove storage macro:engine teams.$(team)
-$tellraw @a[tag=macro.debug] [{"text":"[Team] Silindi: ","color":"red"},{"text":"$(team)","color":"white"}]
+$tellraw @a[tag=macro.debug] [{"text":"[Team] Deleted: ","color":"red"},{"text":"$(team)","color":"white"}]

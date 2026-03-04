@@ -1,9 +1,9 @@
 # ============================================
 # macro:team/has
 # ============================================
-# Oyuncu belirtilen takımda mı kontrol eder.
-# INPUT: macro:input { team:"<isim>", player:"<oyuncu>" }
-# OUTPUT: macro:output { result: 1b (evet) | 0b (hayır) }
+# Player belirtvian takimda mi check eder.
+# INPUT: macro:input { team:"<name>", player:"<player>" }
+# OUTPUT: macro:output { result: 1b (yes) | 0b (no) }
 # ============================================
 
 data modify storage macro:output result set value 0b

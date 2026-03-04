@@ -1,13 +1,13 @@
 # ============================================
 # macro:trigger/list
 # ============================================
-# Kayıtlı trigger bind'larını @s'e gösterir.
-# macro.debug tag'i şart değildir; herhangi bir yönetici çağırabilir.
-# 1.21.6+: dialog ile; önceki sürümler: tellraw ile.
+# Shows registered trigger binds to @s.
+# macro.debug tag is not required; any administrator can call it.
+# 1.21.6+: via dialog; earlier versions: via tellraw.
 #
-# ÇAĞIRIM:
-# execute as <oyuncu> run function macro:trigger/list
+# USAGE:
+# execute as <player> run function macro:trigger/list
 # ============================================
 
-execute unless data storage macro:engine trigger_binds[0] run tellraw @s {"text":"[Trigger] Kayıtlı bind yok.","color":"gray"}
-execute if data storage macro:engine trigger_binds[0] run tellraw @s [{"text":"[Trigger] Bind listesi:\n","color":"gold","bold":true},{"nbt":"trigger_binds","storage":"macro:engine","interpret":false}]
+execute unless data storage macro:engine trigger_binds[0] run tellraw @s {"text":"[Trigger] No binds registered.","color":"gray"}
+execute if data storage macro:engine trigger_binds[0] run tellraw @s [{"text":"[Trigger] Bind list:\n","color":"gold","bold":true},{"nbt":"trigger_binds","storage":"macro:engine","interpret":false}]

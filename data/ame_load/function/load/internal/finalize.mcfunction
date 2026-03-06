@@ -31,4 +31,5 @@ data remove storage macro:input message
 data remove storage macro:input level
 data remove storage macro:input color
 
-forceload add -30000000 1600
+setblock -30000000 0 1601 minecraft:redstone_block
+setblock -30000000 0 1601

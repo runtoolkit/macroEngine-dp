@@ -1,7 +1,6 @@
 name: Genel
 description: Yukarıdaki kategorilere uymayan her şey için
-title: ""
-labels: []
+title: "[Genel] "
 
 body:
   - type: textarea

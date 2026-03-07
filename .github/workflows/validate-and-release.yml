@@ -3,6 +3,8 @@ name: Validate & Release
 # ╔══════════════════════════════════════════════════════════════╗
 # ║          TAMAMEN MANUEL — otomatik tetikleyici YOK          ║
 # ║   Actions → "Run workflow" → istediğin seçenekleri ayarla   ║
+# ║   Job sırası: config → json → pack → functions →            ║
+# ║               structure → version → release                 ║
 # ╚══════════════════════════════════════════════════════════════╝
 on:
   workflow_dispatch:
@@ -27,7 +29,7 @@ on:
           - ubuntu-24.04
 
       fail_fast:
-        description: '💥 fail-fast — bir job başarısız olunca diğerleri iptal edilsin mi?'
+        description: '💥 fail-fast — bir job başarısız olunca sonrakiler iptal edilsin mi?'
         required: true
         type: boolean
         default: false
@@ -46,7 +48,7 @@ on:
         default: 'pack.mcmeta pack.png'
 
       required_dirs:
-        description: '📁 Zorunlu dizinler (boşlukla ayrılmış). Örn: data _pre_1_21_4'
+        description: '📁 Zorunlu dizinler (boşlukla ayrılmış).'
         required: true
         default: 'data _pre_1_21_4 ./-1_21_4 1_21_6'
 
@@ -97,7 +99,7 @@ on:
       # │               VALIDATION DAVRANIŞI                  │
       # └─────────────────────────────────────────────────────┘
       empty_mcfunction_action:
-        description: 'Boş .mcfunction davranışı: warn = uyarı ver devam et | fail = durdur | skip = kontrol etme'
+        description: 'Boş .mcfunction davranışı: warn | fail | skip'
         required: true
         type: choice
         default: 'warn'
@@ -107,13 +109,13 @@ on:
           - skip
 
       strict_function_refs:
-        description: '🔒 Strict function ref — eksik referans WARN değil FAIL sayılsın'
+        description: '🔒 Strict function ref — eksik referans FAIL sayılsın'
         required: true
         type: boolean
         default: true
 
       strict_version_match:
-        description: '🔒 Strict version — pack.mcmeta versiyonu eşleşmezse FAIL (default: WARN)'
+        description: '🔒 Strict version — versiyon uyuşmazlığı FAIL (default: WARN)'
         required: true
         type: boolean
         default: false
@@ -134,17 +136,17 @@ on:
         default: false
 
       version:
-        description: '🏷️ Release version (örn: v1.2.3) — Release oluşturmak için zorunlu'
+        description: '🏷️ Release version (örn: v1.2.3) — Release için zorunlu'
         required: false
         default: ''
 
       zip_name_pattern:
-        description: 'ZIP dosya adı şablonu. {name} = macroEngine, {version} = versiyon. Örn: {name}-{version}'
+        description: 'ZIP adı şablonu. {name} = macroEngine, {version} = versiyon. Örn: {name}-{version}'
         required: true
         default: '{name}-{version}'
 
       zip_extra_paths:
-        description: 'ZIP ekstra yollar (boşlukla ayrılmış). scan_dirs + required_files zaten dahildir.'
+        description: 'ZIP ekstra yollar (boşlukla ayrılmış). scan_dirs + required_files zaten dahil.'
         required: false
         default: ''
 
@@ -172,21 +174,21 @@ on:
         default: true
 
 
-# ──────────────────────────────────────────────────────────────
-# CONCURRENCY — aynı anda birden fazla çalışmasını engelle
-# ──────────────────────────────────────────────────────────────
 concurrency:
   group: validate-release-${{ github.run_id }}
   cancel-in-progress: false
 
 
 # ──────────────────────────────────────────────────────────────
-# JOBS
+# JOBS — sıralı zincir, tek seferde 1 runner
+# config-summary → validate-json → validate-pack
+#   → validate-functions → validate-structure
+#   → validate-version → release
 # ──────────────────────────────────────────────────────────────
 jobs:
 
   # ─────────────────────────────────────────────
-  # 0. Konfigürasyon özeti — her zaman çalışır
+  # 0. Config Summary
   # ─────────────────────────────────────────────
   config-summary:
     name: "⚙️ Config Summary"
@@ -235,7 +237,7 @@ jobs:
     name: "🔵 Validate JSON"
     runs-on: ${{ inputs.runner }}
     needs: config-summary
-    if: ${{ inputs.run_validate_json == true }}
+    if: inputs.run_validate_json == true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -255,7 +257,6 @@ jobs:
               fi
             done < <(find "$d" -name "*.json" 2>/dev/null)
           done
-          # pack.mcmeta ayrıca kontrol et
           if jq . pack.mcmeta > /dev/null 2>&1; then
             echo "OK: pack.mcmeta"
           else
@@ -271,8 +272,12 @@ jobs:
   validate-pack:
     name: "🔵 Validate pack.mcmeta"
     runs-on: ${{ inputs.runner }}
-    needs: config-summary
-    if: ${{ inputs.run_validate_pack == true }}
+    needs: validate-json
+    if: |
+      always() &&
+      inputs.run_validate_pack == true &&
+      (needs.validate-json.result == 'success' || needs.validate-json.result == 'skipped') &&
+      (inputs.fail_fast == false || needs.validate-json.result != 'failure')
     steps:
       - uses: actions/checkout@v4
         with:
@@ -304,8 +309,12 @@ jobs:
   validate-functions:
     name: "🔵 Validate Function References"
     runs-on: ${{ inputs.runner }}
-    needs: config-summary
-    if: ${{ inputs.run_validate_functions == true }}
+    needs: validate-pack
+    if: |
+      always() &&
+      inputs.run_validate_functions == true &&
+      (needs.validate-pack.result == 'success' || needs.validate-pack.result == 'skipped') &&
+      (inputs.fail_fast == false || needs.validate-pack.result != 'failure')
     steps:
       - uses: actions/checkout@v4
         with:
@@ -342,7 +351,6 @@ jobs:
               find "$d" -path "*/tags/function/*.json" 2>/dev/null
             done
           )
-
           [ $FAILED -ne 0 ] && { echo "❌ FAILED"; exit 1; } || echo "✅ PASSED"
 
       - name: Check for empty .mcfunction files
@@ -373,8 +381,12 @@ jobs:
   validate-structure:
     name: "🔵 Validate File Structure"
     runs-on: ${{ inputs.runner }}
-    needs: config-summary
-    if: ${{ inputs.run_validate_structure == true }}
+    needs: validate-functions
+    if: |
+      always() &&
+      inputs.run_validate_structure == true &&
+      (needs.validate-functions.result == 'success' || needs.validate-functions.result == 'skipped') &&
+      (inputs.fail_fast == false || needs.validate-functions.result != 'failure')
     steps:
       - uses: actions/checkout@v4
         with:
@@ -419,16 +431,12 @@ jobs:
   validate-version:
     name: "🔵 Validate Version"
     runs-on: ${{ inputs.runner }}
-    needs:
-      - validate-json
-      - validate-pack
-      - validate-functions
-      - validate-structure
-    if: >-
+    needs: validate-structure
+    if: |
       always() &&
       inputs.run_validate_version == true &&
-      !contains(needs.*.result, 'cancelled') &&
-      (inputs.fail_fast == false || !contains(needs.*.result, 'failure'))
+      (needs.validate-structure.result == 'success' || needs.validate-structure.result == 'skipped') &&
+      (inputs.fail_fast == false || needs.validate-structure.result != 'failure')
     steps:
       - uses: actions/checkout@v4
         with:
@@ -448,7 +456,7 @@ jobs:
           fi
 
       - name: Match version with workflow input
-        if: ${{ inputs.version != '' }}
+        if: inputs.version != ''
         run: |
           INPUT_TAG="${{ inputs.version }}"
           META_VER="${{ steps.mcmeta_ver.outputs.version }}"
@@ -488,16 +496,12 @@ jobs:
   release:
     name: "🚀 Package & Release"
     runs-on: ${{ inputs.runner }}
-    needs:
-      - validate-json
-      - validate-pack
-      - validate-functions
-      - validate-structure
-    if: >-
+    needs: validate-version
+    if: |
       always() &&
       inputs.create_release == true &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      (needs.validate-version.result == 'success' || needs.validate-version.result == 'skipped') &&
+      needs.validate-version.result != 'failure'
     permissions:
       contents: write
     steps:
@@ -525,33 +529,24 @@ jobs:
         id: build
         run: |
           TAG="${{ inputs.version }}"
-
-          # ZIP adı şablonunu çöz
           PATTERN="${{ inputs.zip_name_pattern }}"
           BASENAME="${PATTERN//\{name\}/macroEngine}"
           BASENAME="${BASENAME//\{version\}/$TAG}"
           ZIP="${BASENAME}.zip"
 
-          # scan_dirs dahil et
           PATHS=()
           for d in ${{ inputs.scan_dirs }}; do
             [ -e "$d" ] && PATHS+=("$d") || echo "⚠️ WARN: $d bulunamadı, atlandı"
           done
-
-          # required_files dahil et (tekrar eklenmemesi için unique al)
           for f in ${{ inputs.required_files }}; do
             [ -f "$f" ] && PATHS+=("$f") || echo "⚠️ WARN: $f bulunamadı, atlandı"
           done
-
-          # Ekstra yollar
           for p in ${{ inputs.zip_extra_paths }}; do
             [ -e "$p" ] && PATHS+=("$p") || echo "⚠️ WARN: Ekstra yol bulunamadı: $p"
           done
 
-          # ZIP oluştur
           zip -r "$ZIP" "${PATHS[@]}"
 
-          # Hariç tutma desenleri
           for pat in ${{ inputs.zip_exclude_patterns }}; do
             zip -d "$ZIP" "$pat" 2>/dev/null && echo "Removed: $pat" || true
           done
@@ -562,11 +557,11 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name:                ${{ inputs.version }}
-          name:                    "macroEngine ${{ inputs.version }}"
-          files:                   ${{ steps.build.outputs.zip_name }}
-          draft:                   ${{ inputs.release_draft }}
-          prerelease:              ${{ inputs.release_prerelease }}
-          generate_release_notes:  ${{ inputs.release_generate_notes }}
+          tag_name:               ${{ inputs.version }}
+          name:                   "macroEngine ${{ inputs.version }}"
+          files:                  ${{ steps.build.outputs.zip_name }}
+          draft:                  ${{ inputs.release_draft }}
+          prerelease:             ${{ inputs.release_prerelease }}
+          generate_release_notes: ${{ inputs.release_generate_notes }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -140,38 +140,46 @@ on:
         required: false
         default: ''
 
-      zip_name_pattern:
-        description: 'ZIP adı şablonu. {name} = macroEngine, {version} = versiyon. Örn: {name}-{version}'
+      pack_name:
+        description: '📦 Pack adı — ZIP ve release başlığında kullanılır. Örn: macroEngine'
         required: true
-        default: '{name}-{version}'
+        default: 'macroEngine'
 
-      zip_extra_paths:
-        description: 'ZIP ekstra yollar (boşlukla ayrılmış). scan_dirs + required_files zaten dahil.'
-        required: false
-        default: ''
-
-      zip_exclude_patterns:
-        description: 'ZIP hariç tut — glob desenleri (boşlukla ayrılmış). Örn: "*.log *.tmp"'
-        required: false
-        default: ''
-
-      release_draft:
-        description: '📝 Draft olarak oluştur?'
+      release_type:
+        description: 'Release türü: normal | draft (taslak, yayınlanmaz) | prerelease (ön sürüm)'
         required: true
-        type: boolean
-        default: false
-
-      release_prerelease:
-        description: '⚠️ Pre-release olarak işaretle?'
-        required: true
-        type: boolean
-        default: false
+        type: choice
+        default: 'normal'
+        options:
+          - normal
+          - draft
+          - prerelease
 
       release_generate_notes:
         description: '📋 Release notlarını otomatik oluştur?'
         required: true
         type: boolean
         default: true
+
+      zip_name_pattern:
+        description: 'ZIP adı şablonu. {name} = pack adı, {version} = versiyon. Örn: {name}-{version}'
+        required: true
+        default: '{name}-{version}'
+
+      zip_include_extra:
+        description: |
+          ➕ ZIP — ekstra dahil edilecek dosya/klasörler (boşlukla ayrılmış).
+          scan_dirs + required_files zaten otomatik dahil edilir.
+          Örn: docs/ README.md LICENSE
+        required: false
+        default: ''
+
+      zip_exclude_patterns:
+        description: |
+          ➖ ZIP — hariç tutulacak glob desenleri (boşlukla ayrılmış).
+          Örn: "*.log *.tmp *.bak .git"
+        required: false
+        default: ''
 
 
 concurrency:
@@ -181,9 +189,6 @@ concurrency:
 
 # ──────────────────────────────────────────────────────────────
 # JOBS — sıralı zincir, tek seferde 1 runner
-# config-summary → validate-json → validate-pack
-#   → validate-functions → validate-structure
-#   → validate-version → release
 # ──────────────────────────────────────────────────────────────
 jobs:
 
@@ -208,13 +213,12 @@ jobs:
           echo "  required_dirs        : ${{ inputs.required_dirs }}"
           echo "  required_mcfunctions : ${{ inputs.required_mcfunctions }}"
           echo "  required_tag_jsons   : ${{ inputs.required_tag_jsons }}"
-          echo "  ── Validation Toggles ───────────────────────────"
+          echo "  ── Validation ───────────────────────────────────"
           echo "  validate_json        : ${{ inputs.run_validate_json }}"
           echo "  validate_pack        : ${{ inputs.run_validate_pack }}"
           echo "  validate_functions   : ${{ inputs.run_validate_functions }}"
           echo "  validate_structure   : ${{ inputs.run_validate_structure }}"
           echo "  validate_version     : ${{ inputs.run_validate_version }}"
-          echo "  ── Validation Behaviour ─────────────────────────"
           echo "  empty_mcfunc_action  : ${{ inputs.empty_mcfunction_action }}"
           echo "  strict_func_refs     : ${{ inputs.strict_function_refs }}"
           echo "  strict_version       : ${{ inputs.strict_version_match }}"
@@ -222,12 +226,12 @@ jobs:
           echo "  ── Release ──────────────────────────────────────"
           echo "  create_release       : ${{ inputs.create_release }}"
           echo "  version              : '${{ inputs.version }}'"
-          echo "  zip_name_pattern     : ${{ inputs.zip_name_pattern }}"
-          echo "  zip_extra_paths      : '${{ inputs.zip_extra_paths }}'"
-          echo "  zip_exclude_patterns : '${{ inputs.zip_exclude_patterns }}'"
-          echo "  release_draft        : ${{ inputs.release_draft }}"
-          echo "  release_prerelease   : ${{ inputs.release_prerelease }}"
+          echo "  pack_name            : ${{ inputs.pack_name }}"
+          echo "  release_type         : ${{ inputs.release_type }}"
           echo "  release_generate_notes: ${{ inputs.release_generate_notes }}"
+          echo "  zip_name_pattern     : ${{ inputs.zip_name_pattern }}"
+          echo "  zip_include_extra    : '${{ inputs.zip_include_extra }}'"
+          echo "  zip_exclude_patterns : '${{ inputs.zip_exclude_patterns }}'"
           echo "╚═══════════════════════════════════════════════════╝"
 
   # ─────────────────────────────────────────────
@@ -367,7 +371,6 @@ jobs:
               find "$d" -name "*.mcfunction" 2>/dev/null
             done
           )
-
           if [ $EMPTY -gt 0 ]; then
             echo "$EMPTY boş .mcfunction dosyası bulundu"
             [ "$ACTION" == "fail" ] && { echo "❌ FAILED"; exit 1; } || echo "⚠️ WARNED (intentional olabilir)"
@@ -529,39 +532,76 @@ jobs:
         id: build
         run: |
           TAG="${{ inputs.version }}"
+          PACK="${{ inputs.pack_name }}"
           PATTERN="${{ inputs.zip_name_pattern }}"
-          BASENAME="${PATTERN//\{name\}/macroEngine}"
+
+          # Şablon yer tutucularını çöz
+          BASENAME="${PATTERN//\{name\}/$PACK}"
           BASENAME="${BASENAME//\{version\}/$TAG}"
           ZIP="${BASENAME}.zip"
 
+          echo "── ZIP İçeriği ──────────────────────────────"
+
+          # scan_dirs
           PATHS=()
           for d in ${{ inputs.scan_dirs }}; do
-            [ -e "$d" ] && PATHS+=("$d") || echo "⚠️ WARN: $d bulunamadı, atlandı"
-          done
-          for f in ${{ inputs.required_files }}; do
-            [ -f "$f" ] && PATHS+=("$f") || echo "⚠️ WARN: $f bulunamadı, atlandı"
-          done
-          for p in ${{ inputs.zip_extra_paths }}; do
-            [ -e "$p" ] && PATHS+=("$p") || echo "⚠️ WARN: Ekstra yol bulunamadı: $p"
+            if [ -e "$d" ]; then
+              PATHS+=("$d")
+              echo "  + $d"
+            else
+              echo "  ⚠️ bulunamadı, atlandı: $d"
+            fi
           done
 
+          # required_files
+          for f in ${{ inputs.required_files }}; do
+            if [ -f "$f" ]; then
+              PATHS+=("$f")
+              echo "  + $f"
+            else
+              echo "  ⚠️ bulunamadı, atlandı: $f"
+            fi
+          done
+
+          # zip_include_extra — ekstra dahil edilecekler
+          EXTRA="${{ inputs.zip_include_extra }}"
+          if [ -n "$EXTRA" ]; then
+            for p in $EXTRA; do
+              if [ -e "$p" ]; then
+                PATHS+=("$p")
+                echo "  + (ekstra) $p"
+              else
+                echo "  ⚠️ ekstra yol bulunamadı, atlandı: $p"
+              fi
+            done
+          fi
+
+          echo "────────────────────────────────────────────"
           zip -r "$ZIP" "${PATHS[@]}"
 
-          for pat in ${{ inputs.zip_exclude_patterns }}; do
-            zip -d "$ZIP" "$pat" 2>/dev/null && echo "Removed: $pat" || true
-          done
+          # zip_exclude_patterns — hariç tutulacaklar
+          EXCL="${{ inputs.zip_exclude_patterns }}"
+          if [ -n "$EXCL" ]; then
+            echo "── Hariç tutulanlar ─────────────────────────"
+            for pat in $EXCL; do
+              zip -d "$ZIP" "$pat" 2>/dev/null \
+                && echo "  - $pat kaldırıldı" \
+                || echo "  ~ $pat eşleşmedi, atlandı"
+            done
+          fi
 
+          SIZE=$(du -sh "$ZIP" | cut -f1)
+          echo "✅ $ZIP oluşturuldu ($SIZE)"
           echo "zip_name=$ZIP" >> $GITHUB_OUTPUT
-          echo "✅ $ZIP oluşturuldu ($(du -sh "$ZIP" | cut -f1))"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name:               ${{ inputs.version }}
-          name:                   "macroEngine ${{ inputs.version }}"
+          name:                   "${{ inputs.pack_name }} ${{ inputs.version }}"
           files:                  ${{ steps.build.outputs.zip_name }}
-          draft:                  ${{ inputs.release_draft }}
-          prerelease:             ${{ inputs.release_prerelease }}
+          draft:                  ${{ inputs.release_type == 'draft' }}
+          prerelease:             ${{ inputs.release_type == 'prerelease' }}
           generate_release_notes: ${{ inputs.release_generate_notes }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -171,11 +171,6 @@ on:
         type: boolean
         default: true
 
-      release_body:
-        description: '📝 Özel release notu metni (boş = otomatik notlara bırak)'
-        required: false
-        default: ''
-
 
 # ──────────────────────────────────────────────────────────────
 # CONCURRENCY — aynı anda birden fazla çalışmasını engelle
@@ -573,7 +568,6 @@ jobs:
         with:
           tag_name:                ${{ inputs.version }}
           name:                    "macroEngine ${{ inputs.version }}"
-          body:                    ${{ inputs.release_body }}
           files:                   ${{ steps.build.outputs.zip_name }}
           draft:                   ${{ inputs.release_draft }}
           prerelease:              ${{ inputs.release_prerelease }}

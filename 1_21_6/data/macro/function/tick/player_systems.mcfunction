@@ -18,6 +18,9 @@ scoreboard players enable @a[scores={macro_run=-1..}] macro_run
 # Advanced trigger dispatch
 execute as @a[scores={macro_action=1..}] run function macro:trigger/internal/dispatch
 
+# perm/trigger dispatch (v2.0) — BUG FIX v2.0.1: 1_21_6 overlay'inde eksikti
+function macro:perm/trigger/internal/tick_start
+
 # BUG FIX v1.0.1
 scoreboard players remove @a[scores={macro.dialog_load=1..}] macro.dialog_load 1
 

@@ -9,3 +9,7 @@
 # ============================================
 
 $execute as @a[scores={$(name)=1..}] run function macro:perm/trigger/internal/player_dispatch with storage macro:engine _pt_tick_ctx
+
+# BUG FIX v2.0.1: Trigger hiç tetiklenmemiş oyuncular enable alamıyordu.
+# player_dispatch sadece score>=1 için çalışır; ilk enable buradan gelir.
+$execute as @a run scoreboard players enable @s $(name)

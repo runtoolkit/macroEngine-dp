@@ -2,6 +2,9 @@
 
 ---
 
+## v2.0.1
+- Yakında gelecek
+
 ## v2.0.0 — 2026-03-10
 
 ### ✨ Yeni: `perm/` Modülü — İzin Sistemi

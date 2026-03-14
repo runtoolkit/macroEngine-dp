@@ -97,7 +97,7 @@
 # ============================================
 # Git diff drivers
 # ============================================
-# Kullanım: git config diff.json.textconv "python3 -m json.tool"
-# veya    : git config diff.json.textconv "jq ."
-[diff "json"]
-    textconv = cat
+# diff=json driver'ı aktif etmek için aşağıdaki komutu çalıştır:
+#   git config diff.json.textconv "python3 -m json.tool"
+# veya:
+#   git config diff.json.textconv "jq ."

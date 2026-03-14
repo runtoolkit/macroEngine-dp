@@ -2,6 +2,102 @@
 
 ---
 
+## v2.0.3-pre4 — 2026-03-14
+
+### ✨ Yeni Modül: `uuid/`
+
+Entity UUID'lerini `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` formatında hex string'e çeviren tam UUID altyapısı. Java'nın negatif integer bölme hatası (`truncate` yerine `floor`) el ile düzeltilmiştir — diğer implementasyonlardaki yüksek byte hesaplama hatası bu modülde yoktur.
+
+#### Public Fonksiyonlar
+
+| Fonksiyon | Giriş | Çıkış | Açıklama |
+|---|---|---|---|
+| `uuid/from_entity` | — (as `<entity>`) | `macro:input value` | `@s` entity'sinin UUID'sini hex string'e çevirir |
+| `uuid/from_array` | `{arr:[I;…]}` | `macro:input value` | int[4] UUID array'ini hex string'e çevirir |
+| `uuid/store` | `{key, value}` | — | UUID string'ini cache'e kaydeder |
+| `uuid/recall` | `{key}` | `macro:input value` | Cache'ten UUID string'ini okur |
+| `uuid/recall_array` | `{key}` | `macro:input arr` | Cache'ten UUID'yi int[4] olarak okur |
+| `uuid/match` | `{value, func}` | — | `@s` UUID'sini `value` ile karşılaştırır; eşleşirse `func` çalıştırır |
+| `uuid/has` | `{key}` | `macro:output result` | Cache'te key var mı kontrol eder (`1b`/`0b`) |
+| `uuid/forget` | `{key}` | — | Tek kaydı cache'ten siler |
+| `uuid/cache_clear` | — | — | Tüm UUID cache'ini temizler |
+
+Storage: `macro:engine uuid_cache {key: "uuid-string"}` · `macro:uuid hex_chars [...]` (256 girişli lookup tablosu)
+
+---
+
+### ✨ Yeni Fonksiyonlar
+
+#### `math/lerp_clamped`
+`t` değeri `[0, 100]` aralığına kısıtlanmış lerp. `lerp`'ten farkı: `t < 0` → `0`, `t > 100` → `100` olarak clamp edilir, aralık dışı çıktı üretmez.
+
+| Giriş | Çıkış |
+|---|---|
+| `{a, b, t}` | `macro:output result` |
+
+#### `cooldown/extend`
+Aktif bir cooldown'ın bitiş süresini `amount` tick kadar uzatır. Cooldown aktif değilse `amount` tick'lik yeni bir cooldown başlatır.
+
+| Giriş | Açıklama |
+|---|---|
+| `{player, key, amount}` | Mevcut expiry + `amount` → yeni expiry |
+
+#### `state/toggle`
+`player` key'ini `on` ve `off` değerleri arasında toggle eder. Mevcut değer `on` ise `off`, değilse `on` yazar.
+
+| Giriş | Çıkış |
+|---|---|
+| `{player, on, off}` | `macro:output result` (yeni değer) |
+
+#### `event/fire_as`
+`event` olayını `event_context.player` alanı `player` olarak ayarlandıktan sonra tetikler. `event/fire` ile farkı: context el ile ayarlamadan kısayol.
+
+| Giriş |
+|---|
+| `{event, player}` |
+
+#### `string/format_ticks`
+Tick sayısını dakika + saniyeye dönüştürür (`ticks_to_time`'ın saat içermeyen sade versiyonu).
+
+| Giriş | Çıkış |
+|---|---|
+| `{ticks}` | `macro:output {total_seconds, minutes, seconds}` |
+
+#### `player/get_dimension`
+Oyuncunun bulunduğu dimension'ı (`minecraft:overworld`, `minecraft:the_nether`, `minecraft:the_end`) döndürür.
+
+| Giriş | Çıkış |
+|---|---|
+| `{player}` | `macro:output result` |
+
+---
+
+### ✨ Yeni Varlıklar
+
+| Tür | Dosya |
+|---|---|
+| Advancement şablonları | `advancement/template/task.json`, `goal.json`, `challenge.json` |
+| Item modifier | `item_modifier/set_custom_model_data.json`, `strip_enchants.json` |
+| Loot table | `loot_table/template/tiered_drop.json` |
+| Predicate | `predicate/is_holding_shield.json` |
+
+---
+
+### 🧹 Değişiklikler
+
+- **Yorum temizliği:** Tüm `.mcfunction` dosyalarındaki Türkçe yorum bloklarının büyük çoğunluğu kaldırıldı — dosya boyutları ve okunabilirlik optimize edildi.
+- **Overlay yeniden adlandırma:** `-1_21_4` → `compat_1_21_4` olarak yeniden adlandırıldı; tüm workflow referansları ve `pack.mcmeta` güncellendi.
+- **`1_21_6/dialog/internal/load_exec`** kaldırıldı; içeriği `dialog/load.mcfunction` içine inline edildi.
+- **`pack.mcmeta`:** `supported_formats` array formatından `min_format`/`max_format` object formatına geçildi.
+- **README:** Modül listesi ve kurulum bölümü güncellendi.
+
+### 🐛 Bug Fixes
+
+#### `version_warn.mcfunction` — yanlış pre numarası
+`compat_1_21_4` ve `1_21_6` overlay'lerindeki debug tellraw `(expected: 2 0 3 pre=2)` yazıyordu. `pre=4` olarak düzeltildi.
+
+---
+
 ## v2.0.3-pre3 — 2026-03-14
 
 ### ✨ New Module: `interaction/`

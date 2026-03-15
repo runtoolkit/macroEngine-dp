@@ -6,6 +6,9 @@ name: Validate & Release
 # ║   Job sırası: config → json → pack → functions →            ║
 # ║               structure → version → release                 ║
 # ╚══════════════════════════════════════════════════════════════╝
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 on:
   workflow_dispatch:
     inputs:
@@ -243,7 +246,7 @@ jobs:
     needs: config-summary
     if: inputs.run_validate_json == true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.ref }}
 
@@ -283,7 +286,7 @@ jobs:
       (needs.validate-json.result == 'success' || needs.validate-json.result == 'skipped') &&
       (inputs.fail_fast == false || needs.validate-json.result != 'failure')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.ref }}
 
@@ -320,7 +323,7 @@ jobs:
       (needs.validate-pack.result == 'success' || needs.validate-pack.result == 'skipped') &&
       (inputs.fail_fast == false || (needs.validate-json.result != 'failure' && needs.validate-pack.result != 'failure'))
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.ref }}
 
@@ -391,7 +394,7 @@ jobs:
       (needs.validate-functions.result == 'success' || needs.validate-functions.result == 'skipped') &&
       (inputs.fail_fast == false || (needs.validate-json.result != 'failure' && needs.validate-pack.result != 'failure' && needs.validate-functions.result != 'failure'))
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.ref }}
 
@@ -441,7 +444,7 @@ jobs:
       (needs.validate-structure.result == 'success' || needs.validate-structure.result == 'skipped') &&
       (inputs.fail_fast == false || (needs.validate-json.result != 'failure' && needs.validate-pack.result != 'failure' && needs.validate-functions.result != 'failure' && needs.validate-structure.result != 'failure'))
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.ref }}
 
@@ -518,7 +521,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.ref }}
 

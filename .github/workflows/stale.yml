@@ -1,5 +1,8 @@
 name: Stale Issues & PRs
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 on:
   schedule:
     # Her gün saat 02:00 UTC çalışır

@@ -1,11 +1,11 @@
 # Advanced Macro Engine — Changelog
 
 ---
-## v2.2.0-en — 2026-03-22
+## v2.2.0-en-en — 2026-03-22
 ### Changes
 - Translated all Turkish comments, docstrings, and in-game strings to English.
 
-## v2.2.0 — 2026-03-22
+## v2.2.0-en — 2026-03-22
 
 #### ✨ Yeni Modüller
 
@@ -90,7 +90,7 @@ Scoreboard: `macro.rightClick` (`minecraft.used:minecraft.carrot_on_a_stick`)
 #### `ame_load:load/internal/validate` — storage'daki eski versiyon mismatch
 İlk satır `{version:"v2.1.2-pre1"}` yazıyordu. Önceki dünyadan kalan storage değeri silinmediği için her `/reload`'da mismatch tetiklenip yükleme iptal ediliyordu. İki ayrı düzeltme yapıldı:
 - İlk satır: `v2.1.2-pre1` → `v2.1.2` düzeltildi
-- `data modify storage macro:engine global.version set value "v2.2.0"` satırı eklendi — storage zaten varsa bile her load'da version üzerine yazılır
+- `data modify storage macro:engine global.version set value "v2.2.0-en"` satırı eklendi — storage zaten varsa bile her load'da version üzerine yazılır
 
 #### `cmd/save-all`, `cmd/save-off`, `cmd/save-on`, `cmd/stop` — tek oyunculu mod parse hatası
 Bu komutlar tek oyunculu modda Minecraft'ın command dispatcher'ı tarafından tanınmıyor; load sırasında `Bilinmeyen veya eksik komut` hatası üretiyordu. `cmd/other/run_self` macro wrapper'ı üzerinden çalıştırılacak şekilde yeniden yazıldı — macro fonksiyonlar load sırasında parse edilmediği için hata kalktı.
@@ -181,12 +181,12 @@ Son `$tellraw` satırlarında `$(...)` değişkeni bulunmuyordu; Minecraft `$` i
 
 ---
 
-## v2.2.0 — 2026-03-18
+## v2.2.0-en — 2026-03-18
 
 ### 🐛 Bug Fixes
 
 #### `tools/utils/input_check` — versiyon kontrolü hiçbir zaman geçmiyordu
-`V2.0.3` (büyük V) karşılaştırması yapılıyordu; engine `v2.0.3` (küçük v) saklıyor. Sonuç: kontrol daima başarısız, tüm injection koruması bypass ediliyordu. `v2.2.0` olarak düzeltildi.
+`V2.0.3` (büyük V) karşılaştırması yapılıyordu; engine `v2.0.3` (küçük v) saklıyor. Sonuç: kontrol daima başarısız, tüm injection koruması bypass ediliyordu. `v2.2.0-en` olarak düzeltildi.
 
 #### `tools/utils/input_check` — `execute_validated` çağrısı eksikti
 Doğrulama bloğu geçtikten sonra `function macro:engine/call/execute_validated` hiç çağrılmıyordu; komut asla yürütülmüyordu. Çağrı eklendi. Cleanup satırları (`data remove storage macro:output`) bu çağrıdan sonraya alındı — sıra da düzeltildi.

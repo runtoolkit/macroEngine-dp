@@ -1,3 +1,6 @@
 {
-  "values": ["#macro:init"]
+  "values": [
+    "#macro:init",
+    "macro:load"
+  ]
 }

@@ -13,7 +13,7 @@
 #   → macro:output result = 1
 # ─────────────────────────────────────────────────────────────────
 
-$scoreboard players set $snz_v macro.tmp $(value)
+$scoreboard players set #snz_v macro.tmp $(value)
 data modify storage macro:output result set value 1
-execute if score $snz_v macro.tmp matches ..-1 run data modify storage macro:output result set value -1
+execute if score #snz_v macro.tmp matches ..-1 run data modify storage macro:output result set value -1
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"math/sign_nonzero ","color":"aqua"},{"text":"$(value) → ","color":"gray"},{"storage":"macro:output","nbt":"result","color":"green"}]

@@ -19,16 +19,16 @@ data modify storage macro:output result_a set value 0b
 data modify storage macro:output result_b set value 0b
 data modify storage macro:output result set value 0b
 
-scoreboard players set $fany_a macro.tmp 0
-scoreboard players set $fany_b macro.tmp 0
+scoreboard players set #fany_a macro.tmp 0
+scoreboard players set #fany_b macro.tmp 0
 
-$execute if data storage macro:engine flags.$(key_a) run scoreboard players set $fany_a macro.tmp 1
-$execute if data storage macro:engine flags.$(key_b) run scoreboard players set $fany_b macro.tmp 1
+$execute if data storage macro:engine flags.$(key_a) run scoreboard players set #fany_a macro.tmp 1
+$execute if data storage macro:engine flags.$(key_b) run scoreboard players set #fany_b macro.tmp 1
 
-execute if score $fany_a macro.tmp matches 1 run data modify storage macro:output result_a set value 1b
-execute if score $fany_b macro.tmp matches 1 run data modify storage macro:output result_b set value 1b
+execute if score #fany_a macro.tmp matches 1 run data modify storage macro:output result_a set value 1b
+execute if score #fany_b macro.tmp matches 1 run data modify storage macro:output result_b set value 1b
 
-scoreboard players operation $fany_a macro.tmp += $fany_b macro.tmp
-execute if score $fany_a macro.tmp matches 1.. run data modify storage macro:output result set value 1b
+scoreboard players operation #fany_a macro.tmp += #fany_b macro.tmp
+execute if score #fany_a macro.tmp matches 1.. run data modify storage macro:output result set value 1b
 
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"flag/any ","color":"aqua"},{"text":"$(key_a)|$(key_b) → ","color":"gray"},{"storage":"macro:output","nbt":"result","color":"green"}]

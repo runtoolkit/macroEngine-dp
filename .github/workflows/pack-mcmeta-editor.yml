@@ -1,0 +1,178 @@
+name: pack.mcmeta Editor
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+# ─────────────────────────────────────────────────────────────────
+# pack.mcmeta içindeki pack_format, supported_formats ve overlay
+# formats değerlerini Actions arayüzünden doğrudan düzenler.
+# Değişikliği otomatik commit + push eder.
+#
+# Actions → "Run workflow" → alanları doldur → Run
+# ─────────────────────────────────────────────────────────────────
+
+on:
+  workflow_dispatch:
+    inputs:
+
+      pack_format:
+        description: 'pack_format (tamsayı — ör: 94)'
+        required: true
+        type: string
+
+      supported_min:
+        description: 'supported_formats min_inclusive (ör: 26)'
+        required: true
+        type: string
+
+      supported_max:
+        description: 'supported_formats max_inclusive (ör: 400000)'
+        required: true
+        type: string
+
+      overlay_updates:
+        description: |
+          Overlay formats güncelleme (isteğe bağlı).
+          Her satır: <directory>=<min>:<max>
+          Örn:
+            1_21_6=80:400000
+            26_1=101:101
+        required: false
+        type: string
+        default: ''
+
+      commit_message:
+        description: 'Commit mesajı (boş = otomatik)'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  edit-pack-mcmeta:
+    name: Edit pack.mcmeta
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Validate inputs
+        run: |
+          PF="${{ inputs.pack_format }}"
+          SMIN="${{ inputs.supported_min }}"
+          SMAX="${{ inputs.supported_max }}"
+
+          if ! echo "$PF" | grep -qE '^\d+$'; then
+            echo "FAIL: pack_format tamsayı olmalı, alınan: '$PF'"
+            exit 1
+          fi
+          if ! echo "$SMIN" | grep -qE '^\d+$'; then
+            echo "FAIL: supported_min tamsayı olmalı, alınan: '$SMIN'"
+            exit 1
+          fi
+          if ! echo "$SMAX" | grep -qE '^\d+$'; then
+            echo "FAIL: supported_max tamsayı olmalı, alınan: '$SMAX'"
+            exit 1
+          fi
+          if [ "$SMIN" -gt "$SMAX" ]; then
+            echo "FAIL: supported_min ($SMIN) > supported_max ($SMAX)"
+            exit 1
+          fi
+          if [ "$PF" -lt "$SMIN" ] || [ "$PF" -gt "$SMAX" ]; then
+            echo "FAIL: pack_format ($PF) supported_formats [$SMIN, $SMAX] dışında"
+            exit 1
+          fi
+          echo "OK: Girdiler geçerli."
+
+      - name: Apply changes to pack.mcmeta
+        run: |
+          python3 << 'PYEOF'
+          import json, os, sys
+
+          pf   = int("${{ inputs.pack_format }}")
+          smin = int("${{ inputs.supported_min }}")
+          smax = int("${{ inputs.supported_max }}")
+          overlay_raw = """${{ inputs.overlay_updates }}""".strip()
+
+          with open('pack.mcmeta', 'r', encoding='utf-8') as f:
+              meta = json.load(f)
+
+          old_pf   = meta['pack']['pack_format']
+          old_smin = meta['pack'].get('supported_formats', {}).get('min_inclusive', '?')
+          old_smax = meta['pack'].get('supported_formats', {}).get('max_inclusive', '?')
+
+          meta['pack']['pack_format'] = pf
+          meta['pack']['supported_formats'] = {
+              'min_inclusive': smin,
+              'max_inclusive': smax
+          }
+
+          # min_format / max_format root alanları varsa güncelle (varsa)
+          if 'min_format' in meta['pack']:
+              meta['pack']['min_format'] = smin
+          if 'max_format' in meta['pack']:
+              meta['pack']['max_format'] = smax
+
+          print(f"pack_format      : {old_pf} → {pf}")
+          print(f"supported_formats: [{old_smin}, {old_smax}] → [{smin}, {smax}]")
+
+          # Overlay güncellemeleri
+          if overlay_raw:
+              entries = {e['directory']: e for e in meta.get('overlays', {}).get('entries', [])}
+              for line in overlay_raw.splitlines():
+                  line = line.strip()
+                  if not line or '=' not in line or ':' not in line:
+                      continue
+                  directory, fmt = line.split('=', 1)
+                  directory = directory.strip()
+                  o_min, o_max = fmt.strip().split(':', 1)
+                  o_min, o_max = int(o_min), int(o_max)
+
+                  if directory in entries:
+                      old_fmt = entries[directory].get('formats', {})
+                      old_min = old_fmt.get('min_inclusive', '?')
+                      old_max = old_fmt.get('max_inclusive', '?')
+                      entries[directory]['formats'] = {
+                          'min_inclusive': o_min,
+                          'max_inclusive': o_max
+                      }
+                      # min_format / max_format overlay entry'de varsa güncelle
+                      if 'min_format' in entries[directory]:
+                          entries[directory]['min_format'] = o_min
+                      if 'max_format' in entries[directory]:
+                          entries[directory]['max_format'] = o_max
+                      print(f"overlay '{directory}': [{old_min}, {old_max}] → [{o_min}, {o_max}]")
+                  else:
+                      print(f"WARN: overlay '{directory}' pack.mcmeta'da bulunamadı, atlandı.")
+
+          with open('pack.mcmeta', 'w', encoding='utf-8') as f:
+              json.dump(meta, f, indent=2, ensure_ascii=False)
+              f.write('\n')
+
+          print("pack.mcmeta güncellendi.")
+          PYEOF
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add pack.mcmeta
+
+          if git diff --cached --quiet; then
+            echo "Değişiklik yok, commit atlanıyor."
+            exit 0
+          fi
+
+          CUSTOM_MSG="${{ inputs.commit_message }}"
+          if [ -n "$CUSTOM_MSG" ]; then
+            MSG="$CUSTOM_MSG"
+          else
+            MSG="chore(pack): pack_format=${{ inputs.pack_format }}, supported=[${{ inputs.supported_min }}, ${{ inputs.supported_max }}]"
+          fi
+
+          git commit -m "$MSG"
+          git push

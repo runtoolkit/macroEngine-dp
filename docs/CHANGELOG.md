@@ -2,6 +2,18 @@
 
 ---
 
+## v2.2.9 — 2026-04-04
+
+### ✨ New Features
+
+| Module | Functions | Description |
+|---|---|---|
+| `cooldown/` | `pause`, `resume` | Freezes an active cooldown and restores it later with the original remaining duration |
+| `player/` | `is_flying` | Checks if a named player is currently flying (`abilities:{flying:1b}`) |
+| `string/` | `repeat` + `internal/repeat_1..16` | Repeats a single character N times (1–16) into `macro:output result` |
+
+---
+
 ## v2.2.8 — 2026-04-03
 
 ### ✨ Yeni Fonksiyonlar

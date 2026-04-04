@@ -10,5 +10,3 @@ execute as @a[tag=macro.admin] at @s run playsound minecraft:block.note_block.pl
 
 # Log to debug
 tellraw @a[tag=macro.debug] ["",{"text":"[Rate Limit] ","color":"yellow"},{"text":"Abuse detected: ","color":"gray"},{"selector":"@s","color":"white"},{"text":" | Violations: ","color":"gray"},{"score":{"name":"@s","objective":"macro.rl_violations"},"color":"red"}]
-
-return 0

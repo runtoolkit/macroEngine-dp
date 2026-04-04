@@ -19,5 +19,3 @@ execute if entity @s[tag=macro.debug] run tellraw @s ["",{"text":"[Debug] ","col
 
 # Admin alert for high violations
 execute if score @s macro.rl_violations >= #rl_violation_threshold macro.rl_max run function macro:rate_limit/internal/admin_alert
-
-return 0

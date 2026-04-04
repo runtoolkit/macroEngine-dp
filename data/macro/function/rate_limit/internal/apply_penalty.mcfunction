@@ -13,5 +13,3 @@ execute if score @s macro.rl_violations matches 5.. run scoreboard players opera
 
 # Visual feedback
 execute at @s run particle minecraft:angry_villager ~ ~2 ~ 0.3 0.3 0.3 0 5
-
-return 0

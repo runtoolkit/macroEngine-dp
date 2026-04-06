@@ -36,7 +36,7 @@ sha256sum datapack.zip
 ```
 macro:engine  (persistent data)
 ├── global
-│   ├── version: "v2.2.8"
+│   ├── version: "v3.0.0-pre1"
 │   └── tick: <int>
 ├── players
 │   └── Steve { coins:150, level:5, xp:2300, online:1b, ... }

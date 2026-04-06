@@ -1,5 +1,6 @@
 schedule clear macro:lib/sync_tick
 
+forceload remove -30000000 1600
 forceload remove 0 0
 
 scoreboard players reset @a macro_menu
@@ -42,6 +43,9 @@ data remove storage macro:engine _ia_ucur
 data remove storage macro:engine teams
 data remove storage macro:engine global
 data remove storage macro:output result
+
+# rate_limit module cleanup
+data remove storage macro:engine rate_limit
 
 scoreboard objectives remove macro.tmp
 scoreboard objectives remove macro.time
@@ -94,3 +98,18 @@ data remove storage macro:engine _hook_fire_event
 data remove storage macro:engine _hook_fire_tmp
 data remove storage macro:engine _hook_unbinds
 data remove storage macro:engine _hook_filter_event
+
+# Fiber module cleanup
+data remove storage macro:engine fibers
+
+# Region watch cleanup
+data remove storage macro:engine region_watches
+
+# Batch module cleanup
+data remove storage macro:engine batches
+
+# Once-per-player cleanup
+data remove storage macro:engine once_per_player
+
+# UUID cache cleanup
+data remove storage macro:engine _uuid_cache

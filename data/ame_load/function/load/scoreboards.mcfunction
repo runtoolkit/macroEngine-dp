@@ -48,3 +48,9 @@ scoreboard objectives add macro.hook_traded dummy
 # Tick channel dispatch
 scoreboard objectives add macro.tick dummy
 scoreboard objectives add macro.Flags dummy
+
+# Player stat hooks
+scoreboard objectives add macro.hook_jump minecraft.custom:minecraft.jump
+scoreboard objectives add macro.hook_open_chest minecraft.custom:minecraft.open_chest
+scoreboard objectives add macro.hook_drop minecraft.custom:minecraft.drop
+scoreboard objectives add macro.hook_target_hit minecraft.custom:minecraft.target_hit

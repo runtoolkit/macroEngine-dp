@@ -1,9 +1,4 @@
-# Send Debug Message
-summon minecraft:marker 0 -64 0 {Tags:["ame.init"],CustomName:{text:"AME/Load",italic:0b,color:"gold",bold:1b}}
-execute as @e[type=minecraft:marker,limit=1,tag=ame.init] run say Loading...
-kill @e[type=minecraft:marker,tag=ame.init]
-
-# Load
+# Load — entry point called from minecraft:load tag via macro:load
 forceload add -30000000 1600
 
 execute unless function ame_load:load/internal/validate run return 0

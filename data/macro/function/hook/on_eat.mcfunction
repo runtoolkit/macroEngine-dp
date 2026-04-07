@@ -10,4 +10,4 @@
 # USAGE:
 #   function macro:hook/bind {event:"eat",func:"mypack:on_eat"}
 # ─────────────────────────────────────────────────────────────────
-function macro:hook/bind {event:"eat",func:"$(func)"}
+$function macro:hook/bind {event:"eat",func:"$(func)"}

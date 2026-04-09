@@ -24,7 +24,7 @@ sha256sum datapack.zip
 ## 📦 Installation
 
 ```
-1. Place advanced_macro_engine_v30/ into your server/datapacks/ folder
+1. Place macroEngine-dp-main.zip/macroEngine-dp into your <server name>/world/datapacks/ folder
 2. /reload
 3. Become an admin: /tag @s add macro.admin
 ```
@@ -36,7 +36,7 @@ sha256sum datapack.zip
 ```
 macro:engine  (persistent data)
 ├── global
-│   ├── version: "v3.0.0-pre1"
+│   ├── version: "v3.0.0-pre3"
 │   └── tick: <int>
 ├── players
 │   └── Steve { coins:150, level:5, xp:2300, online:1b, ... }
@@ -82,11 +82,11 @@ Code and examples are split into separate documents by module:
 
 | Module | Document |
 |--------|----------|
-| 🕐 Cooldown | [cooldown.md](cooldown.md) |
-| 📡 Event | [event.md](event.md) |
-| 🔢 Math | [math.md](math.md) |
-| 👥 Team & ⚙️ Config | [team-config.md](team-config.md) |
-| 🔁 Lib · 👤 Player · ⚙️ Commands · 💬 Messaging | [lib-player-cmd-string.md](lib-player-cmd-string.md) |
+| 🕐 Cooldown | [cooldown.md](docs/cooldown.md) |
+| 📡 Event | [event.md](docs/event.md) |
+| 🔢 Math | [math.md](docs/math.md) |
+| 👥 Team & ⚙️ Config | [team-config.md](docs/team-config.md) |
+| 🔁 Lib · 👤 Player · ⚙️ Commands · 💬 Messaging · Dialog | [docs/lib-player-cmd-string.md](lib-player-cmd-string.md) |
 
 ---
 

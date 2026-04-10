@@ -71,5 +71,5 @@ body:
     id: logs
     attributes:
       label: Log / Hata Çıktısı
-      description: Oyun içi hata mesajları veya `/function macro:debug/...` çıktısı
+      description: Oyun içi hata mesajları veya `.minecraft/logs/latest.txt` çıktısı
       render: text

@@ -29,6 +29,8 @@ body:
         - "state/ — State"
         - "log/ — Log"
         - "dialog/ — Dialog (1.21.6+)"
+        - "hook/ — Hook"
+        - "interaction/ — Interaction"
         - "Yeni modül"
         - "Diğer"
     validations:

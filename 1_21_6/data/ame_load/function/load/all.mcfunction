@@ -2,7 +2,7 @@
 forceload add -30000000 1600
 
 # Stage 1 debug
-summon minecraft:marker ~ ~ ~ {Tags:["macro.stage1"],CustomName:'{"text":"AME"}'}
+summon minecraft:marker ~ ~ ~ {Tags:["macro.stage1"],CustomName:{"text":"AME"}}
 execute as @e[type=minecraft:marker,tag=macro.stage1,limit=1] run say Starting macroEngine...
 execute as @e[type=minecraft:marker,tag=macro.stage1,limit=1] run kill @s
 
@@ -14,13 +14,13 @@ data modify storage macro:input color set value "aqua"
 function macro:log/add with storage macro:input {}
 
 # Stage 2 debug
-summon minecraft:marker ~ ~ ~ {Tags:["macro.stage2"],CustomName:'{"text":"AME"}'}
+summon minecraft:marker ~ ~ ~ {Tags:["macro.stage2"],CustomName:{"text":"AME"}}
 execute as @e[type=minecraft:marker,tag=macro.stage2,limit=1] run say Loading scoreboards...
 execute as @e[type=minecraft:marker,tag=macro.stage2,limit=1] run kill @s
 function ame_load:load/scoreboards
 
 # Stage 3 debug
-summon minecraft:marker ~ ~ ~ {Tags:["macro.stage3"],CustomName:'{"text":"AME"}'}
+summon minecraft:marker ~ ~ ~ {Tags:["macro.stage3"],CustomName:{"text":"AME"}}
 execute as @e[type=minecraft:marker,tag=macro.stage3,limit=1] run say Loading storages...
 execute as @e[type=minecraft:marker,tag=macro.stage3,limit=1] run kill @s
 function ame_load:load/storages

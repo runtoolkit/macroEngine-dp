@@ -11,7 +11,7 @@
 > Files downloaded from other sites or forks may have been modified.
 > Only download from the [Releases](https://github.com/tickwarden/macroEngine-datapack/releases) page.
 
-**SHA256:** *(updated on release)*
+**SHA256:** *ed3de006c912a3ef24e6f956aef8335d3ff61a69dfb636fd4bd2d90aa81ed5e8*
 
 ```bash
 # Windows

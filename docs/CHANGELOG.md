@@ -2,7 +2,7 @@
 
 ---
 
-## v3.0.4-pre1 — 2026-04-13
+## v4.0.0 — 2026-04-13
 
 ### ✨ Yeni
 
@@ -55,7 +55,7 @@ Yeni komutlar için `ame_load:gate/exec/` altına executor yazılır, `gate/yes.
 
 ---
 
-## v3.0.4-pre1 — 2026-04-12
+## v4.0.0 — 2026-04-12
 
 ### ✨ Yeni
 

@@ -2,7 +2,7 @@
 **Minecraft Java Edition 1.20.3–1.21.6+ | Multiplayer-Safe | Pure Datapack**
 
 
-> Current version: **v3.0.4-pre1**
+> Current version: **v4.0.0**
 
 ---
 
@@ -70,7 +70,7 @@ Bundled directly into the pack under the `stringlib` namespace. Exposed via `mac
 ```
 macro:engine  (persistent data)
 ├── global
-│   ├── version: "v3.0.4-pre1"
+│   ├── version: "v4.0.0"
 │   └── tick: <int>
 ├── players
 │   └── Steve { coins:150, level:5, xp:2300, online:1b, ... }
@@ -158,7 +158,7 @@ function macro:lib/string/replace
 
 See [docs/CHANGELOG.md](docs/CHANGELOG.md) for the full changelog.
 
-### v3.0.4-pre1
+### v4.0.0
 - Bundle StringLib (CMDred, MIT) and expose via `macro:lib/string/*`
 - Load-time warn if StringLib is missing
 
@@ -190,4 +190,4 @@ New modules: `math/abs`, `math/clamp`, `team/*`, `config/*`, `lib/input_push`, `
 
 ---
 
-*Advanced Macro Engine v3.0.4-pre1 | MC Java 1.20.3–1.21.6+ | Language: mcfunction*
+*Advanced Macro Engine v4.0.0 | MC Java 1.20.3–1.21.6+ | Language: mcfunction*

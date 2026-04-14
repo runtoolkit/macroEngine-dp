@@ -1,6 +1,6 @@
 # AME Safe Load System
 
-**Introduced in v3.0.4-pre1**
+**Introduced in v4.0.0**
 
 ---
 

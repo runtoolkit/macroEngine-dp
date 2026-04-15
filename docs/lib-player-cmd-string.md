@@ -82,16 +82,8 @@ Advanced text and interaction system with click/hover support.
 
 | Function                     | Input Parameters                                      | Description |
 |-----------------------------|-------------------------------------------------------|-----------|
-| `string/chat`               | `target`, `message`, `color`                          | Simple colored chat message. |
-| `string/player_raw`         | `player`, `json`                                      | Raw JSON message to one player. |
-| `string/broadcast_raw`      | `json`                                                | Raw JSON to all players. |
-| `string/click_run`          | `target`, `text`, `color`, `command`                  | Clickable text that runs a command. |
-| `string/click_suggest`      | `target`, `text`, `color`, `suggest`                  | Click to suggest command in chat. |
-| `string/copy_to_clipboard`  | `target`, `text`, `color`, `copy_value`               | Click to copy text to clipboard. |
-| `string/link`               | `target`, `text`, `color`, `url`                      | Clickable hyperlink. |
 | `string/hover_text`         | `target`, `text`, `color`, `hover`, `hover_color`     | Text with hover tooltip. |
 | `string/tooltip_item`       | `target`, `text`, `color`, `item`                     | Shows item preview on hover. |
-| `string/function_suggest`   | `target`, `title`, `body`, `suggest`, `color`         | Beautiful function suggestion button. |
 | `string/progress_bar`       | `player`, `current`, `max`, `label`                   | Visual progress bar in actionbar. |
 
 ---

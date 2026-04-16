@@ -8,7 +8,25 @@
 
 > 📚 **Wiki** — Full API reference, examples, and guides: [docs/wiki/](docs/wiki/) *(GitHub Wiki coming soon)*
 
+
+
+
+
 ---
+## ⚠️ Arşivlendi
+
+Bu depo arşivlenmiştir ve artık geliştirilmeyecektir.
+
+Son dönemde dijital içerikler ve güvenlik konularına yönelik tartışmalar nedeniyle önlem amaçlı arşivlenmiştir.
+
+Kodlar referans ve eğitim amaçlı olarak erişilebilir durumda bırakılmıştır.
+
+---
+
+
+
+
+
 
 ## ✅ Verification
 

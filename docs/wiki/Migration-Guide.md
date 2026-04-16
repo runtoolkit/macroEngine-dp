@@ -30,11 +30,11 @@ If you depend on this project in another datapack via LanternLoad, no namespace 
 
 ---
 
-## Migrating from `v3.x` → `v4.0.0`
+## Migrating from `v3.x` → `v4.0.1`
 
 ### StringLib dependency
 
-`v4.0.0` bundles [StringLib (CMDred, MIT)](https://github.com/CMDred/StringLib) directly. If your setup previously included StringLib separately:
+`v4.0.1` bundles [StringLib (CMDred, MIT)](https://github.com/CMDred/StringLib) directly. If your setup previously included StringLib separately:
 
 - You can remove the standalone StringLib datapack — it is now part of macroEngine.
 - Access string functions via `macro:lib/string/*` wrappers instead of `stringlib:*` directly.
@@ -54,7 +54,7 @@ function macro:lib/string/replace with storage macro:input {}
 
 ### Load Confirmation Gate
 
-`v4.0.0` introduces a load confirmation gate. After `/reload`, you must run:
+`v4.0.1` introduces a load confirmation gate. After `/reload`, you must run:
 
 ```
 /function ame_load:load/yes
@@ -66,11 +66,11 @@ To skip the gate for automated testing, call `ame_load:load/yes` from a schedule
 
 ---
 
-## Migrating from `v2.x` → `v4.0.0`
+## Migrating from `v2.x` → `v4.0.1`
 
 ### `rate_limit` module breaking change
 
-The `rate_limit` module was completely rewritten in v4.0.0:
+The `rate_limit` module was completely rewritten in v4.0.1:
 
 - Old sub-function-based API removed
 - New API: `check` / `tick` / `config` — pure scoreboard, no sub-functions

@@ -59,7 +59,7 @@
 
 | Score holder | Objective | Value | Description |
 |---|---|---|---|
-| `macroEngine` | `load.status` | `40000` (v4.0.0) | Version for dependency guards. Format: `major*10000 + minor*100 + patch`. |
+| `macroEngine` | `load.status` | `40000` (v4.0.1) | Version for dependency guards. Format: `major*10000 + minor*100 + patch`. |
 | `StringLib` | `load.status` | non-zero | StringLib loaded successfully. |
 
 ---

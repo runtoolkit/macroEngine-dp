@@ -2,7 +2,7 @@
 
 **Minecraft Java Edition 1.20.3 – 1.21.6+ | Multiplayer-Safe | Pure Datapack**
 
-> Current version: **v4.0.0** · Repository: [tickwarden/macroEngine-datapack](https://github.com/tickwarden/macroEngine-datapack)
+> Current version: **v4.0.1** · Repository: [tickwarden/macroEngine-datapack](https://github.com/tickwarden/macroEngine-datapack)
 
 ---
 

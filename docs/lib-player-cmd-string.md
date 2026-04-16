@@ -160,6 +160,6 @@ function macro:dialog/close
 
 ---
 
-**Pack Version**: v4.0.0  
+**Pack Version**: v4.0.1  
 **Compatible with**: Minecraft 1.20.3 → 1.21.x → 26.x+  
 **Author**: tickwarden (ToolkitMC)

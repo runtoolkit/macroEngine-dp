@@ -6,7 +6,7 @@ Full detailed changelog: [docs/CHANGELOG.md](https://github.com/tickwarden/macro
 
 ---
 
-## v4.0.0 — 2026-04-13
+## v4.0.1 — 2026-04-13
 
 **Load Confirmation Gate** — `ame_load:load/confirm` / `yes` / `no` / `timeout`. Storage is never written until an admin confirms. Prevents silent data loss on `/reload`.
 
@@ -18,7 +18,7 @@ Full detailed changelog: [docs/CHANGELOG.md](https://github.com/tickwarden/macro
 
 ---
 
-## v4.0.0 — 2026-04-12
+## v4.0.1 — 2026-04-12
 
 **StringLib Integration** — [StringLib (CMDred, MIT)](https://github.com/CMDred/StringLib) bundled directly. Access via `macro:lib/string/*` wrappers: `concat`, `find`, `replace`, `split`, `insert`, `to_lowercase`, `to_uppercase`, `to_number`, `to_string`.
 
@@ -44,11 +44,11 @@ Full detailed changelog: [docs/CHANGELOG.md](https://github.com/tickwarden/macro
 ## v3.0.1 — 2026-04-09
 
 **New:** `time/get_time`, `time/time_phase`, `hook/reset_all`.  
-**Fix:** Version string mismatch in all overlays (v4.0.0 → v3.0.1).
+**Fix:** Version string mismatch in all overlays (v4.0.1 → v3.0.1).
 
 ---
 
-## v4.0.0 — 2026-04-04
+## v4.0.1 — 2026-04-04
 
 **Breaking:** `rate_limit` module fully rewritten — sub-function API removed. New `check` / `tick` / `config` pure-scoreboard API.
 

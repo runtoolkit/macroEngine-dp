@@ -2,7 +2,7 @@
 **Minecraft Java Edition 1.20.3–1.21.6+ | Multiplayer-Safe | Pure Datapack**
 
 
-> Current version: **v4.0.0**
+> Current version: **v4.0.1**
 
 > 📦 **Moved from `ToolkitMC/macroEngine-dp`** — This is the new official repository. The old repo is archived (read-only). Update your remotes and bookmarks. See the [Migration Guide](docs/wiki/Migration-Guide.md) for details.
 
@@ -75,7 +75,7 @@ Bundled directly into the pack under the `stringlib` namespace. Exposed via `mac
 ```
 macro:engine  (persistent data)
 ├── global
-│   ├── version: "v4.0.0"
+│   ├── version: "v4.0.1"
 │   └── tick: <int>
 ├── players
 │   └── Steve { coins:150, level:5, xp:2300, online:1b, ... }
@@ -163,7 +163,7 @@ function macro:lib/string/replace
 
 See [docs/CHANGELOG.md](docs/CHANGELOG.md) for the full changelog.
 
-### v4.0.0
+### v4.0.1
 - Bundle StringLib (CMDred, MIT) and expose via `macro:lib/string/*`
 - Load-time warn if StringLib is missing
 
@@ -197,4 +197,4 @@ New modules: `math/abs`, `math/clamp`, `team/*`, `config/*`, `lib/input_push`, `
 [![Issues](https://img.shields.io/github/issues/tickwarden/macroEngine-datapack?style=for-the-badge)](https://github.com/tickwarden/macroEngine-datapack/issues) - GitHub Issues — Your hub for questions, suggestions, and bug reports.
 ---
 
-*Advanced Macro Engine v4.0.0 | MC Java 1.20.3–1.21.6+ | Language: mcfunction*
+*Advanced Macro Engine v4.0.1 | MC Java 1.20.3–1.21.6+ | Language: mcfunction*

@@ -80,7 +80,7 @@ If your server uses other LanternLoad-compatible datapacks, macroEngine integrat
 execute if score macroEngine load.status matches 1.. run say loaded
 
 # Get version (major*10000 + minor*100 + patch)
-# v4.0.0 = 40000
+# v4.0.1 = 40000
 scoreboard players get macroEngine load.status
 ```
 

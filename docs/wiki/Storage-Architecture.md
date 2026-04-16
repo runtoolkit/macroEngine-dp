@@ -21,7 +21,7 @@ All macroEngine communication uses three NBT storage namespaces:
 ```
 macro:engine
 ├── global
-│   ├── version: "v4.0.0"
+│   ├── version: "v4.0.1"
 │   └── tick: <int>
 │
 ├── players

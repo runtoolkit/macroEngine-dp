@@ -24,7 +24,8 @@ data remove storage macro:engine _macro_pipe
 $data modify storage macro:engine _macro_pipe.$(var) set value 0b
 
 # Oyuncu advancement'ı tamamladıysa 1b olarak güncelle
-$execute as @a[name=$(player),limit=1,advancements={"$(advancement)":{done:true}}] run data modify storage macro:engine _macro_pipe.$(var) set value 1b
+$execute as @a[name=$(player),limit=1,advancements={$(advancement)=true}] run data modify storage macro:engine _macro_pipe.$(var) set value 1b
+$execute as @a[name=$(player),limit=1,advancements={$(advancement)=false}] run data modify storage macro:engine _macro_pipe.$(var) set value 0b
 
 # Hedef fonksiyonu pipe üzerinden çalıştır
 $function $(func) with storage macro:engine _macro_pipe

@@ -115,3 +115,4 @@ test.tar.gz
 *.xlsx
 *.ppt
 *.pptx
+!pack.png

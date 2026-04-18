@@ -1,163 +1,34 @@
 # 🔧 Advanced Macro Engine
 **Minecraft Java Edition 1.20.3–1.21.6+ | Multiplayer-Safe | Pure Datapack**
 
+> Current version: **v4.0.1**
 
-> Current version: **v4.0.2**
-
-> 📦 **Moved from `ToolkitMC/macroEngine-dp`** — This is the new official repository. The old repo is archived (read-only). Update your remotes and bookmarks. See the [Migration Guide](docs/wiki/Migration-Guide.md) for details.
-
-> 📚 **Wiki** — Full API reference, examples, and guides: [docs/wiki/](docs/wiki/) *(GitHub Wiki coming soon)*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+> ⚠️ **Migrated from `ToolkitMC/macroEngine-dp`** — This is the new official repository. The old repo is archived (read-only). See the [Migration Guide](../../wiki/Migration-Guide) for details.
 
 ---
 
+## 📚 Documentation
 
+Full API reference, guides, and examples are available in the **[GitHub Wiki](../../wiki)**.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## ✅ Verification
-
-> ⚠️ **This is the ONLY official source.**
-> Files downloaded from other sites or forks may have been modified.
-> Only download from the [Releases](https://github.com/tickwarden/macroEngine-datapack/releases) page.
-
-**SHA256:** *dcc86cacc48edbb48c4814ae4346a8734d787b593b94f8ca93f0f9f64116f6fb*
-
-```bash
-# Windows
-certutil -hashfile datapack.zip SHA256
-
-# Linux / Mac
-sha256sum datapack.zip
-```
+| Page | Description |
+|------|-------------|
+| [Installation](../../wiki/Installation) | How to install and load the datapack |
+| [Storage Architecture](../../wiki/Storage-Architecture) | `macro:engine`, `macro:input`, `macro:output` layout |
+| [Overlay System](../../wiki/Overlay-System) | Multi-version overlay structure |
+| [Admin Guide](../../wiki/Admin-Guide) | `macro.admin` tag, permissions, debug tools |
+| [Changelog](../../wiki/Changelog) | Full version history |
 
 ---
 
 ## 📦 Installation
 
 ```
-1. Place macroEngine-dp-main.zip/macroEngine-dp into your <server name>/world/datapacks/ folder
+1. Place macroEngine-dp into <world>/datapacks/
 2. /reload
 3. /function ame_load:load/yes
-4. Become an admin: /tag @s add macro.admin
+4. /tag @s add macro.admin
 ```
-
----
-
-## 📚 Dependencies & Libraries
-
-### Lantern Load
-**Repository:** https://github.com/LanternMC/load  
-**Purpose:** Datapack load order management and version resolution  
-**License:** BSD 0-Clause (public domain)
-
-Lantern Load provides:
-- Deterministic load order across datapacks
-- Version tracking via `load.status` scoreboard
-- Pre-load, load, and post-load hooks
-
-**macroEngine version detection:**
-```mcfunction
-# Check if macroEngine is loaded
-execute if score macroEngine load.status matches 1.. run say macroEngine is loaded
-
-# Get version (format: major*10000 + minor*100 + patch)
-# Example: v3.0.4 = 30004
-scoreboard players get macroEngine load.status
-```
-
-### StringLib
-**Repository:** https://github.com/CMDred/StringLib  
-**Purpose:** String manipulation (concat, find, replace, split, insert, case conversion)  
-**License:** MIT
-
-Bundled directly into the pack under the `stringlib` namespace. Exposed via `macro:core/lib/string/*` wrappers — see [API Reference](#-api-reference--examples) below.
 
 ---
 
@@ -183,61 +54,67 @@ macro:output  (receiving results from a function)
 
 ---
 
-## 🔍 Predicate System — `macro:predicate/*`
+## 🔍 Predicate Reference
 
 Used with `execute if predicate <id>`.
 
-| Predicate ID | Description |
+| Predicate | Description |
 |---|---|
-| `macro:is_survival` | Is the player in survival mode? |
-| `macro:is_creative` | Is the player in creative mode? |
-| `macro:has_empty_mainhand` | Is the player's main hand empty? |
-| `macro:is_full_health` | Is the player at full health? (20 HP) |
-| `macro:is_sneaking` | Is the player sneaking? |
-| `macro:is_sprinting` | Is the player sprinting? |
-| `macro:is_burning` | Is the player on fire? |
-| `macro:is_on_ground` | Is the player on the ground? |
-| `macro:is_daytime` | Is it daytime? (0–12000 ticks) |
-| `macro:is_raining` | Is it raining? |
-| `macro:is_thundering` | Is there a thunderstorm? |
-| `macro:in_overworld` | Is the player in the Overworld? |
-| `macro:in_nether` | Is the player in the Nether? |
-| `macro:in_end` | Is the player in the End? |
+| `macro:is_survival` | Player is in survival mode |
+| `macro:is_creative` | Player is in creative mode |
+| `macro:has_empty_mainhand` | Main hand is empty |
+| `macro:is_full_health` | Player is at full health (20 HP) |
+| `macro:is_sneaking` | Player is sneaking |
+| `macro:is_sprinting` | Player is sprinting |
+| `macro:is_burning` | Player is on fire |
+| `macro:is_on_ground` | Player is on the ground |
+| `macro:is_daytime` | Daytime (0–12000 ticks) |
+| `macro:is_raining` | It is raining |
+| `macro:is_thundering` | There is a thunderstorm |
+| `macro:in_overworld` | Player is in the Overworld |
+| `macro:in_nether` | Player is in the Nether |
+| `macro:in_end` | Player is in the End |
+
+Full reference: [Predicate Reference](../../wiki/Predicate-Reference)
 
 ---
 
-## 📚 API Reference & Examples
+## 📦 Dependencies
 
-Code and examples are split into separate documents by module:
+### Lantern Load
+**Repository:** https://github.com/LanternMC/load  
+**License:** BSD 0-Clause (public domain)
 
-| Module | Document |
-|--------|----------|
-| 🕐 Cooldown | [cooldown.md](docs/cooldown.md) |
-| 📡 Event | [event.md](https://github.com/tickwarden/macroEngine-datapack/blob/main/docs/event.md) |
-| 🔢 Math | [math.md](https://github.com/tickwarden/macroEngine-datapack/blob/main/docs/math.md) |
-| 👥 Team & ⚙️ Config | [team-config.md](https://github.com/tickwarden/macroEngine-datapack/blob/main/docs/team-config.md) |
-| 🔁 Lib · 👤 Player · ⚙️ Commands · 💬 Messaging · Dialog · Other | [lib-player-cmd-string.md](https://github.com/tickwarden/macroEngine-datapack/blob/main/docs/lib-player-cmd-string.md) |
-| 🔤 String (StringLib) | see below |
+Provides deterministic load order, version tracking, and pre/load/post-load hooks.
 
-### 🔤 `macro:core/lib/string/*`
+```mcfunction
+# Check if macroEngine is loaded
+execute if score macroEngine load.status matches 1.. run say macroEngine is loaded
+
+# Get version (major*10000 + minor*100 + patch → v4.0.1 = 40001)
+scoreboard players get macroEngine load.status
+```
+
+### StringLib
+**Repository:** https://github.com/CMDred/StringLib  
+**License:** MIT
+
+Bundled under the `stringlib` namespace. Exposed via `macro:core/lib/string/*`.
+
+| Function | Description |
+|---|---|
+| `lib/string/concat` | Join a string array |
+| `lib/string/find` | Find substring index |
+| `lib/string/replace` | Replace substring |
+| `lib/string/split` | Split by separator |
+| `lib/string/insert` | Insert at index |
+| `lib/string/to_lowercase` | Lowercase (A–Z, fast) |
+| `lib/string/to_uppercase` | Uppercase (a–z, fast) |
+| `lib/string/to_number` | String → numeric NBT |
+| `lib/string/to_string` | Value → string |
 
 All functions read from `macro:input` and write to `macro:output string.result`.
 
-| Function | Input fields | Output |
-|---|---|---|
-| `lib/string/concat` | `list` (string array) | combined string |
-| `lib/string/find` | `string`, `find`, `n` | index list, or `[-1]` |
-| `lib/string/replace` | `string`, `find`, `replace`, `n` | modified string |
-| `lib/string/split` | `string`, `separator`, `n`, `keep_empty` | string list |
-| `lib/string/insert` | `string`, `insertion`, `index` | modified string |
-| `lib/string/to_lowercase` | `string` | lowercase (A–Z only, fast) |
-| `lib/string/to_lowercase_full` | `string` | lowercase (full Unicode) |
-| `lib/string/to_uppercase` | `string` | uppercase (a–z only, fast) |
-| `lib/string/to_uppercase_full` | `string` | uppercase (full Unicode) |
-| `lib/string/to_number` | `string` | numeric NBT value |
-| `lib/string/to_string` | `value` | string representation |
-
-**Example — replace:**
 ```mcfunction
 data modify storage macro:input string set value "Hello World"
 data modify storage macro:input find set value "World"
@@ -246,46 +123,33 @@ function macro:core/lib/string/replace
 # macro:output string.result → "Hello Everyone"
 ```
 
-**`n` parameter** (find / replace / split): `0` or unset = all, `+n` = first n, `-n` = last n.
+---
+
+## 📡 API Modules
+
+| Module | Wiki |
+|--------|------|
+| 🕐 Cooldown | [API-Cooldown](../../wiki/API-Cooldown) |
+| 📡 Event | [API-Event](../../wiki/API-Event) |
+| 🏳️ Flag & State | [API-Flag-State](../../wiki/API-Flag-State) |
+| 🪝 Hook | [API-Hook](../../wiki/API-Hook) |
+| 🖱️ Interaction | [API-Interaction](../../wiki/API-Interaction) |
+| 🎒 Inventory | [API-Inventory](../../wiki/API-Inventory) |
+| 📚 Library | [API-Library](../../wiki/API-Library) |
+| 🔢 Math | [API-Math](../../wiki/API-Math) |
+| 🔐 Permission | [API-Permission](../../wiki/API-Permission) |
+| 👤 Player | [API-Player](../../wiki/API-Player) |
+| 🔤 String | [API-String](../../wiki/API-String) |
+| 🪄 Wand | [API-Wand](../../wiki/API-Wand) |
+| 🌍 World & Geo | [API-World-Geo](../../wiki/API-World-Geo) |
 
 ---
 
-## 🩹 Changelog
+## 💬 Support
 
-See [docs/CHANGELOG.md](docs/CHANGELOG.md) for the full changelog.
-
-### v4.0.1
-- Bundle StringLib (CMDred, MIT) and expose via `macro:core/lib/string/*`
-- Load-time warn if StringLib is missing
-
-### v3.0.3
-- New `1_20_5` overlay (pack_format 48)
-- `math/mul_div` — overflow-safe a×b÷c
-
-### v3.0.2
-- New `1_20_3` overlay (pack_format 26)
-- `queue/` multi-cmd system
-- Trigger system rewrite
-
-### v3.0 — Bug Fixes & New Modules
-
-| Bug | Fix |
-|-----|-----|
-| **CRITICAL**: `$epoch` reset on `/reload` | Added `unless score $epoch` guard |
-| `process_queue` stack overflow risk | `$pq_depth` limit of 256/tick |
-
-New modules: `math/abs`, `math/clamp`, `team/*`, `config/*`, `lib/input_push`, `lib/input_pop`
+[![Issues](https://img.shields.io/github/issues/runtoolkit/macroEngine-dp?style=for-the-badge)](https://github.com/runtoolkit/macroEngine-dp/issues)
+[![Discussions](https://img.shields.io/github/discussions/runtoolkit/macroEngine-dp?style=for-the-badge&logo=github&color=blue)](https://github.com/runtoolkit/macroEngine-dp/discussions)
 
 ---
 
-## 💬 Community & Support
-
-[![Discussions](https://img.shields.io/github/discussions/tickwarden/macroEngine-datapack?style=for-the-badge&logo=github&color=blue)](https://github.com/tickwarden/macroEngine-datapack/discussions)
-
-[GitHub Discussions](https://github.com/tickwarden/macroEngine-datapack/discussions) — For questions, suggestions, and bug reports.
-
-
-[![Issues](https://img.shields.io/github/issues/tickwarden/macroEngine-datapack?style=for-the-badge)](https://github.com/tickwarden/macroEngine-datapack/issues) - GitHub Issues — Your hub for questions, suggestions, and bug reports.
----
-
-*Advanced Macro Engine v4.0.1 | MC Java 1.20.3–1.21.6+ | Language: mcfunction*
+*Advanced Macro Engine v4.0.1 | MC Java 1.20.3–1.21.6+ | Pure Datapack*

@@ -1,7 +1,7 @@
 # 🔧 Advanced Macro Engine
 **Minecraft Java Edition 1.20.3–1.21.6+ | Multiplayer-Safe | Pure Datapack**
 
-> Current version: **v4.0.1**
+> Current version: **v4.0.2**
 
 > ⚠️ **Migrated from `ToolkitMC/macroEngine-dp`** — This is the new official repository. The old repo is archived (read-only). See the [Migration Guide](../../wiki/Migration-Guide) for details.
 
@@ -152,4 +152,4 @@ function macro:core/lib/string/replace
 
 ---
 
-*Advanced Macro Engine v4.0.1 | MC Java 1.20.3–1.21.6+ | Pure Datapack*
+*Advanced Macro Engine v4.0.2 | MC Java 1.20.3–1.21.6+ | Pure Datapack*

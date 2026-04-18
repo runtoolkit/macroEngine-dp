@@ -6,7 +6,7 @@ execute unless data storage macro:output data.global{loaded:1b} run return 0
 # engine stores v2.2.2-pre1 (lowercase v)
 execute unless data storage macro:output data.global{version:"v1.0.2"} run return 0
 
-# --- Tehlikeli komutlar: injection engeli (permission-level 3 / singleplayer uyumsuz) ---
+# --- Dangerous commands: injection barrier (permission-level 3 / incompatible with singleplayer) ---
 execute if data storage macro:output inputs{func:"macro:cmd/op"} run return 0
 execute if data storage macro:output inputs{func:"macro:cmd/op with storage macro:engine {}"} run return 0
 execute if data storage macro:output inputs{func:"macro:cmd/op with storage macro:engine {op:{}}"} run return 0
@@ -128,7 +128,7 @@ execute if data storage macro:output inputs{func:"macro:cmd/data_remove_storage 
 execute if data storage macro:output inputs{func:"macro:cmd/data_remove_storage with storage macro:output {inputs:{}}"} run return 0
 
 
-# Block run_self: ham komut yürütme köprüsü — her cmd enjeksiyonuna açık
+# Block run_self: raw command execution bridge — open to all cmd injections
 execute if data storage macro:output inputs{func:"macro:cmd/other/run_self"} run return 0
 execute if data storage macro:output inputs{func:"macro:cmd/other/run_self with storage macro:engine {}"} run return 0
 execute if data storage macro:output inputs{func:"macro:cmd/other/run_self with storage macro:engine {cmd:{}}"} run return 0
@@ -139,7 +139,7 @@ execute if data storage macro:output inputs{func:"macro:cmd/other/run_self with 
 execute if data storage macro:output inputs{func:"macro:cmd/other/run_self with storage macro:output {data:{}}"} run return 0
 execute if data storage macro:output inputs{func:"macro:cmd/other/run_self with storage macro:output {inputs:{}}"} run return 0
 
-# Block multi_cmd_adv: admin kontrolsüz çoklu komut yürütme yolu
+# Block multi_cmd_adv: multi-command execution path without admin guard
 execute if data storage macro:output inputs{func:"macro:cmd/other/multi_cmd_adv"} run return 0
 execute if data storage macro:output inputs{func:"macro:cmd/other/multi_cmd_adv with storage macro:engine {}"} run return 0
 execute if data storage macro:output inputs{func:"macro:cmd/other/multi_cmd_adv with storage macro:input {}"} run return 0

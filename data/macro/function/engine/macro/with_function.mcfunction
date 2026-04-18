@@ -1,33 +1,33 @@
 # ─────────────────────────────────────────────
 # macro:engine/macro/with_function [MACRO]
 #
-# Provider (source) fonksiyonunu çalıştırır; fonksiyonun
-# macro:engine _macro_pipe storage'ına yazdığı verileri
-# consumer (target) fonksiyonuna makro değişken kaynağı olarak iletir.
+# Runs a provider (source) function; passes the data that function
+# wrote to macro:engine _macro_pipe storage as macro variable source
+# to a consumer (target) function.
 #
-# İki fonksiyon arasında tip-güvenli bir veri köprüsü oluşturur.
+# Establishes a type-safe data bridge between two functions.
 #
-# Kullanım:
+# Usage:
 #   function macro:engine/macro/with_function \
 #     {source:"ns:provider", target:"ns:consumer"}
 #
-# Parametreler:
-#   source — veriyi üretip macro:engine _macro_pipe'a yazan fonksiyon
-#   target — pipe'taki verileri makro değişken olarak tüketen fonksiyon
+# Parameters:
+#   source — function that produces data and writes it to macro:engine _macro_pipe
+#   target — function that consumes data from the pipe as macro variables
 #
-# Sözleşme:
-#   source fonksiyonu çıktılarını şu storage'a yazmalıdır:
+# Contract:
+#   source function must write its output to this storage:
 #     data modify storage macro:engine _macro_pipe.<key> set value <val>
-#   target fonksiyonu bu key'leri $(key) şeklinde kullanabilir.
+#   target function can access those keys as $(key).
 # ─────────────────────────────────────────────
 
-# Source çalışmadan önce pipe'ı temizle
+# Clear pipe before source runs
 data remove storage macro:engine _macro_pipe
 
-# Provider fonksiyonunu çalıştır — çıktıyı _macro_pipe'a yazar
+# Run provider function — it writes its output to _macro_pipe
 $function $(source)
 
-# Consumer fonksiyonunu pipe ile besle
+# Pass pipe to consumer as macro source
 $function $(target) with storage macro:engine _macro_pipe
 
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"engine/macro/with_function ","color":"aqua"},{"text":"$(source)","color":"yellow"},{"text":" ⟶ ","color":"#555555"},{"text":"$(target)","color":"aqua"}]

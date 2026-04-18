@@ -1,33 +1,32 @@
 # ─────────────────────────────────────────────
 # macro:engine/macro/with_advancement [MACRO]
 #
-# Bir oyuncunun belirli bir advancement'ı tamamlayıp tamamlamadığını
-# kontrol eder; sonucu named makro değişkeni olarak hedef fonksiyona iletir.
+# Checks whether a player has completed a specific advancement and
+# injects the boolean result as a named macro variable into the target function.
 #
-# Kullanım:
+# Usage:
 #   function macro:engine/macro/with_advancement \
 #     {func:"ns:path", player:"Name", advancement:"ns:adv/path", var:"done"}
 #
-# Parametreler:
-#   func        — çalıştırılacak fonksiyon (ns:path)
-#   player      — hedef oyuncu adı
-#   advancement — kontrol edilecek advancement (ns:path/to/adv)
-#   var         — fonksiyona aktarılacak makro değişken adı
+# Parameters:
+#   func        — function to call (ns:path)
+#   player      — target player name
+#   advancement — advancement to check (ns:path/to/adv)
+#   var         — macro variable name to inject into the target function
 #
-# Çıktı: $(done) → 1b (tamamlandı) veya 0b (tamamlanmadı)
+# Output: $(done) → 1b (completed) or 0b (not completed)
 # ─────────────────────────────────────────────
 
-# Pipe'ı temizle
+# Clear pipe
 data remove storage macro:engine _macro_pipe
 
-# Varsayılan: tamamlanmadı
+# Default: not completed
 $data modify storage macro:engine _macro_pipe.$(var) set value 0b
 
-# Oyuncu advancement'ı tamamladıysa 1b olarak güncelle
-$execute as @a[name=$(player),limit=1,advancements={$(advancement)=true}] run data modify storage macro:engine _macro_pipe.$(var) set value 1b
-$execute as @a[name=$(player),limit=1,advancements={$(advancement)=false}] run data modify storage macro:engine _macro_pipe.$(var) set value 0b
+# Set to 1b if the player has completed the advancement
+$execute as @a[name=$(player),limit=1,advancements={"$(advancement)":{done:true}}] run data modify storage macro:engine _macro_pipe.$(var) set value 1b
 
-# Hedef fonksiyonu pipe üzerinden çalıştır
+# Call target function with pipe as macro source
 $function $(func) with storage macro:engine _macro_pipe
 
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"engine/macro/with_advancement ","color":"aqua"},{"text":"$(player)","color":"white"},{"text":" [","color":"#555555"},{"text":"$(advancement)","color":"yellow"},{"text":"] ","color":"#555555"},{"text":"$(var)","color":"green"},{"text":" → ","color":"#555555"},{"text":"$(func)","color":"aqua"}]

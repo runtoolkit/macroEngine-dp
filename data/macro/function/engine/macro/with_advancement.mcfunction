@@ -21,10 +21,11 @@
 data remove storage macro:engine _macro_pipe
 
 # Default: not completed
-$data modify storage macro:engine _macro_pipe.$(var) set value 0b
+$data modify storage macro:engine _macro_pipe.$(var) set value "empty"
 
 # Set to 1b if the player has completed the advancement
-$execute as @a[name=$(player),limit=1,advancements={"$(advancement)":{done:true}}] run data modify storage macro:engine _macro_pipe.$(var) set value 1b
+$execute as @a[name=$(player),limit=1,advancements={$(advancement)=true}] run data modify storage macro:engine _macro_pipe.$(var) set value 1b
+$execute as @a[name=$(player),limit=1,advancements={$(advancement)=false}] run data modify storage macro:engine _macro_pipe.$(var) set value 0b
 
 # Call target function with pipe as macro source
 $function $(func) with storage macro:engine _macro_pipe

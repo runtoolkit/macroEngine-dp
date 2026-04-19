@@ -7,6 +7,10 @@
 
 ---
 
+> 🛡️ **Bu bir Minecraft Datapack'tir.** VirusTotal taramasında temiz çıkmıştır. Bazı antivirüs programları, macro içeren `.mcfunction` dosyaları nedeniyle yanlış pozitif verebilir. Dosyayı yalnızca resmi kaynaktan, yani buradan indirin.
+
+---
+
 ## 📚 Documentation
 
 Full API reference, guides, and examples are available in the **[GitHub Wiki](../../wiki)**.

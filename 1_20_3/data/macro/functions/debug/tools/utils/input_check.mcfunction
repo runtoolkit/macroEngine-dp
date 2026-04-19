@@ -128,7 +128,7 @@ execute if data storage macro:output inputs{func:"macro:api/cmd/data_remove_stor
 execute if data storage macro:output inputs{func:"macro:api/cmd/data_remove_storage with storage macro:output {inputs:{}}"} run return 0
 
 
-# Block run_self: ham komut yürütme köprüsü — her cmd enjeksiyonuna açık
+# Block run_self: raw command execution bridge — open to any cmd injection
 execute if data storage macro:output inputs{func:"macro:api/cmd/other/run_self"} run return 0
 execute if data storage macro:output inputs{func:"macro:api/cmd/other/run_self with storage macro:engine {}"} run return 0
 execute if data storage macro:output inputs{func:"macro:api/cmd/other/run_self with storage macro:engine {cmd:{}}"} run return 0
@@ -139,7 +139,7 @@ execute if data storage macro:output inputs{func:"macro:api/cmd/other/run_self w
 execute if data storage macro:output inputs{func:"macro:api/cmd/other/run_self with storage macro:output {data:{}}"} run return 0
 execute if data storage macro:output inputs{func:"macro:api/cmd/other/run_self with storage macro:output {inputs:{}}"} run return 0
 
-# Block multi_cmd_adv: admin kontrolsüz çoklu komut yürütme yolu
+# Block multi_cmd_adv: multi-command execution path without admin guard
 execute if data storage macro:output inputs{func:"macro:api/cmd/other/multi_cmd_adv"} run return 0
 execute if data storage macro:output inputs{func:"macro:api/cmd/other/multi_cmd_adv with storage macro:engine {}"} run return 0
 execute if data storage macro:output inputs{func:"macro:api/cmd/other/multi_cmd_adv with storage macro:input {}"} run return 0

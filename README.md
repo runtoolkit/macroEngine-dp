@@ -7,7 +7,9 @@
 
 ---
 
-> 🛡️ **Bu bir Minecraft Datapack'tir.** VirusTotal taramasında temiz çıkmıştır. Bazı antivirüs programları, macro içeren `.mcfunction` dosyaları nedeniyle yanlış pozitif verebilir. Dosyayı yalnızca resmi kaynaktan, yani buradan indirin.
+> 🛡️ **This is a Minecraft Datapack — it contains no executables or scripts outside of `.mcfunction` files.**
+> Some antivirus software may flag `.mcfunction` files as suspicious due to macro-like syntax. This is a **false positive**. The pack has been scanned on [VirusTotal](https://www.virustotal.com) and returned clean.
+> **Only download from this official repository.** Do not trust redistributed or repackaged versions from third-party sources.
 
 ---
 

@@ -64,17 +64,27 @@ jobs:
             --exclude='README.md' \
             ./ build/
 
-      # 📂 Hedef overlay(lar)ını kopyala (full build'de atlanır)
+      # 📂 Overlay'ları kopyala
       - name: Copy target overlays
-        if: ${{ matrix.overlays != '' }}
         run: |
-          for overlay in ${{ matrix.overlays }}; do
-            if [ -d "$overlay" ]; then
-              cp -r "$overlay" build/
-            else
-              echo "::warning::Overlay directory '$overlay' not found, skipping."
-            fi
-          done
+          ALL_OVERLAYS="1_20_3 1_20_5 _pre_1_21_4 compat_1_21_4 1_21_5 1_21_6 26_1"
+          TARGET="${{ matrix.overlays }}"
+
+          if [ -z "$TARGET" ]; then
+            # Full build: tüm overlay dizinlerini kopyala
+            for d in $ALL_OVERLAYS; do
+              [ -d "$d" ] && cp -r "$d" build/ || echo "::warning::Overlay '$d' not found, skipping."
+            done
+          else
+            # Targeted build: sadece ilgili overlay(lar)ı kopyala
+            for overlay in $TARGET; do
+              if [ -d "$overlay" ]; then
+                cp -r "$overlay" build/
+              else
+                echo "::warning::Overlay '$overlay' not found, skipping."
+              fi
+            done
+          fi
 
       # 🧩 pack.mcmeta — pack_format güncelle, sadece ilgili overlay girdilerini bırak
       - name: Patch pack.mcmeta

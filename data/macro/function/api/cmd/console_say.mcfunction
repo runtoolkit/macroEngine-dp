@@ -1,3 +1,5 @@
+execute unless function macro:debug/tools/utils/check_all run return 0
+
 # ─────────────────────────────────────────────────────────────────
 # macro:api/cmd/console_say
 # Sends a message to the server console and all players via /say.

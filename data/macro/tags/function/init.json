@@ -1,3 +1,5 @@
 {
-  "values": []
+  "values": [
+    "#macro:events/on_load"
+  ]
 }

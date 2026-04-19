@@ -1,5 +1,5 @@
 {
   "values": [
-    "macro:core/load/warn"
+    "#macro:events/on_load"
   ]
 }

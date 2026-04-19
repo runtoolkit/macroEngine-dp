@@ -17,3 +17,5 @@ function macro:api/perm/trigger/internal/tick_start
 function macro:api/wand/internal/tick_scan
 
 function macro:systems/hook/internal/tick_scan
+# Event bus — on_tick
+function #macro:events/on_tick

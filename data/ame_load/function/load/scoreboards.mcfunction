@@ -70,3 +70,9 @@ scoreboard players set #100 macro.tmp 100
 # Log level system: 0=off 1=error 2=warn 3=info 4=debug
 scoreboard objectives add ame.log_level dummy
 execute unless score #ame.log_level ame.log_level matches 0.. run scoreboard players set #ame.log_level ame.log_level 3
+
+# Config scoreboard — fast integer config values (no storage lookup needed)
+scoreboard objectives add macro.config dummy
+
+# State scoreboard — per-player state machine (0=idle 1=combat 2=menu ...)
+scoreboard objectives add macro.state dummy

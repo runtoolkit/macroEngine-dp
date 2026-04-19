@@ -1,13 +1,15 @@
-# ─────────────────────────────────────────────────────────────────
 # macro:systems/hook/on_eat
-# Fires when a player eats food.
-# Based on the consume_item advancement.
+# Binds a function or command to the "eat" event.
 #
-# INPUT:
-#   $(func) or $(cmd) → function/command to trigger
-#   $(tag)              → (optional) bind tag
+# INPUT (storage macro:input):
+#   func → function to run when a player eats
+#   cmd  → command to run when a player eats (used if func is absent)
 #
 # USAGE:
-# function macro:systems/hook/bind {event:"eat",func:"mypack:on_eat"}
-# ─────────────────────────────────────────────────────────────────
-$function macro:systems/hook/bind {event:"eat",func:"$(func)"}
+#   data modify storage macro:input func set value "mypack:on_eat"
+#   function macro:systems/hook/on_eat
+#   -- or --
+#   data modify storage macro:input cmd set value "say I ate something"
+#   function macro:systems/hook/on_eat
+data modify storage macro:input event set value "eat"
+function macro:systems/hook/bind

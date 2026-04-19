@@ -6,4 +6,7 @@ on:
 jobs:
   noop:
     runs-on: ubuntu-latest
-    steps: []
+    steps:
+      - name: noop
+        if: ${{ false }}
+        run: exit 0

@@ -66,3 +66,7 @@ scoreboard objectives add macro.hook_fish dummy
 # Version calculation constants (for Lantern Load integration)
 scoreboard players set #10000 macro.tmp 10000
 scoreboard players set #100 macro.tmp 100
+
+# Log level system: 0=off 1=error 2=warn 3=info 4=debug
+scoreboard objectives add ame.log_level dummy
+execute unless score #ame.log_level ame.log_level matches 0.. run scoreboard players set #ame.log_level ame.log_level 3

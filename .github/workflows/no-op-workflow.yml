@@ -1,0 +1,11 @@
+name: No-Op Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do nothing
+        run: echo "No operation"

@@ -1,3 +1,5 @@
+execute unless function macro:debug/tools/utils/check_all run return 0
+
 # AME - World Clock Rate Controller
 $time rate $(rate)
 

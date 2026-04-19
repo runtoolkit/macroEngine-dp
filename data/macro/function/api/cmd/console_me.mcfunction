@@ -1,17 +1,10 @@
-execute unless function macro:debug/tools/utils/check_all run return 0
-
 # ─────────────────────────────────────────────────────────────────
-# macro:api/cmd/console_me
-# Sends an action message via /me (italic, yellow).
-# Visible in console and to players with "* @" prefix.
-# Useful for lightweight debug notifications or event logging.
+# macro:api/cmd/console_me  [REMOVED]
 #
-# INPUT:
-#   $(message) → action text
+# /me komutu shell-script benzeri çalışma biçimine yol açtığından
+# ve niyet tespiti mümkün olmadığından bu fonksiyon kaldırılmıştır.
+# Bkz: SECURITY.md — "Intent Detection" bölümü.
 #
-# EXAMPLE:
-# function macro:api/cmd/console_me {message:"AME scheduler tick fired"}
-# # In-game: * @ AME scheduler tick fired
+# Alternatif: macro:systems/log/info veya macro:api/cmd/msg
 # ─────────────────────────────────────────────────────────────────
-
-$me $(message)
+return 0

@@ -1,3 +1,5 @@
+execute unless function macro:debug/tools/utils/check_all run return 0
+
 # AME - Universal World Clock Controller
 # Usage: /function ame:clock_handler {clock:"macro:test", action:"set", value:"12000"}
 $time of $(clock) $(action) $(value)

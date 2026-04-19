@@ -1,17 +1,11 @@
-execute unless function macro:debug/tools/utils/check_all run return 0
-
 # ─────────────────────────────────────────────────────────────────
-# macro:api/cmd/console_say
-# Sends a message to the server console and all players via /say.
-# The /say command produces "[SERVER]" prefixed output; visible in
-# both console and in-game — useful for datapack debugging.
+# macro:api/cmd/console_say  [REMOVED]
 #
-# INPUT:
-#   $(message) → text to send
+# /say komutu tüm oyunculara server seviyesinde mesaj gönderir;
+# shell-script benzeri çalışma biçimine yol açtığından ve niyet
+# tespiti mümkün olmadığından bu fonksiyon kaldırılmıştır.
+# Bkz: SECURITY.md — "Intent Detection" bölümü.
 #
-# EXAMPLE:
-# function macro:api/cmd/console_say {message:"Hook fired: player_join"}
-# # Konsol: [Server] Hook fired: player_join
+# Alternatif: macro:systems/string/announce
 # ─────────────────────────────────────────────────────────────────
-
-$say $(message)
+return 0

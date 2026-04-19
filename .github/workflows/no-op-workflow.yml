@@ -7,6 +7,6 @@ jobs:
   noop:
     runs-on: ubuntu-latest
     steps:
-      - name: noop
+      - name: no-op
         if: ${{ false }}
         run: exit 0

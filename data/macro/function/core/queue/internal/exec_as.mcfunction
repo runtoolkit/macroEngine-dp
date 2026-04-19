@@ -6,4 +6,5 @@
 #   fn     — function path to call
 #   player — player name used in selector
 
-$execute as $(player) run function $(fn)
+$data modify storage macro:engine _dispatch.func set value "$(fn)"
+$execute as $(player) run function macro:core/dispatch/run

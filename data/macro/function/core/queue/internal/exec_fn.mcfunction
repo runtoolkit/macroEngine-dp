@@ -5,4 +5,5 @@
 # Macro input:
 #   fn — function path to call
 
-$function $(fn)
+$data modify storage macro:engine _dispatch.func set value "$(fn)"
+function #macro:internal/dispatch

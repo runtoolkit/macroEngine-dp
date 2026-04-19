@@ -7,4 +7,5 @@
 
 execute if data storage macro:tick_work channel{condition:""} run return 0
 
-$execute as @a[limit=1] at @s if predicate $(condition) run function $(fn)
+$data modify storage macro:engine _dispatch.func set value "$(fn)"
+$execute as @a[limit=1] at @s if predicate $(condition) run function macro:core/dispatch/run

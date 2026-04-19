@@ -14,5 +14,8 @@ $execute if data storage macro:engine once_per_player.$(player).$(key) run retur
 
 data modify storage macro:output ran set value 1b
 $data modify storage macro:engine once_per_player.$(player).$(key) set value 1b
-$function $(func)
+
+$data modify storage macro:engine _dispatch.func set value "$(func)"
+function #macro:internal/dispatch
+
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"lib/once_per_player ","color":"aqua"},{"text":"$(player):$(key) ","color":"white"},{"text":"✔ ran for the first time","color":"green"}]

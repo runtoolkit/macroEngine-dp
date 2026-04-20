@@ -29,7 +29,7 @@ jobs:
             pack_format: 80
             overlays: "1_21_6"
           - label: "full"
-            pack_format: 94
+            pack_format: 101
             overlays: ""
 
     steps:
@@ -93,32 +93,27 @@ jobs:
           FORMAT="${{ matrix.pack_format }}"
           OVERLAYS="${{ matrix.overlays }}"
 
-          if [ "$LABEL" = "full" ]; then
-            # Full build: pack.mcmeta olduğu gibi kalır, sadece kopyalandı
-            echo "Full build — pack.mcmeta untouched."
-          else
-            # Overlay listesini jq array'ine çevir
-            JQ_ARRAY="[]"
-            for ov in $OVERLAYS; do
-              JQ_ARRAY=$(echo "$JQ_ARRAY" | jq --arg d "$ov" '. + [$d]')
-            done
+          # Overlay listesini jq array'ine çevir (full build için boş kalabilir)
+          JQ_ARRAY="[]"
+          for ov in $OVERLAYS; do
+            JQ_ARRAY=$(echo "$JQ_ARRAY" | jq --arg d "$ov" '. + [$d]')
+          done
 
-            # pack_format'ı güncelle + overlays.entries'i filtrele
-            jq \
-              --argjson fmt "$FORMAT" \
-              --argjson keep "$JQ_ARRAY" \
-              '
-                .pack.pack_format = $fmt |
-                if .overlays.entries then
-                  .overlays.entries = [
-                    .overlays.entries[] |
-                    select(.directory as $d | $keep | index($d) != null)
-                  ]
-                else . end
-              ' \
-              build/pack.mcmeta > build/pack.mcmeta.tmp
-            mv build/pack.mcmeta.tmp build/pack.mcmeta
-          fi
+          jq \
+            --argjson fmt "$FORMAT" \
+            --argjson keep "$JQ_ARRAY" \
+            --arg label "$LABEL" \
+            '
+              .pack.pack_format = $fmt |
+              if .overlays.entries and $label != "full" then
+                .overlays.entries = [
+                  .overlays.entries[] |
+                  select(.directory as $d | $keep | index($d) != null)
+                ]
+              else . end
+            ' \
+            build/pack.mcmeta > build/pack.mcmeta.tmp
+          mv build/pack.mcmeta.tmp build/pack.mcmeta
 
       # 🔍 Sanity check — pack.mcmeta geçerli JSON mi?
       - name: Validate pack.mcmeta
@@ -203,6 +198,6 @@ jobs:
 
           gh release create "$TAG" \
             --title "macroEngine-dp $TAG" \
-            --notes "**Full multi-version datapack build** (pack_format 94, tüm overlay'lar dahil)." \
+            --notes "**Full multi-version datapack build** (pack_format 101.1, tüm overlay'lar dahil)." \
             --latest \
             "$ZIP#macroEngine-full.zip"

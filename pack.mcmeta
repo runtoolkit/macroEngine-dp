@@ -54,9 +54,7 @@
     "supported_formats": {
       "min_inclusive": 26,
       "max_inclusive": 400000
-    },
-    "min_format": 26,
-    "max_format": 400000
+    }
   },
   "filter": {
     "block": [
@@ -103,9 +101,7 @@
         "formats": {
           "min_inclusive": 80,
           "max_inclusive": 400000
-        },
-        "min_format": 80,
-        "max_format": 400000
+        }
       },
       {
         "directory": "1_21_5",
@@ -119,27 +115,21 @@
         "formats": {
           "min_inclusive": 101,
           "max_inclusive": 101
-        },
-        "min_format": 101,
-        "max_format": 101
+        }
       },
       {
         "directory": "1_20_3",
         "formats": {
           "min_inclusive": 26,
           "max_inclusive": 26
-        },
-        "min_format": 26,
-        "max_format": 26
+        }
       },
       {
         "directory": "1_20_5",
         "formats": {
           "min_inclusive": 41,
           "max_inclusive": 47
-        },
-        "min_format": 41,
-        "max_format": 47
+        }
       }
     ]
   }

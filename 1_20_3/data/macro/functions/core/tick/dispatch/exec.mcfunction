@@ -6,4 +6,4 @@
 # condition:"macro:is_daytime" → only run when predicate passes
 
 $data modify storage macro:engine _dispatch.func set value "$(fn)"
-execute if data storage macro:tick_work channel{condition:""} run function macro:core/dispatch/run
+execute if data storage macro:tick_work channel{condition:""} run function #macro:internal/dispatch

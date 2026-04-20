@@ -7,4 +7,4 @@
 #   player — player name used in selector
 
 $data modify storage macro:engine _dispatch.func set value "$(fn)"
-$execute as $(player) run function macro:core/dispatch/run
+$execute as $(player) run function #macro:internal/dispatch

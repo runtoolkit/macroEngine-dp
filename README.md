@@ -3,10 +3,6 @@
 
 > Current version: **v4.0.2**
 
-> ⚠️ **Migrated from `ToolkitMC/macroEngine-dp`** — This is the new official repository. The old repo is archived (read-only). See the [Migration Guide](../../wiki/Migration-Guide) for details.
-
----
-
 > 🛡️ **This is a Minecraft Datapack — it contains no executables or scripts outside of `.mcfunction` files.**
 > Some antivirus software may flag `.mcfunction` files as suspicious due to macro-like syntax. This is a **false positive**. The pack has been scanned on [VirusTotal](https://www.virustotal.com) and returned clean.
 > **Only download from this official repository.** Do not trust redistributed or repackaged versions from third-party sources.
@@ -43,7 +39,7 @@ Full API reference, guides, and examples are available in the **[GitHub Wiki](..
 ```
 macro:engine  (persistent data)
 ├── global
-│   ├── version: "v4.0.1"
+│   ├── version: "v4.0.2"
 │   └── tick: <int>
 ├── players
 │   └── Steve { coins:150, level:5, xp:2300, online:1b, ... }

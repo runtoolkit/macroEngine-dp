@@ -25,7 +25,7 @@ execute as @a run function macro:systems/hook/internal/check_level_up
 execute as @a[scores={macro.hook_placed=1..}] run function macro:systems/hook/internal/on_block_place
 execute as @a[scores={macro.hook_placed=1..}] run scoreboard players set @s macro.hook_placed 0
 
-# block_break — statistic-based (no advancement trigger in 1.21.x)
+# block_break — statistic-based (no advancement trigger in 1.20.3–26.1+)
 execute as @a run function macro:systems/hook/internal/check_block_break
 
 # item_use — advancement-based, score increase

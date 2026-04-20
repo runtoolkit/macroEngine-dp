@@ -1,5 +1,5 @@
 # 🔧 Advanced Macro Engine
-**Minecraft Java Edition 1.20.3–1.21.6+ | Multiplayer-Safe | Pure Datapack**
+**Minecraft Java Edition 1.20.3–26.1+ | Multiplayer-Safe | Pure Datapack**
 
 > Current version: **v4.0.2**
 
@@ -154,4 +154,4 @@ function macro:core/lib/string/replace
 
 ---
 
-*Advanced Macro Engine v4.0.2 | MC Java 1.20.3–1.21.6+ | Pure Datapack*
+*Advanced Macro Engine v4.0.2 | MC Java 1.20.3–26.1+ | Pure Datapack*

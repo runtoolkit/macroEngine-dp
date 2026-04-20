@@ -1,60 +1,60 @@
-# Güvenlik & Kullanım Notları
+# Security & Usage Notes
 
-## ⚠️ Riskli Kullanım Senaryoları
+## ⚠️ Risk Scenarios
 
-### Hesap Güvenliği
-- Şüpheli yazılımlar token çalma ve oturum ele geçirme riski taşır.
-- Microsoft hesabı bu saldırılara karşı savunmasız olabilir.
+### Account Security
+- Suspicious software can steal tokens and hijack sessions.
+- Microsoft accounts are vulnerable to these attacks.
 
-### Sunucu Kuralları
-Çoğu server şunları hile/exploit sayar:
-- Dış script kullanımı
-- Otomasyon
-- AI bot davranışı
+### Server Rules
+Most servers treat the following as cheating or exploiting:
+- External scripts
+- Automation
+- AI bot behavior
 
-### Mod Kaynakları
-Crackli veya bilinmeyen modlar şunları içerebilir:
-- Zararlı kod
-- Backdoor
-- Veri sızıntısı
-
----
-
-## 🔒 Güvenli Kullanım Rehberi
-
-### 1. Güvenilir Platform Kullan
-- **Modrinth** veya **CurseForge** kullan.
-- Rastgele GitHub / Discord linklerinden mod alma.
-
-### 2. AI Entegrasyonu — Sadece Geliştirme Tarafında
-
-| Kullanım | Durum |
-|---|---|
-| Datapack yazdırmak | ✅ |
-| Kod üretmek | ✅ |
-| Otomasyon (CI/CD) | ✅ |
-| Oyun içine runtime AI sokmak | ❌ |
-| Server'da bot gibi çalıştırmak | ❌ |
-
-### 3. Multiplayer'da Temiz Client
-- Sadece **Fabric** veya **Forge** kullan.
-- Bilinen, güvenilir modlar.
-- `unknown_client.jar` gibi kaynak belirsiz dosyalardan uzak dur.
-
-### 4. Güvenlik Sıralaması
-```
-Datapack > Mod > Dış Araç
-```
-Datapack: sandbox içinde, vanilla uyumlu, abuse edilmediği sürece sorun yok.
+### Mod Sources
+Cracked or unknown mods may contain:
+- Malicious code
+- Backdoors
+- Data leaks
 
 ---
 
-## 💡 Özet
+## 🔒 Safe Usage Guidelines
 
-| Risk Faktörü | Açıklama |
+### 1. Use Trusted Platforms
+- Use **Modrinth** or **CurseForge**.
+- Do not download mods from random GitHub or Discord links.
+
+### 2. AI Integration — Development Side Only
+
+| Use Case | Status |
 |---|---|
-| Ban riski | Client hile + exploit + şüpheli mod |
-| AI tek başına | Sorun değil |
-| Nasıl kullandığın | Her şey |
+| Writing datapacks | ✅ |
+| Generating code | ✅ |
+| Automation (CI/CD) | ✅ |
+| Runtime AI inside the game | ❌ |
+| Running as a bot on a server | ❌ |
 
-> **AI + Minecraft = geliştirme aracı olarak mükemmel; oyun içine entegre edersen riskli.**
+### 3. Clean Client in Multiplayer
+- Only use **Fabric** or **Forge**.
+- Stick to known, trusted mods.
+- Avoid files with unclear origins like `unknown_client.jar`.
+
+### 4. Security Ranking
+```
+Datapack > Mod > External Tool
+```
+Datapacks run in a sandbox, are vanilla-compatible, and pose no risk as long as they are not abused.
+
+---
+
+## Summary
+
+| Risk Factor | Notes |
+|---|---|
+| Ban risk | Client cheats + exploits + suspicious mods |
+| AI on its own | Not a problem |
+| How you use it | Everything |
+
+> **AI + Minecraft = excellent as a development tool. Risky if integrated into live gameplay.**

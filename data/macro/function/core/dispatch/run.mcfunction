@@ -6,4 +6,4 @@
 # Override #macro:internal/dispatch in your overlay/pack to inject
 # validation or logging without touching call sites.
 # ─────────────────────────────────────────────────────────────────
-function macro:core/dispatch/exec with storage macro:engine _dispatch {}
+function macro:core/dispatch/exec with storage macro:engine _dispatch

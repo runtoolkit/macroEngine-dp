@@ -124,7 +124,7 @@
         "directory": "1_21_6",
         "formats": {
           "min_inclusive": 80,
-          "max_inclusive": 400000
+          "max_inclusive": 100
         },
         "min_format": [
           80,

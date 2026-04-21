@@ -112,11 +112,17 @@ jobs:
               errors.append(f"overlay '{d}': min_inclusive ({lo}) > max_inclusive ({hi})")
             ranges.append((lo, hi, d))
 
+          # Kasıtlı olarak aynı range'i paylaşan overlay çiftleri — overlap hata sayılmaz
+          ALLOWED_OVERLAPS = {
+            frozenset({'_pre_1_21_4', 'compat_1_21_4'}),
+          }
+
           # Range overlap — O(n²) yeterli
           for i, (lo1, hi1, d1) in enumerate(ranges):
             for lo2, hi2, d2 in ranges[i + 1:]:
               if lo1 <= hi2 and lo2 <= hi1:
-                errors.append(f"overlay range overlap: '{d1}' [{lo1}–{hi1}] ∩ '{d2}' [{lo2}–{hi2}]")
+                if frozenset({d1, d2}) not in ALLOWED_OVERLAPS:
+                  errors.append(f"overlay range overlap: '{d1}' [{lo1}–{hi1}] ∩ '{d2}' [{lo2}–{hi2}]")
 
           if errors:
             for e in errors:

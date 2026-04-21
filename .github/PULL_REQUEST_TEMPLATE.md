@@ -19,8 +19,9 @@
 ## Checklist
 - [ ] Functions are commented with module path and context (`# @context`)
 - [ ] No hardcoded player selectors where macro input is expected
-- [ ] `pack.mcmeta` `supported_formats` uses object syntax
-- [ ] No `min_format` / `max_format` fields
+- [ ] `pack.mcmeta` `supported_formats` uses object syntax (not array)
+- [ ] `min_format` / `max_format` present and consistent with `formats` ranges
+- [ ] Overlay `formats` ranges do not overlap
 - [ ] Overlay added if version-specific behavior changed
 
 ## Related Issues

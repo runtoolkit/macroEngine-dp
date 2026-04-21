@@ -1,0 +1,358 @@
+name: Validate Datapack
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  # ─────────────────────────────────────────────
+  # 1. JSON dosyalarını parse et
+  # ─────────────────────────────────────────────
+  validate-json:
+    name: JSON Syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Parse all JSON files
+        run: |
+          python3 - << 'EOF'
+          import json, sys, pathlib
+
+          errors = []
+          files = [f for f in pathlib.Path('.').rglob('*.json') if '.git' not in str(f)]
+
+          for f in files:
+            try:
+              json.loads(f.read_text(encoding='utf-8'))
+            except json.JSONDecodeError as e:
+              errors.append(f"::error file={f},line={e.lineno}::JSON parse error: {e.msg}")
+
+          if errors:
+            for e in errors:
+              print(e)
+            sys.exit(1)
+
+          print(f"✓ {len(files)} JSON files valid")
+          EOF
+
+  # ─────────────────────────────────────────────
+  # 2. pack.mcmeta yapısı ve overlay çakışmaları
+  # ─────────────────────────────────────────────
+  validate-pack-meta:
+    name: pack.mcmeta
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate pack.mcmeta structure
+        run: |
+          python3 - << 'EOF'
+          import json, sys
+
+          errors = []
+
+          try:
+            meta = json.loads(open('pack.mcmeta').read())
+          except Exception as e:
+            print(f"::error file=pack.mcmeta::Cannot read pack.mcmeta: {e}")
+            sys.exit(1)
+
+          pack = meta.get('pack', {})
+
+          # supported_formats → object zorunlu
+          sf = pack.get('supported_formats')
+          if sf is None:
+            errors.append("missing 'supported_formats'")
+          elif isinstance(sf, (int, list)):
+            errors.append(f"'supported_formats' must be object {{min_inclusive, max_inclusive}}, got {type(sf).__name__}")
+          elif 'min_inclusive' not in sf or 'max_inclusive' not in sf:
+            errors.append("'supported_formats' missing min_inclusive or max_inclusive")
+
+          # min_format / max_format zorunlu
+          if 'min_format' not in pack:
+            errors.append("missing 'min_format'")
+          if 'max_format' not in pack:
+            errors.append("missing 'max_format'")
+
+          # pack_format sayı mı
+          pf = pack.get('pack_format')
+          if pf is not None and not isinstance(pf, int):
+            errors.append(f"'pack_format' must be integer, got {type(pf).__name__}")
+
+          # overlay validasyonu + çakışma kontrolü
+          overlays = meta.get('overlays', {}).get('entries', [])
+          ranges = []
+
+          for ov in overlays:
+            d = ov.get('directory', '?')
+            fmt = ov.get('formats')
+
+            if fmt is None:
+              errors.append(f"overlay '{d}': missing 'formats'")
+              continue
+            if isinstance(fmt, (int, list)):
+              errors.append(f"overlay '{d}': 'formats' must be object, got {type(fmt).__name__}")
+              continue
+            if 'min_inclusive' not in fmt or 'max_inclusive' not in fmt:
+              errors.append(f"overlay '{d}': 'formats' missing min_inclusive or max_inclusive")
+              continue
+            if 'min_format' not in ov:
+              errors.append(f"overlay '{d}': missing 'min_format'")
+            if 'max_format' not in ov:
+              errors.append(f"overlay '{d}': missing 'max_format'")
+
+            lo, hi = fmt['min_inclusive'], fmt['max_inclusive']
+            if lo > hi:
+              errors.append(f"overlay '{d}': min_inclusive ({lo}) > max_inclusive ({hi})")
+            ranges.append((lo, hi, d))
+
+          # Range overlap — O(n²) yeterli
+          for i, (lo1, hi1, d1) in enumerate(ranges):
+            for lo2, hi2, d2 in ranges[i + 1:]:
+              if lo1 <= hi2 and lo2 <= hi1:
+                errors.append(f"overlay range overlap: '{d1}' [{lo1}–{hi1}] ∩ '{d2}' [{lo2}–{hi2}]")
+
+          if errors:
+            for e in errors:
+              print(f"::error file=pack.mcmeta::{e}")
+            sys.exit(1)
+
+          print(f"✓ pack.mcmeta valid — {len(overlays)} overlay(s), no range overlaps")
+          EOF
+
+  # ─────────────────────────────────────────────
+  # 3. mcfunction güvenlik ve kalite kontrolleri
+  # ─────────────────────────────────────────────
+  validate-mcfunction:
+    name: mcfunction Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check mcfunction files
+        run: |
+          python3 - << 'EOF'
+          import pathlib, sys, re
+
+          hard_errors = []
+          warnings = []
+
+          all_mcf = [
+            f for f in pathlib.Path('.').rglob('*.mcfunction')
+            if '.git' not in str(f)
+          ]
+
+          for f in all_mcf:
+            rel = str(f)
+            try:
+              lines = f.read_text(encoding='utf-8', errors='replace').splitlines()
+            except Exception as e:
+              hard_errors.append(f"::error file={rel}::Cannot read file: {e}")
+              continue
+
+            for i, line in enumerate(lines, 1):
+              stripped = line.strip()
+              is_comment = stripped.startswith('#')
+
+              # ── Güvenlik ──────────────────────────────────────────────
+
+              # 1. clickEvent camelCase yasak (tüm sürümler)
+              if not is_comment and 'clickEvent' in line:
+                hard_errors.append(
+                  f"::error file={rel},line={i}::"
+                  f"forbidden 'clickEvent' (camelCase) — removed from macroAPI"
+                )
+
+              # 2. hoverEvent camelCase yasak (1.21.5+ overlaylarda)
+              if not is_comment and 'hoverEvent' in line:
+                hard_errors.append(
+                  f"::error file={rel},line={i}::"
+                  f"forbidden 'hoverEvent' (camelCase) — use hover_event in 1.21.5+"
+                )
+
+              # 3. click_event tamamen kaldırıldı macroAPI'den
+              if not is_comment and '"click_event"' in line:
+                hard_errors.append(
+                  f"::error file={rel},line={i}::"
+                  f"forbidden 'click_event' — removed from macroAPI (security policy)"
+                )
+
+              # 4. Nested macro syntax: $(key.sub) geçersiz
+              if not is_comment and re.search(r'\$\([a-zA-Z_]\w*\.[a-zA-Z_]\w*\)', line):
+                hard_errors.append(
+                  f"::error file={rel},line={i}::"
+                  f"invalid nested macro syntax \$(key.sub) — flatten storage before calling"
+                )
+
+              # 5. Macro variable olarak tam komut enjeksiyonu: $( komutun kendisi )
+              # Örn: function $(arbitrary_func) — doğrulama olmadan
+              if not is_comment and re.search(r'^function\s+\$\(', stripped):
+                # execute_validated veya dispatch path'lerinde izin ver
+                safe_paths = ['execute_validated', 'dispatch', 'call', 'internal']
+                if not any(sp in rel for sp in safe_paths):
+                  hard_errors.append(
+                    f"::error file={rel},line={i}::"
+                    f"unsafe macro function call 'function \$(...)' without validation — use execute_validated"
+                  )
+
+              # 6. # <talimat> marker — çözülmemiş iş kalemi
+              if is_comment and re.search(r'#\s*<talimat>', line, re.IGNORECASE):
+                hard_errors.append(
+                  f"::error file={rel},line={i}::"
+                  f"unresolved '# <talimat>' marker — resolve or remove before merging"
+                )
+
+              # ── Kalite ────────────────────────────────────────────────
+
+              # 7. Hardcoded player name selector (macro beklenen yerde)
+              # @a[name="literal"] veya @p[name="literal"] — $(player) kullanılmalı
+              if not is_comment and re.search(r'@[ape]\[[^\]]*name="(?!\$\()[^"]*"', line):
+                warnings.append(
+                  f"::warning file={rel},line={i}::"
+                  f"possible hardcoded player name in selector — use macro variable \$(player)"
+                )
+
+              # 8. scoreboard objective adı "macroAPI" veya "macroEngine" — çakışma riski
+              if not is_comment and re.search(r'scoreboard objectives add macroAPI\b', line):
+                hard_errors.append(
+                  f"::error file={rel},line={i}::"
+                  f"scoreboard objective named 'macroAPI' — conflicts with player named 'macroAPI' (known crash)"
+                )
+
+          # ── API yorum kontrolü ─────────────────────────────────────
+          for f in pathlib.Path('data').rglob('*.mcfunction'):
+            if '.git' in str(f):
+              continue
+            parts = f.parts
+            # api/ altındaki non-internal fonksiyonlar
+            if 'api' in parts and 'internal' not in parts:
+              content = f.read_text(encoding='utf-8', errors='replace')
+              if '# @' not in content:
+                warnings.append(
+                  f"::warning file={str(f)}::"
+                  f"public API function missing '# @context' comment"
+                )
+
+          # ── Sonuç ──────────────────────────────────────────────────
+          for w in warnings:
+            print(w)
+          for e in hard_errors:
+            print(e)
+
+          total = len(all_mcf)
+          if hard_errors:
+            print(f"\n✗ {len(hard_errors)} error(s), {len(warnings)} warning(s) across {total} files")
+            sys.exit(1)
+
+          print(f"✓ {total} mcfunction file(s) — {len(warnings)} warning(s)")
+          EOF
+
+  # ─────────────────────────────────────────────
+  # 4. Klasör adlandırma kuralları
+  # ─────────────────────────────────────────────
+  validate-structure:
+    name: Folder Conventions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check version-specific folder names
+        run: |
+          python3 - << 'EOF'
+          import pathlib, sys
+
+          errors = []
+
+          # 1.21.5+ overlay'larda TEKIL yollar zorunlu
+          new_overlays = ['1_21_5', '1_21_6', '26_1']
+          # Pre-1.21.5 overlay'larda ÇOĞUL yollar zorunlu
+          old_overlays = ['1_20_3', '1_20_5', '_pre_1_21_4', 'compat_1_21_4']
+
+          for overlay in new_overlays:
+            p = pathlib.Path(overlay)
+            if not p.exists():
+              continue
+
+            # damage_type/ → damage_types/ (1.21.5+)
+            for item in p.rglob('damage_type'):
+              if item.is_dir():
+                errors.append(
+                  f"::error file={item}::"
+                  f"use 'damage_types/' (plural) in {overlay} overlay — 'damage_type/' is pre-1.21.5"
+                )
+
+            # functions/ → function/ (1.21.5+)
+            for item in p.rglob('functions'):
+              if item.is_dir() and 'tags' not in str(item):
+                errors.append(
+                  f"::error file={item}::"
+                  f"use 'function/' (singular) in {overlay} overlay — 'functions/' is pre-1.21.5"
+                )
+
+            # advancements/ → advancement/ (1.21.5+)
+            for item in p.rglob('advancements'):
+              if item.is_dir():
+                errors.append(
+                  f"::error file={item}::"
+                  f"use 'advancement/' (singular) in {overlay} overlay"
+                )
+
+            # tags/functions/ → tags/function/ (1.21.5+)
+            for item in p.rglob('tags'):
+              if item.is_dir():
+                funcs_dir = item / 'functions'
+                if funcs_dir.exists():
+                  errors.append(
+                    f"::error file={funcs_dir}::"
+                    f"use 'tags/function/' (singular) in {overlay} overlay"
+                  )
+
+          for overlay in old_overlays:
+            p = pathlib.Path(overlay)
+            if not p.exists():
+              continue
+
+            # damage_types/ → damage_type/ (pre-1.21.5)
+            for item in p.rglob('damage_types'):
+              if item.is_dir():
+                errors.append(
+                  f"::error file={item}::"
+                  f"use 'damage_type/' (singular) in {overlay} overlay — 'damage_types/' is 1.21.5+"
+                )
+
+          # Root data/ — 1.21.5 base olduğu için tekil zorunlu
+          for bad in ['data/macro/functions', 'data/macro/advancements',
+                      'data/ame_load/functions', 'data/load/functions']:
+            if pathlib.Path(bad).exists():
+              errors.append(
+                f"::error file={bad}::"
+                f"root 'data/' uses 1.21.5+ paths — use singular form ('{bad.replace('functions','function').replace('advancements','advancement')}')"
+              )
+
+          if errors:
+            for e in errors:
+              print(e)
+            sys.exit(1)
+
+          print("✓ Folder naming conventions OK")
+          EOF
+
+  # ─────────────────────────────────────────────
+  # 5. Tüm job'lar geçmeden merge engellensin
+  # ─────────────────────────────────────────────
+  all-checks-passed:
+    name: All Checks Passed
+    runs-on: ubuntu-latest
+    needs:
+      - validate-json
+      - validate-pack-meta
+      - validate-mcfunction
+      - validate-structure
+    steps:
+      - run: echo "✓ All validation checks passed"

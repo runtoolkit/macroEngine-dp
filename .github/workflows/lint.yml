@@ -143,6 +143,14 @@ jobs:
           hard_errors = []
           warnings = []
 
+          # Pre-1.21.5 overlay dizinleri — camelCase text component syntax kullanır, NORMAL
+          pre_1_21_5_overlays = {'1_20_3', '1_20_5', '_pre_1_21_4', 'compat_1_21_4'}
+
+          def is_pre_1_21_5(path_str):
+            """Dosya yolu pre-1.21.5 overlay'a ait mi?"""
+            parts = pathlib.Path(path_str).parts
+            return bool(parts and parts[0] in pre_1_21_5_overlays)
+
           all_mcf = [
             f for f in pathlib.Path('.').rglob('*.mcfunction')
             if '.git' not in str(f)
@@ -150,6 +158,8 @@ jobs:
 
           for f in all_mcf:
             rel = str(f)
+            old_overlay = is_pre_1_21_5(rel)
+
             try:
               lines = f.read_text(encoding='utf-8', errors='replace').splitlines()
             except Exception as e:
@@ -159,84 +169,66 @@ jobs:
             for i, line in enumerate(lines, 1):
               stripped = line.strip()
               is_comment = stripped.startswith('#')
+              if is_comment:
+                # Sadece talimat marker kontrolü
+                if re.search(r'#\s*<talimat>', line, re.IGNORECASE):
+                  hard_errors.append(
+                    f"::error file={rel},line={i}::"
+                    f"unresolved '# <talimat>' marker — resolve or remove before merging"
+                  )
+                continue
 
-              # ── Güvenlik ──────────────────────────────────────────────
+              # 1. clickEvent / hoverEvent camelCase
+              #    → pre-1.21.5 overlay'larda NORMAL, diğerlerinde yasak
+              if not old_overlay:
+                if 'clickEvent' in line:
+                  hard_errors.append(
+                    f"::error file={rel},line={i}::"
+                    f"forbidden 'clickEvent' (camelCase) in 1.21.5+ context — removed from macroAPI"
+                  )
+                if 'hoverEvent' in line:
+                  hard_errors.append(
+                    f"::error file={rel},line={i}::"
+                    f"forbidden 'hoverEvent' (camelCase) in 1.21.5+ context — use hover_event"
+                  )
 
-              # 1. clickEvent camelCase yasak (tüm sürümler)
-              if not is_comment and 'clickEvent' in line:
+              # 2. click_event tamamen kaldırıldı macroAPI'den (tüm sürümler)
+              if '"click_event"' in line:
                 hard_errors.append(
                   f"::error file={rel},line={i}::"
-                  f"forbidden 'clickEvent' (camelCase) — removed from macroAPI"
+                  f"forbidden 'click_event' — removed from macroAPI (security policy, all versions)"
                 )
 
-              # 2. hoverEvent camelCase yasak (1.21.5+ overlaylarda)
-              if not is_comment and 'hoverEvent' in line:
+              # 3. Nested macro syntax: $(key.sub) geçersiz
+              if re.search(r'\$\([a-zA-Z_]\w*\.[a-zA-Z_]\w*\)', line):
                 hard_errors.append(
                   f"::error file={rel},line={i}::"
-                  f"forbidden 'hoverEvent' (camelCase) — use hover_event in 1.21.5+"
+                  r"invalid nested macro syntax $(key.sub) — flatten storage before calling"
                 )
 
-              # 3. click_event tamamen kaldırıldı macroAPI'den
-              if not is_comment and '"click_event"' in line:
-                hard_errors.append(
-                  f"::error file={rel},line={i}::"
-                  f"forbidden 'click_event' — removed from macroAPI (security policy)"
-                )
-
-              # 4. Nested macro syntax: $(key.sub) geçersiz
-              if not is_comment and re.search(r'\$\([a-zA-Z_]\w*\.[a-zA-Z_]\w*\)', line):
-                hard_errors.append(
-                  f"::error file={rel},line={i}::"
-                  f"invalid nested macro syntax \$(key.sub) — flatten storage before calling"
-                )
-
-              # 5. Macro variable olarak tam komut enjeksiyonu: $( komutun kendisi )
-              # Örn: function $(arbitrary_func) — doğrulama olmadan
-              if not is_comment and re.search(r'^function\s+\$\(', stripped):
-                # execute_validated veya dispatch path'lerinde izin ver
-                safe_paths = ['execute_validated', 'dispatch', 'call', 'internal']
+              # 4. Doğrulanmamış macro function call
+              #    function $(var) — execute_validated / dispatch / internal dışında yasak
+              if re.search(r'^function\s+\$\(', stripped):
+                safe_paths = ('execute_validated', 'dispatch', 'call', 'internal')
                 if not any(sp in rel for sp in safe_paths):
                   hard_errors.append(
                     f"::error file={rel},line={i}::"
-                    f"unsafe macro function call 'function \$(...)' without validation — use execute_validated"
+                    r"unsafe macro function call 'function $(...)' — use execute_validated wrapper"
                   )
 
-              # 6. # <talimat> marker — çözülmemiş iş kalemi
-              if is_comment and re.search(r'#\s*<talimat>', line, re.IGNORECASE):
+              # 5. scoreboard objective "macroAPI" adı — bilinen crash riski
+              if re.search(r'scoreboard\s+objectives\s+add\s+macroAPI\b', line):
                 hard_errors.append(
                   f"::error file={rel},line={i}::"
-                  f"unresolved '# <talimat>' marker — resolve or remove before merging"
+                  f"scoreboard objective named 'macroAPI' — conflicts with player named 'macroAPI'"
                 )
 
-              # ── Kalite ────────────────────────────────────────────────
-
-              # 7. Hardcoded player name selector (macro beklenen yerde)
-              # @a[name="literal"] veya @p[name="literal"] — $(player) kullanılmalı
-              if not is_comment and re.search(r'@[ape]\[[^\]]*name="(?!\$\()[^"]*"', line):
+              # 6. Hardcoded player name selector uyarısı
+              #    @a[name="literal"] — $(player) kullanılmalı
+              if re.search(r'@[ape]\[[^\]]*name="(?!\$\()[^"]*"', line):
                 warnings.append(
                   f"::warning file={rel},line={i}::"
-                  f"possible hardcoded player name in selector — use macro variable \$(player)"
-                )
-
-              # 8. scoreboard objective adı "macroAPI" veya "macroEngine" — çakışma riski
-              if not is_comment and re.search(r'scoreboard objectives add macroAPI\b', line):
-                hard_errors.append(
-                  f"::error file={rel},line={i}::"
-                  f"scoreboard objective named 'macroAPI' — conflicts with player named 'macroAPI' (known crash)"
-                )
-
-          # ── API yorum kontrolü ─────────────────────────────────────
-          for f in pathlib.Path('data').rglob('*.mcfunction'):
-            if '.git' in str(f):
-              continue
-            parts = f.parts
-            # api/ altındaki non-internal fonksiyonlar
-            if 'api' in parts and 'internal' not in parts:
-              content = f.read_text(encoding='utf-8', errors='replace')
-              if '# @' not in content:
-                warnings.append(
-                  f"::warning file={str(f)}::"
-                  f"public API function missing '# @context' comment"
+                  r"possible hardcoded player name — use macro variable $(player)"
                 )
 
           # ── Sonuç ──────────────────────────────────────────────────

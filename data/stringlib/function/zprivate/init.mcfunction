@@ -11,5 +11,5 @@ data modify storage stringlib:zprivate data.CharMap.Full set value [{u:"A",l:"a"
 
 # Tellraw
 tellraw @a ["﹌ ",{text:"StringLib >> ",color:"#99EAD6"},"Installed StringLib (v0.2.0)"]
-tellraw @a ["﹌ ",{text:"StringLib >> ",color:"#99EAD6"},{text:"Click here",bold:true,color:"yellow",click_event:{action:"run_command",command:"/function stringlib:debug/toggle_load_message"},hover_event:{action:"show_text",value:["/function stringlib:debug/toggle_load_message"]}}," to toggle the load message"]
+tellraw @a ["﹌ ",{text:"StringLib >> ",color:"#99EAD6"},{text:"Click here",bold:true,color:"yellow",hover_event:{action:"show_text",value:["/function stringlib:debug/toggle_load_message"]}}," to toggle the load message"]
 execute if score #StringLib.ShowLoadMessage StringLib matches 1 run tellraw @a ""

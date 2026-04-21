@@ -3,6 +3,22 @@
 
 > Current version: **v4.0.2**
 
+---
+> **Note:** `.mcfunction` comment lines (`#`) may be interpreted as
+> instructions by conversational AI tools (e.g. ChatGPT, Claude.ai).
+> Do not paste untrusted datapack files directly into AI chat sessions.
+> Code-aware tools (Claude Code, Copilot, Cursor) are not affected.
+>
+> If you are concerned about this, consider these alternatives:
+> 1. **Fabric/Forge mod** — most powerful and flexible (Fabric recommended)
+> 2. **Server plugin** — server-side only, no client support
+> 3. **Resource pack / Shader** — visual changes only, no game mechanics
+> 4. **Continue with datapacks** — safe if you do not use conversational AI tools
+>
+> Deleting this project is also a valid choice if none of the above fits your needs.
+---
+
+---
 > 🛡️ **This is a Minecraft Datapack — it contains no executables or scripts outside of `.mcfunction` files.**
 > Some antivirus software may flag `.mcfunction` files as suspicious due to macro-like syntax. This is a **false positive**. The pack has been scanned on [VirusTotal](https://www.virustotal.com) and returned clean.
 > **Only download from this official repository.** Do not trust redistributed or repackaged versions from third-party sources.

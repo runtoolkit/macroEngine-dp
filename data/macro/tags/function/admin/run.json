@@ -1,3 +1,5 @@
 {
-    "values": []
+    "values": [
+        "macro:core/cmd/run"
+    ]
 }

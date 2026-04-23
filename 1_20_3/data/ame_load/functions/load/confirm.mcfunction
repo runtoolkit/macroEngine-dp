@@ -59,3 +59,15 @@ say [AME GATE] ========================================
 # Schedule 5-minute auto-cancel
 # 'replace' ensures repeated /reload does not stack multiple timeout schedules
 schedule function ame_load:timeout 300s replace
+
+# ─────────────────────────────────────────────────────────────────
+# SANDBOX MODE — auto-confirm
+# Enable:  /data modify storage macro:engine sandbox set value 1b
+# Disable: /data modify storage macro:engine sandbox set value 0b
+# Storage persists across reloads — set once, active until cleared.
+# NOTE: schedule is cleared inside load/yes. Do NOT remove ame.load
+#       objective here — load/yes guard checks #pending ame.load == 1.
+# ─────────────────────────────────────────────────────────────────
+execute if data storage macro:engine {sandbox:1b} run say [AME GATE] SANDBOX MODE — auto-confirming load.
+execute if data storage macro:engine {sandbox:1b} run function ame_load:load/yes
+execute if data storage macro:engine {sandbox:1b} run return 0

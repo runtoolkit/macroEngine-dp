@@ -14,3 +14,7 @@ scoreboard players enable @a[tag=macro.admin] macro_action
 
 # Initialize tick channel config on first world load
 function macro:core/tick/init_channels
+
+# Assign pid for any players already online at load time
+# (on_player_join won't fire for them after a /reload)
+execute as @a run function macro:player/internal/init_online

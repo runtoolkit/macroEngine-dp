@@ -1,7 +1,7 @@
 # 🔧 Advanced Macro Engine
 **Minecraft Java Edition 1.20.3–26.1+ | Multiplayer-Safe | Pure Datapack**
 
-> Current version: **v4.0.2**
+> Current version: **v4.0.4**
 
 ---
 > **Note:** `.mcfunction` comment lines (`#`) may be interpreted as

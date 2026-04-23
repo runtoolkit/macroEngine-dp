@@ -119,3 +119,6 @@ data remove storage macro:engine once_per_player
 
 # UUID cache cleanup
 data remove storage macro:engine _uuid_cache
+
+# pid init temp cleanup
+data remove storage macro:engine _pid_init_tmp

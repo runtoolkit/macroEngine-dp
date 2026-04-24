@@ -10,11 +10,6 @@ FILES = []
 SEEN  = set()
 
 
-def safe_multiline(s: str) -> str:
-    """Triple quote güvenli hale getirir."""
-    return s.replace('"""', '\\"""')
-
-
 def collect(directory):
     for root, dirs, files in os.walk(directory):
         dirs.sort()
@@ -94,7 +89,7 @@ print(f"[INFO] Toplam {len(FILES)} dosya.")
 
 
 # -------------------------
-# build.py yaz
+# build.py yaz (FIXED)
 # -------------------------
 with open(OUTPUT, "w", encoding="utf-8") as out:
     out.write("import os\n\n")
@@ -102,8 +97,8 @@ with open(OUTPUT, "w", encoding="utf-8") as out:
 
     out.write("FILES = [\n")
     for p, c in FILES:
-        c_safe = safe_multiline(c)
-        out.write(f'    ({repr(p)}, r"""{c_safe}"""),\n')
+        # 🔥 KAYIPSIZ + SYNTAX SAFE
+        out.write(f"    ({p!r}, {c!r}),\n")
     out.write("]\n\n")
 
     out.write("""\

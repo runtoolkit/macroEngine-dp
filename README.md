@@ -28,7 +28,7 @@ Full API reference, guides, and examples are available in the **[GitHub Wiki](..
 ## 📦 Installation
 
 ```
-1. Place macroEngine-dp into <world>/datapacks/
+1. Place macroEngine-v4.0.4 into <world>/datapacks/
 2. /reload
 3. /function ame_load:load/yes
 4. /tag @s add macro.admin

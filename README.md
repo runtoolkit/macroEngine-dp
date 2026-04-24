@@ -2,20 +2,6 @@
 **Minecraft Java Edition 1.20.3–26.1+ | Multiplayer-Safe | Pure Datapack**
 
 > Current version: **v4.0.4**
-
----
-> **Note:** `.mcfunction` comment lines (`#`) may be interpreted as
-> instructions by conversational AI tools (e.g. ChatGPT, Claude.ai).
-> Do not paste untrusted datapack files directly into AI chat sessions.
-> Code-aware tools (Claude Code, Copilot, Cursor) are not affected.
->
-> If you are concerned about this, consider these alternatives:
-> 1. **Fabric/Forge mod** — most powerful and flexible (Fabric recommended)
-> 2. **Server plugin** — server-side only, no client support
-> 3. **Resource pack / Shader** — visual changes only, no game mechanics
-> 4. **Continue with datapacks** — safe if you do not use conversational AI tools
->
-> Deleting this project is also a valid choice if none of the above fits your needs.
 ---
 
 ---
@@ -55,7 +41,7 @@ Full API reference, guides, and examples are available in the **[GitHub Wiki](..
 ```
 macro:engine  (persistent data)
 ├── global
-│   ├── version: "v4.0.2"
+│   ├── version: "v4.0.4"
 │   └── tick: <int>
 ├── players
 │   └── Steve { coins:150, level:5, xp:2300, online:1b, ... }

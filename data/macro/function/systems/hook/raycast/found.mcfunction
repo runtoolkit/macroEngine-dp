@@ -1,4 +1,4 @@
-# Blok bulundu!
+# Block found!
 # Increment hook.placed scoreboard
 scoreboard players add @s macro.hook_placed 1
 
@@ -10,7 +10,7 @@ execute store result storage macro:hook placed.y int 1 run data get entity @e[ty
 execute store result storage macro:hook placed.z int 1 run data get entity @e[type=minecraft:marker,tag=macro.hook_block_pos,limit=1] Pos[2]
 kill @e[type=minecraft:marker,tag=macro.hook_block_pos,limit=1]
 
-# Timestamp kaydet (macro.time skorundan)
+# Record timestamp (from macro.time scoreboard)
 execute store result storage macro:hook placed.tick int 1 run scoreboard players get #time macro.time
 
 # Get player UUID and name via macroEngine modules
@@ -21,7 +21,7 @@ execute as @s run function macro:player/get_name
 data modify storage macro:hook placed.name set from storage macro:names temp.NAME
 data modify storage macro:hook placed.uuid_array set from storage macro:names temp.UUID
 
-# Hook event flag'ini set et
+# Set hook event flag
 data modify storage macro:hook placed.active set value 1b
 
 # Hook event sistemine "placed_block" event'i fire et

@@ -1,6 +1,6 @@
 # macro:systems/geo/region_watch/internal/check_region [MACRO]
 # INPUT (from _rw_cur): $(id), $(x1), $(y1), $(z1), $(x2), $(y2), $(z2)
-# @s = kontrol edilen oyuncu
+# @s = the player being checked
 # Player coordinates: macro:engine _rw_player.{x,y,z}
 
 # --- AABB test: return early if outside any axis ---

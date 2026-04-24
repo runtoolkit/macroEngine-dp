@@ -1,5 +1,5 @@
 # macro:systems/geo/region_watch/internal/region_loop
-# @s = kontrol edilen oyuncu
+# @s = the player being checked
 # Consumes _rw_iter list, calls check_region for each region.
 
 execute unless data storage macro:engine _rw_iter[0] run return 0

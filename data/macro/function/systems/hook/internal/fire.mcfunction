@@ -1,6 +1,6 @@
 # macro:systems/hook/internal/fire [MACRO]
 # INPUT: $(event) — event name to fire
-# @s = tetikleyen oyuncu
+# @s = the triggering player
 # Copies hook_binds list and dispatches it.
 
 $data modify storage macro:engine _hook_fire_event set value "$(event)"

@@ -1,5 +1,5 @@
 # macro:systems/geo/region_watch/internal/player_scan
-# @s = kontrol edilecek oyuncu
+# @s = the player to check
 # Reads coordinates to storage, then iterates all regions.
 
 data modify storage macro:engine _rw_iter set from storage macro:engine region_watches

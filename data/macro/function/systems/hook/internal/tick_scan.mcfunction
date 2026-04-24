@@ -4,7 +4,7 @@
 
 execute unless data storage macro:engine hook_binds[0] run return 0
 
-# player_join — macro.hook_online score'u olmayan online oyuncu
+# player_join — online player with no macro.hook_online score
 # BUGFIX: existing players should not trigger after reload (scoreboards.mcfunction sets @a → 1)
 execute as @a[scores={macro.hook_online=..0}] run function macro:systems/hook/internal/on_player_join
 execute as @a run scoreboard players set @s macro.hook_online 1

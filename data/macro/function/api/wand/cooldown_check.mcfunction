@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────────────────────────
 # macro:api/wand/cooldown_check
-# Wand cooldown aktif mi kontrol eder.
+# Checks whether the wand cooldown is active.
 # NOTE: Wand cooldowns are stored under macro:engine wand_cooldowns;
 #      this avoids collision with macro:cooldown module's "$(player).$(key)" path
 # so there is zero risk of key collision.

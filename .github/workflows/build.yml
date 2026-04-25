@@ -1,14 +1,11 @@
 name: Datapack Multi-Version Build
-
 on:
   push:
     branches: [main]
   pull_request:
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         include:
@@ -30,12 +27,10 @@ jobs:
           - label: "full"
             pack_format: 101
             overlays: ""
-
     steps:
       - uses: actions/checkout@v6
         with:
           submodules: recursive
-
       # 🔒 Repo lock — yanlış fork'tan çalışmasın
       - name: Repo lock
         run: |
@@ -43,11 +38,9 @@ jobs:
             echo "::error::This workflow may only run in runtoolkit/macroEngine-dp."
             exit 1
           fi
-
       # 📁 Build dizini hazırla
       - name: Prepare build directory
         run: mkdir -p build
-
       # 📂 Base katmanını kopyala (overlay dizinleri hariç)
       - name: Copy base layer
         run: |
@@ -65,13 +58,11 @@ jobs:
             --exclude='LICENSE' \
             --exclude='README.md' \
             ./ build/
-
       # 📂 Overlay'ları kopyala
       - name: Copy target overlays
         run: |
           ALL_OVERLAYS="1_20_3 1_20_5 _pre_1_21_4 compat_1_21_4 1_21_5 1_21_6 26_1"
           TARGET="${{ matrix.overlays }}"
-
           if [ -z "$TARGET" ]; then
             for d in $ALL_OVERLAYS; do
               [ -d "$d" ] && cp -r "$d" build/ || echo "::warning::Overlay '$d' not found, skipping."
@@ -85,35 +76,63 @@ jobs:
               fi
             done
           fi
-
-      # 🔧 StringLib çift katman düzeltme
-      # Sorun: CMDred/StringLib reposu içinde data/stringlib/ var.
-      # Submodule data/stringlib/'e clone'lanınca → data/stringlib/data/stringlib/function olur.
-      # Çözüm: data/stringlib/data/stringlib/ içeriğini data/stringlib/'e taşı, ara data/ klasörünü sil.
+      # 🔧 StringLib derin çift katman + StringLib klasörü bugunu KALDIRMA
+      # Hedef: data/stringlib/StringLib/data/stringlib/function
+      # Olması gereken: data/stringlib/function
       - name: Flatten StringLib double path
         run: |
+          echo "🔍 StringLib derin nesting düzeltme başlatılıyor..."
+
+          # En sorunlu yapı: .../stringlib/StringLib/data/stringlib/
+          find build -path "*/stringlib/StringLib/data/stringlib" -type d | while read -r deep_path; do
+            target="${deep_path%/StringLib/data/stringlib}"
+            echo "Deep fix: $deep_path → $target/"
+            shopt -s dotglob nullglob
+            mv "$deep_path"/* "$target/" 2>/dev/null || true
+            rm -rf "$target/StringLib" "$target/data" 2>/dev/null || true
+          done
+
+          # Genel çift katman temizliği
           find build -type d -name "stringlib" | while read -r dir; do
-            inner="$dir/data/stringlib"
-            if [ -d "$inner" ]; then
-              echo "Flattening: $inner → $dir/"
-              (shopt -s dotglob; mv "$inner"/* "$dir"/)
+            echo "Kontrol: $dir"
+
+            if [ -d "$dir/data/stringlib" ]; then
+              echo "  → Çift katman taşınıyor..."
+              shopt -s dotglob nullglob
+              mv "$dir/data/stringlib"/* "$dir/" 2>/dev/null || true
               rm -rf "$dir/data"
-              echo "Done: $dir/"
+            fi
+
+            if [ -d "$dir/StringLib" ]; then
+              echo "  → StringLib klasörü temizleniyor..."
+              if [ -d "$dir/StringLib/data/stringlib" ]; then
+                mv "$dir/StringLib/data/stringlib"/* "$dir/" 2>/dev/null || true
+              fi
+              rm -rf "$dir/StringLib"
+            fi
+
+            [ -d "$dir/data" ] && rm -rf "$dir/data"
+          done
+
+          # Son kalan StringLib'leri temizle
+          find build -name "StringLib" -type d | while read -r leftover; do
+            if [[ "$(dirname "$leftover")" == *"stringlib"* ]]; then
+              echo "Son temizlik: $leftover kaldırıldı"
+              rm -rf "$leftover"
             fi
           done
 
+          echo "✅ StringLib flattening tamamlandı → data/stringlib/function olmalı"
       # 🧩 pack.mcmeta — pack_format güncelle, sadece ilgili overlay girdilerini bırak
       - name: Patch pack.mcmeta
         run: |
           LABEL="${{ matrix.label }}"
           FORMAT="${{ matrix.pack_format }}"
           OVERLAYS="${{ matrix.overlays }}"
-
           JQ_ARRAY="[]"
           for ov in $OVERLAYS; do
             JQ_ARRAY=$(echo "$JQ_ARRAY" | jq --arg d "$ov" '. + [$d]')
           done
-
           jq \
             --argjson fmt "$FORMAT" \
             --argjson keep "$JQ_ARRAY" \
@@ -129,20 +148,17 @@ jobs:
             ' \
             build/pack.mcmeta > build/pack.mcmeta.tmp
           mv build/pack.mcmeta.tmp build/pack.mcmeta
-
       # 🔍 Sanity check — pack.mcmeta geçerli JSON mi?
       - name: Validate pack.mcmeta
         run: |
           jq empty build/pack.mcmeta && echo "pack.mcmeta is valid JSON." \
             || { echo "::error::pack.mcmeta is malformed!"; exit 1; }
-
       # 📦 Zip'le
       - name: Package datapack
         run: |
           cd build
           zip -r ../macroEngine-${{ matrix.label }}.zip .
           echo "Archive size: $(du -sh ../macroEngine-${{ matrix.label }}.zip | cut -f1)"
-
       # 🚀 Artifact olarak yükle
       - uses: actions/upload-artifact@v6
         with:
@@ -150,7 +166,6 @@ jobs:
           path: macroEngine-${{ matrix.label }}.zip
           retention-days: 14
           if-no-files-found: error
-
   # ───────────────────────────────────────────────
   # Release — sadece main push'larında, full ZIP ile
   # ───────────────────────────────────────────────
@@ -158,15 +173,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
     permissions:
       contents: write
-
     steps:
       - uses: actions/checkout@v6
         with:
           submodules: recursive
-
       # 🔒 Repo lock
       - name: Repo lock
         run: |
@@ -174,13 +186,11 @@ jobs:
             echo "::error::This workflow may only run in runtoolkit/macroEngine-dp."
             exit 1
           fi
-
       # 📥 Full ZIP'i artifact'tan al
       - uses: actions/download-artifact@v7
         with:
           name: macroEngine-full
           path: dist/
-
       # 🏷️ Versiyon numarasını pack.mcmeta'dan oku
       - name: Read version
         id: ver
@@ -198,7 +208,6 @@ jobs:
             VERSION=$(jq -r '.pack.description' pack.mcmeta | grep -oP 'v[\d.]+' | head -1)
           fi
           echo "version=${VERSION:-latest}" >> "$GITHUB_OUTPUT"
-
       # 🚀 GitHub Release oluştur / güncelle
       - name: Create or update release
         env:
@@ -206,10 +215,8 @@ jobs:
         run: |
           TAG="${{ steps.ver.outputs.version }}"
           ZIP="dist/macroEngine-full.zip"
-
           gh release delete "$TAG" --yes 2>/dev/null || true
           git push origin ":refs/tags/$TAG" 2>/dev/null || true
-
           gh release create "$TAG" \
             --title "macroEngine-dp $TAG" \
             --notes "**Full multi-version datapack build** (pack_format 101.1, tüm overlay'lar dahil)." \

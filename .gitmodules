@@ -1,0 +1,3 @@
+[submodule "data/stringlib"]
+	path = data/stringlib
+	url = https://github.com/CMDred/StringLib.git

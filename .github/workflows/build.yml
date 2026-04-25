@@ -12,7 +12,6 @@ jobs:
     strategy:
       matrix:
         include:
-          # Base format + overlay pairs — her satır bir hedef MC sürümüdür
           - label: "1_20_3"
             pack_format: 26
             overlays: "1_20_3"
@@ -37,7 +36,6 @@ jobs:
         with:
           submodules: recursive
 
-      # 🔒 Repo lock — yanlış fork'tan çalışmasın
       - name: Repo lock
         run: |
           if [ "$GITHUB_REPOSITORY" != "runtoolkit/macroEngine-dp" ]; then
@@ -45,11 +43,9 @@ jobs:
             exit 1
           fi
 
-      # 📁 Build dizini hazırla
       - name: Prepare build directory
         run: mkdir -p build
 
-      # 📂 Base katmanını kopyala (overlay dizinleri hariç)
       - name: Copy base layer
         run: |
           OVERLAY_DIRS="1_20_3 1_20_5 _pre_1_21_4 compat_1_21_4 1_21_5 1_21_6 26_1"
@@ -67,19 +63,16 @@ jobs:
             --exclude='README.md' \
             ./ build/
 
-      # 📂 Overlay'ları kopyala
       - name: Copy target overlays
         run: |
           ALL_OVERLAYS="1_20_3 1_20_5 _pre_1_21_4 compat_1_21_4 1_21_5 1_21_6 26_1"
           TARGET="${{ matrix.overlays }}"
 
           if [ -z "$TARGET" ]; then
-            # Full build: tüm overlay dizinlerini kopyala
             for d in $ALL_OVERLAYS; do
               [ -d "$d" ] && cp -r "$d" build/ || echo "::warning::Overlay '$d' not found, skipping."
             done
           else
-            # Targeted build: sadece ilgili overlay(lar)ı kopyala
             for overlay in $TARGET; do
               if [ -d "$overlay" ]; then
                 cp -r "$overlay" build/
@@ -89,14 +82,12 @@ jobs:
             done
           fi
 
-      # 🧩 pack.mcmeta — pack_format güncelle, sadece ilgili overlay girdilerini bırak
       - name: Patch pack.mcmeta
         run: |
           LABEL="${{ matrix.label }}"
           FORMAT="${{ matrix.pack_format }}"
           OVERLAYS="${{ matrix.overlays }}"
 
-          # Overlay listesini jq array'ine çevir (full build için boş kalabilir)
           JQ_ARRAY="[]"
           for ov in $OVERLAYS; do
             JQ_ARRAY=$(echo "$JQ_ARRAY" | jq --arg d "$ov" '. + [$d]')
@@ -118,20 +109,17 @@ jobs:
             build/pack.mcmeta > build/pack.mcmeta.tmp
           mv build/pack.mcmeta.tmp build/pack.mcmeta
 
-      # 🔍 Sanity check — pack.mcmeta geçerli JSON mi?
       - name: Validate pack.mcmeta
         run: |
           jq empty build/pack.mcmeta && echo "pack.mcmeta is valid JSON." \
             || { echo "::error::pack.mcmeta is malformed!"; exit 1; }
 
-      # 📦 Zip'le
       - name: Package datapack
         run: |
           cd build
           zip -r ../macroEngine-${{ matrix.label }}.zip .
           echo "Archive size: $(du -sh ../macroEngine-${{ matrix.label }}.zip | cut -f1)"
 
-      # 🚀 Artifact olarak yükle
       - uses: actions/upload-artifact@v6
         with:
           name: macroEngine-${{ matrix.label }}
@@ -139,9 +127,6 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-  # ───────────────────────────────────────────────
-  # Release — sadece main push'larında, full ZIP ile
-  # ───────────────────────────────────────────────
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -155,7 +140,6 @@ jobs:
         with:
           submodules: recursive
 
-      # 🔒 Repo lock
       - name: Repo lock
         run: |
           if [ "$GITHUB_REPOSITORY" != "runtoolkit/macroEngine-dp" ]; then
@@ -163,17 +147,14 @@ jobs:
             exit 1
           fi
 
-      # 📥 Full ZIP'i artifact'tan al
       - uses: actions/download-artifact@v7
         with:
           name: macroEngine-full
           path: dist/
 
-      # 🏷️ Versiyon numarasını pack.mcmeta'dan oku
       - name: Read version
         id: ver
         run: |
-          # pack.mcmeta'daki description array'inden "v4.0.2" gibi versiyonu çek
           VERSION=$(jq -r '
             .pack.description |
             if type == "array" then
@@ -183,13 +164,11 @@ jobs:
             select(test("^\\s*\\|\\s*v[0-9]")) |
             gsub("^\\s*\\|\\s*"; "") | ltrimstr(" ")
           ' pack.mcmeta | head -1)
-          # Fallback: düz string description ise doğrudan al
           if [ -z "$VERSION" ]; then
             VERSION=$(jq -r '.pack.description' pack.mcmeta | grep -oP 'v[\d.]+' | head -1)
           fi
           echo "version=${VERSION:-latest}" >> "$GITHUB_OUTPUT"
 
-      # 🚀 GitHub Release oluştur / güncelle
       - name: Create or update release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -197,7 +176,6 @@ jobs:
           TAG="${{ steps.ver.outputs.version }}"
           ZIP="dist/macroEngine-full.zip"
 
-          # Aynı tag varsa sil, yoksa devam et
           gh release delete "$TAG" --yes 2>/dev/null || true
           git push origin ":refs/tags/$TAG" 2>/dev/null || true
 

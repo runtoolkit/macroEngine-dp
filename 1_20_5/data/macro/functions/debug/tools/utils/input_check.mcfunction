@@ -1,3 +1,5 @@
+execute if data storage macro:engine global{in_call:1b} run return 1
+
 data modify storage macro:output inputs set from storage macro:input
 data modify storage macro:output data set from storage macro:engine
 
@@ -156,8 +158,11 @@ execute if data storage macro:output inputs{func:"with storage macro:input"} run
 execute if data storage macro:output inputs{func:"with storage macro:output"} run return 0
 
 # If validation passed, proceed to safe execution phase
+data modify storage macro:engine global.in_call set value 1b
 function macro:core/engine/call/execute_validated
+data remove storage macro:engine global.in_call
 
 # Clean up temporary data (memory management and security)
 data remove storage macro:output data
 data remove storage macro:output inputs
+return 1

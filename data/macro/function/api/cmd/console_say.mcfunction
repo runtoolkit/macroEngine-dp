@@ -2,10 +2,10 @@
 # macro:api/cmd/console_say  [REMOVED]
 #
 # /say sends a server-level message to all players;
-# shell-script benzeri çalışma biçimine yol açtığından ve niyet
-# tespiti mümkün olmadığından bu fonksiyon kaldırılmıştır.
-# Bkz: SECURITY.md — "Intent Detection" bölümü.
+# it produces shell-script-like execution behavior and intent
+# detection is not reliably possible, so this function has been removed.
+# See: SECURITY.md — "Intent Detection" section.
 #
-# Alternatif: macro:systems/string/announce
+# Alternative: macro:systems/string/announce
 # ─────────────────────────────────────────────────────────────────
 return 0

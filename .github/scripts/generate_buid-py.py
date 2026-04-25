@@ -81,7 +81,7 @@ with open(OUTPUT, "w", encoding="utf-8") as out:
     out.write(f"# Auto-generated — {len(FILES)} files\n\n")
     out.write("FILES = [\n")
     for p, c in FILES:
-        # 🔥 LOSSLESS + SYNTAX SAFE
+        # LOSSLESS + SYNTAX SAFE
         out.write(f"    ({p!r}, {c!r}),\n")
     out.write("]\n\n")
     out.write("""\

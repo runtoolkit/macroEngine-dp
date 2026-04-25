@@ -1,3 +1,24 @@
 [submodule "data/stringlib"]
 	path = data/stringlib
 	url = https://github.com/CMDred/StringLib.git
+[submodule "1_20_3/data/stringlib"]
+	path = 1_20_3/data/stringlib
+	url = https://github.com/CMDred/StringLib.git
+[submodule "1_20_5/data/stringlib"]
+	path = 1_20_5/data/stringlib
+	url = https://github.com/CMDred/StringLib.git
+[submodule "1_21_5/data/stringlib"]
+	path = 1_21_5/data/stringlib
+	url = https://github.com/CMDred/StringLib.git
+[submodule "1_21_6/data/stringlib"]
+	path = 1_21_6/data/stringlib
+	url = https://github.com/CMDred/StringLib.git
+[submodule "26_1/data/stringlib"]
+	path = 26_1/data/stringlib
+	url = https://github.com/CMDred/StringLib.git
+[submodule "_pre_1_21_4/data/stringlib"]
+	path = _pre_1_21_4/data/stringlib
+	url = https://github.com/CMDred/StringLib.git
+[submodule "compat_1_21_4/data/stringlib"]
+	path = compat_1_21_4/data/stringlib
+	url = https://github.com/CMDred/StringLib.git

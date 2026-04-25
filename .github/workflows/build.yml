@@ -86,17 +86,20 @@ jobs:
             done
           fi
 
-      # 🔧 StringLib ekstra iç klasörünü düzelt
-      # Sorun: CMDred/StringLib reposu kendi içinde StringLib/ klasörü barındırıyor.
-      # Sonuç: data/stringlib/StringLib/data/... → pack bozuluyor.
-      # Çözüm: build/ altındaki tüm StringLib/ klasörlerini bir üste taşı, boş klasörü sil.
-      - name: Flatten StringLib inner folder
+      # 🔧 StringLib çift katman düzeltme
+      # Sorun: CMDred/StringLib reposu içinde data/stringlib/ var.
+      # Submodule data/stringlib/'e clone'lanınca → data/stringlib/data/stringlib/function olur.
+      # Çözüm: data/stringlib/data/stringlib/ içeriğini data/stringlib/'e taşı, ara data/ klasörünü sil.
+      - name: Flatten StringLib double path
         run: |
-          find build -type d -name "StringLib" | while read -r dir; do
-            parent=$(dirname "$dir")
-            echo "Flattening: $dir → $parent/"
-            (shopt -s dotglob; mv "$dir"/* "$parent"/)
-            rmdir "$dir"
+          find build -type d -name "stringlib" | while read -r dir; do
+            inner="$dir/data/stringlib"
+            if [ -d "$inner" ]; then
+              echo "Flattening: $inner → $dir/"
+              (shopt -s dotglob; mv "$inner"/* "$dir"/)
+              rm -rf "$dir/data"
+              echo "Done: $dir/"
+            fi
           done
 
       # 🧩 pack.mcmeta — pack_format güncelle, sadece ilgili overlay girdilerini bırak

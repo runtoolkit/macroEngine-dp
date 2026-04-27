@@ -18,7 +18,7 @@
 # Example: -1 / 256 = 0 (floor should be -1).
 # GU does not handle this; high bytes of negative ints are computed incorrectly.
 # This function correctly extracts each byte using floor-division:
-# 
+#
 # b_raw = v % 256 (Java mod, range -255..255)
 # if b_raw < 0:
 # v = (v / 256) - 1 (correction for floor division)

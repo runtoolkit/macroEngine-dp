@@ -3,7 +3,7 @@
 
 ---
 
-[![commits](https://img.shields.io/github/commits-since/runtoolkit/macroEngine-dp/latest?label=commits&logo=github)](https://github.com/runtoolkit/macroEngine-dp/commits)
+[![commits](https://img.shields.io/github/commit-activity/t/runtoolkit/macroEngine-dp?label=commits&logo=github)](https://github.com/runtoolkit/macroEngine-dp/commits)
 [![issues](https://img.shields.io/github/issues/runtoolkit/macroEngine-dp?logo=github)](https://github.com/runtoolkit/macroEngine-dp/issues)
 [![pull requests](https://img.shields.io/github/issues-pr/runtoolkit/macroEngine-dp?logo=github)](https://github.com/runtoolkit/macroEngine-dp/pulls)
 [![license](https://img.shields.io/github/license/runtoolkit/macroEngine-dp)](https://github.com/runtoolkit/macroEngine-dp/blob/main/LICENSE)

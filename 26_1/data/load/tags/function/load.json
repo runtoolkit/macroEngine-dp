@@ -1,5 +1,7 @@
 {
     "values": [
-        "macro:load"
+        "stringlib:zprivate/load",
+        "macro:load",
+        "#player_action:load"
     ]
 }

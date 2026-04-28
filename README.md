@@ -1,6 +1,14 @@
 # 🔧 Advanced Macro Engine
 **Minecraft Java Edition 1.20.3–26.1+ | Multiplayer-Safe | Pure Datapack**
 
+---
+
+[![commits](https://img.shields.io/github/commits-since/runtoolkit/macroEngine-dp/latest?label=commits&logo=github)](https://github.com/runtoolkit/macroEngine-dp/commits)
+[![issues](https://img.shields.io/github/issues/runtoolkit/macroEngine-dp?logo=github)](https://github.com/runtoolkit/macroEngine-dp/issues)
+[![pull requests](https://img.shields.io/github/issues-pr/runtoolkit/macroEngine-dp?logo=github)](https://github.com/runtoolkit/macroEngine-dp/pulls)
+[![license](https://img.shields.io/github/license/runtoolkit/macroEngine-dp)](https://github.com/runtoolkit/macroEngine-dp/blob/main/LICENSE)
+
+---
 > Current version: **v4.0.4**
 ---
 

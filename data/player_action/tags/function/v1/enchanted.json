@@ -1,3 +1,5 @@
 {
-  "values": []
+  "values": [
+    "macro:hook/player_action/on_enchant"
+  ]
 }

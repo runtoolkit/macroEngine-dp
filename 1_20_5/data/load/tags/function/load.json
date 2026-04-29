@@ -1,5 +1,6 @@
 {
     "values": [
-        "macro:load"
+        "macro:load",
+        "#player_action:load"
     ]
 }

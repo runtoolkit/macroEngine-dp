@@ -1,5 +1,5 @@
 {
   "values": [
-    "macro:hook/player_action/on_jump"
+    "macro:systems/hook/internal/on_jump"
   ]
 }

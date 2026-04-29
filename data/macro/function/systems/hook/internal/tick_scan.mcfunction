@@ -4,13 +4,12 @@
 
 execute unless data storage macro:engine hook_binds[0] run return 0
 
-# player_join — online player with no macro.hook_online score
-# BUGFIX: existing players should not trigger after reload (scoreboards.mcfunction sets @a → 1)
-execute as @a[scores={macro.hook_online=..0}] run function macro:systems/hook/internal/on_player_join
+# player_join — delegated to #player_action:v1/joined (fired by player_action when player_action.join >= 1)
+# Only score management remains here to prevent double-fire
 execute as @a run scoreboard players set @s macro.hook_online 1
 
-# player_death — detect deaths score increase
-execute as @a[scores={macro.hook_deaths=1..}] run function macro:systems/hook/internal/on_player_death
+# player_death — delegated to #player_action:v1/died (fired by player_action when player_action.death >= 1)
+# Only score reset remains here to prevent double-fire
 execute as @a[scores={macro.hook_deaths=1..}] run scoreboard players set @s macro.hook_deaths 0
 
 # player_respawn — was dead (dead flag set) but alive again
@@ -74,8 +73,8 @@ execute as @a[scores={macro.hook_dim_changed=1..}] run scoreboard players set @s
 execute as @a[scores={macro.hook_traded=1..}] run function macro:systems/hook/internal/on_trade
 execute as @a[scores={macro.hook_traded=1..}] run scoreboard players set @s macro.hook_traded 0
 
-# jumped — minecraft.custom:minecraft.jump stat
-execute as @a[scores={macro.hook_jump=1..}] run function macro:systems/hook/internal/on_jump
+# jumped — delegated to #player_action:v1/jumped (fired by player_action when player_action.jump >= 1)
+# Only score reset remains here to prevent double-fire
 execute as @a[scores={macro.hook_jump=1..}] run scoreboard players reset @s macro.hook_jump
 
 # open_chest — minecraft.custom:minecraft.open_chest stat

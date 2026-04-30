@@ -1,5 +1,5 @@
 {
   "values": [
-    "macro:core/tick/dispatch"
+    "macro:core/tick"
   ]
 }

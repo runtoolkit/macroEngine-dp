@@ -1,3 +1,5 @@
 {
-  "values": []
+  "values": [
+    "macro:test/events/on_enchant"
+  ]
 }

@@ -9,7 +9,7 @@
 [![license](https://img.shields.io/github/license/runtoolkit/macroEngine-dp)](https://github.com/runtoolkit/macroEngine-dp/blob/main/LICENSE)
 
 ---
-> Current version: **v4.0.4**
+> Current version: **v4.0.5-pre1**
 ---
 
 ---
@@ -49,7 +49,7 @@ Full API reference, guides, and examples are available in the **[GitHub Wiki](..
 ```
 macro:engine  (persistent data)
 ├── global
-│   ├── version: "v4.0.4"
+│   ├── version: "v4.0.5-pre1"
 │   └── tick: <int>
 ├── players
 │   └── Steve { coins:150, level:5, xp:2300, online:1b, ... }

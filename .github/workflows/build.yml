@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
-          # Base format + overlay pairs — her satır bir hedef MC sürümüdür
+          # Base format + overlay pairs — each row is a target MC version
           - label: "1_20_3"
             pack_format: 26
             overlays: "1_20_3"
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      # 🔒 Repo lock — yanlış fork'tan çalışmasın
+      # 🔒 Repo lock — prevent running from wrong fork
       - name: Repo lock
         run: |
           if [ "$GITHUB_REPOSITORY" != "runtoolkit/macroEngine-dp" ]; then
@@ -43,11 +43,11 @@ jobs:
             exit 1
           fi
 
-      # 📁 Build dizini hazırla
+      # 📁 Prepare build directory
       - name: Prepare build directory
         run: mkdir -p build
 
-      # 📂 Base katmanını kopyala (overlay dizinleri hariç)
+      # 📂 Copy base layer (excluding overlay directories)
       - name: Copy base layer
         run: |
           OVERLAY_DIRS="1_20_3 1_20_5 _pre_1_21_4 compat_1_21_4 1_21_5 1_21_6 26_1"
@@ -64,19 +64,19 @@ jobs:
             --exclude='README.md' \
             ./ build/
 
-      # 📂 Overlay'ları kopyala
+      # 📂 Copy overlays
       - name: Copy target overlays
         run: |
           ALL_OVERLAYS="1_20_3 1_20_5 _pre_1_21_4 compat_1_21_4 1_21_5 1_21_6 26_1"
           TARGET="${{ matrix.overlays }}"
 
           if [ -z "$TARGET" ]; then
-            # Full build: tüm overlay dizinlerini kopyala
+            # Full build: copy all overlay directories
             for d in $ALL_OVERLAYS; do
               [ -d "$d" ] && cp -r "$d" build/ || echo "::warning::Overlay '$d' not found, skipping."
             done
           else
-            # Targeted build: sadece ilgili overlay(lar)ı kopyala
+            # Targeted build: copy only the relevant overlay(s)
             for overlay in $TARGET; do
               if [ -d "$overlay" ]; then
                 cp -r "$overlay" build/
@@ -86,14 +86,14 @@ jobs:
             done
           fi
 
-      # 🧩 pack.mcmeta — pack_format güncelle, sadece ilgili overlay girdilerini bırak
+      # 🧩 pack.mcmeta — update pack_format, keep only relevant overlay entries
       - name: Patch pack.mcmeta
         run: |
           LABEL="${{ matrix.label }}"
           FORMAT="${{ matrix.pack_format }}"
           OVERLAYS="${{ matrix.overlays }}"
 
-          # Overlay listesini jq array'ine çevir (full build için boş kalabilir)
+          # Convert overlay list to jq array (may be empty for full build)
           JQ_ARRAY="[]"
           for ov in $OVERLAYS; do
             JQ_ARRAY=$(echo "$JQ_ARRAY" | jq --arg d "$ov" '. + [$d]')
@@ -115,20 +115,20 @@ jobs:
             build/pack.mcmeta > build/pack.mcmeta.tmp
           mv build/pack.mcmeta.tmp build/pack.mcmeta
 
-      # 🔍 Sanity check — pack.mcmeta geçerli JSON mi?
+      # 🔍 Sanity check — is pack.mcmeta valid JSON?
       - name: Validate pack.mcmeta
         run: |
           jq empty build/pack.mcmeta && echo "pack.mcmeta is valid JSON." \
             || { echo "::error::pack.mcmeta is malformed!"; exit 1; }
 
-      # 📦 Zip'le
+      # 📦 Zip
       - name: Package datapack
         run: |
           cd build
           zip -r ../macroEngine-${{ matrix.label }}.zip .
           echo "Archive size: $(du -sh ../macroEngine-${{ matrix.label }}.zip | cut -f1)"
 
-      # 🚀 Artifact olarak yükle
+      # 🚀 Upload as artifact
       - uses: actions/upload-artifact@v6
         with:
           name: macroEngine-${{ matrix.label }}
@@ -137,7 +137,7 @@ jobs:
           if-no-files-found: error
 
   # ───────────────────────────────────────────────
-  # Release — sadece main push'larında, full ZIP ile
+  # Release — only on main pushes, with full ZIP
   # ───────────────────────────────────────────────
   release:
     needs: build
@@ -158,17 +158,17 @@ jobs:
             exit 1
           fi
 
-      # 📥 Full ZIP'i artifact'tan al
+      # 📥 Download full ZIP from artifact
       - uses: actions/download-artifact@v7
         with:
           name: macroEngine-full
           path: dist/
 
-      # 🏷️ Versiyon numarasını pack.mcmeta'dan oku
+      # 🏷️ Read version number from pack.mcmeta
       - name: Read version
         id: ver
         run: |
-          # pack.mcmeta'daki description array'inden "v4.0.2" gibi versiyonu çek
+          # Extract version like "v4.0.2" from the description array in pack.mcmeta
           VERSION=$(jq -r '
             .pack.description |
             if type == "array" then
@@ -178,13 +178,13 @@ jobs:
             select(test("^\\s*\\|\\s*v[0-9]")) |
             gsub("^\\s*\\|\\s*"; "") | ltrimstr(" ")
           ' pack.mcmeta | head -1)
-          # Fallback: düz string description ise doğrudan al
+          # Fallback: if description is a plain string, extract directly
           if [ -z "$VERSION" ]; then
             VERSION=$(jq -r '.pack.description' pack.mcmeta | grep -oP 'v[\d.]+' | head -1)
           fi
           echo "version=${VERSION:-latest}" >> "$GITHUB_OUTPUT"
 
-      # 🚀 GitHub Release oluştur / güncelle
+      # 🚀 Create or update GitHub Release
       - name: Create or update release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -192,12 +192,12 @@ jobs:
           TAG="${{ steps.ver.outputs.version }}"
           ZIP="dist/macroEngine-full.zip"
 
-          # Aynı tag varsa sil, yoksa devam et
+          # Delete existing tag if it exists, otherwise continue
           gh release delete "$TAG" --yes 2>/dev/null || true
           git push origin ":refs/tags/$TAG" 2>/dev/null || true
 
           gh release create "$TAG" \
             --title "macroEngine-dp $TAG" \
-            --notes "**Full multi-version datapack build** (pack_format 101.1, tüm overlay'lar dahil)." \
+            --notes "**Full multi-version datapack build** (pack_format 101.1, all overlays included)." \
             --latest \
             "$ZIP#macroEngine-full.zip"

@@ -164,4 +164,4 @@ function macro:core/lib/string/replace
 
 ---
 
-*Advanced Macro Engine v4.0.2 | MC Java 1.20.3–26.1+ | Pure Datapack*
+*Advanced Macro Engine v4.0.5-pre1 | MC Java 1.20.3–26.1+ | Pure Datapack*

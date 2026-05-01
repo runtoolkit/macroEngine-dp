@@ -57,6 +57,11 @@ scoreboard objectives remove macro.dialog_load
 scoreboard objectives remove health
 scoreboard objectives remove ame.pre_version
 
+scoreboard objectives remove macro.Flags
+scoreboard objectives remove macro.hook_eat
+scoreboard objectives remove macro.hook_fish
+scoreboard objectives remove macro.state
+
 tag @a remove macro.dialog_opened
 tag @a remove macro.dialog_closed
 advancement revoke @a from macro:hidden/root

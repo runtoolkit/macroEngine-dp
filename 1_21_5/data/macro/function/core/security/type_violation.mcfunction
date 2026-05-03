@@ -19,7 +19,7 @@ data remove storage macro:input color
 
 tellraw @s ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"✘ ","color":"red"},{"text":"Security violation: command type not permitted in sandbox mode.","color":"red"}]
 tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"TYPE VIOLATION ","color":"red","bold":true},{"selector":"@s","color":"gold"},{"text":" — blocked (not in allowlist)","color":"red"}]
-execute if entity @s[type=minecraft:player] run kick @s [AME] Security violation — command type not in allowlist
+#execute if entity @s[type=minecraft:player] run kick @s [AME] Security violation — command type not in allowlist
 
 # ─── server log via test_block ───────────────────────────────────
 setblock 0 -62 0 minecraft:test_block[mode=log]{message:"[AME SECURITY] type_violation — command type not in allowlist. Run /function macro:systems/log/show for details."}

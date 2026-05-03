@@ -11,4 +11,4 @@ data remove storage macro:input message
 data remove storage macro:input level
 data remove storage macro:input color
 execute if entity @s[type=minecraft:player] run tellraw @s ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"✘ ","color":"red"},{"text":"Command blocked in sandbox mode.","color":"red"}]
-execute if entity @s[type=minecraft:player] run kick @s [AME] Sandbox violation — command blocked
+#execute if entity @s[type=minecraft:player] run kick @s [AME] Sandbox violation — command blocked

@@ -20,4 +20,4 @@ tellraw @s ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"✘ ","c
 tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"TYPE VIOLATION ","color":"red","bold":true},{"selector":"@s","color":"gold"},{"text":" — blocked (not in allowlist)","color":"red"}]
 
 # Kick the player from server (requires function-level perm >= 3)
-execute if entity @s[type=minecraft:player] run kick @s [AME] Security violation — command type not in allowlist
+#execute if entity @s[type=minecraft:player] run kick @s [AME] Security violation — command type not in allowlist

@@ -1,10 +1,10 @@
 {
-  "release": "v4.0.5-pre1",
+  "release": "v5.0.0",
   "semver": {
-    "major": 4,
+    "major": 5,
     "minor": 0,
-    "patch": 5,
-    "pre": 1
+    "patch": 0,
+    "pre": 0
   },
   "targets": [
     {

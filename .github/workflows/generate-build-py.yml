@@ -2,7 +2,7 @@ name: Generate Build.py
 
 on:
   push:
-    branches: [ main]
+    branches: [workflows]
   pull_request:
   workflow_dispatch:
 
@@ -24,4 +24,4 @@ jobs:
           python -m pip install --upgrade pip
 
       - name: Run Generate Build Script
-        run: python .github/scripts/generate_build-py.py
+        run: python3 .github/scripts/generate_buid-py.py

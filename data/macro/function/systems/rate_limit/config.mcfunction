@@ -19,5 +19,7 @@
 # Removing a rule: function macro:systems/rate_limit/delete {key:"..."}
 # Listing rules: function macro:systems/rate_limit/list
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $data modify storage macro:engine rate_limit.rules.$(key) set value {limit:$(limit),window:$(window),hits:[]}
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"rate_limit/config ","color":"aqua"},{"text":"→ ","color":"#555555"},{"text":"$(key)","color":"white"},{"text":" limit=","color":"#555555"},{"text":"$(limit)","color":"green"},{"text":" window=","color":"#555555"},{"text":"$(window)","color":"green"},{"text":"t","color":"#555555"}]

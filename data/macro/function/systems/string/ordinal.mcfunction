@@ -22,6 +22,8 @@
 # {n:22} → suffix="nd" {n:103}→ suffix="rd"
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $ord_n macro.tmp $(n)
 execute store result storage macro:output n int 1 run scoreboard players get $ord_n macro.tmp
 

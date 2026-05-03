@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 scoreboard players set $ftgl macro.tmp 0
 $execute if data storage macro:engine flags.$(key) run scoreboard players set $ftgl macro.tmp 1
 

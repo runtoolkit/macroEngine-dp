@@ -11,5 +11,7 @@
 #   -- or --
 #   data modify storage macro:input cmd set value "say An item was dropped"
 #   function macro:systems/hook/on_drop
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:input event set value "drop_item"
 function macro:systems/hook/bind

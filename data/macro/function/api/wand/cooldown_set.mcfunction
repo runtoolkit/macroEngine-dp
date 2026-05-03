@@ -11,6 +11,8 @@
 #   $(duration) → cooldown duration (in ticks)
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $wcd_dur macro.tmp $(duration)
 execute store result score $wcd_now macro.tmp run scoreboard players get $epoch macro.time
 scoreboard players operation $wcd_now macro.tmp += $wcd_dur macro.tmp

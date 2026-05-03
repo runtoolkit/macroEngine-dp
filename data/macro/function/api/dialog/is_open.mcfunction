@@ -8,6 +8,8 @@
 # # Then read macro:output result per player context
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:output result set value 0b
 execute if entity @s[tag=macro.dialog_opened] unless entity @s[tag=macro.dialog_closed] run data modify storage macro:output result set value 1b
 

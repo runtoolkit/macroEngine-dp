@@ -17,6 +17,8 @@
 # Rule must be pre-registered via macro:systems/rate_limit/config.
 # If no rule exists for the key → ALLOWED (fail-open; log warning).
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:output result set value 1b
 
 # Guard: rule must exist — try auto-create from player template first

@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $pb1_seg macro.tmp $(current)
 $scoreboard players set $pb1_max macro.tmp $(max)
 

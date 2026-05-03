@@ -7,6 +7,8 @@
 #   $(cmd) → raw command to run
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless data storage macro:engine wand_binds run data modify storage macro:engine wand_binds set value []
 
 $data modify storage macro:engine wand_binds append value {tag:"$(tag)", func:"$(func)"}

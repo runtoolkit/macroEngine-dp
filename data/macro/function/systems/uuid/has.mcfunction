@@ -13,5 +13,7 @@
 # OUTPUT:
 # $uuid.has macro.tmp → 1 (found) or 0 (not found)
 # ============================================================
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 scoreboard players set $uuid.has macro.tmp 0
 function macro:systems/uuid/internal/has_check with storage macro:input

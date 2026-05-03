@@ -14,6 +14,8 @@
 # function macro:systems/flag/set_if {key:"night_mode",score_holder:"$time",objective:"macro.tmp",matches:"..12000"}
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:output result set value 0b
 $execute if score $(score_holder) $(objective) matches $(matches) run data modify storage macro:engine flags.$(key) set value 1b
 $execute if score $(score_holder) $(objective) matches $(matches) run data modify storage macro:output result set value 1b

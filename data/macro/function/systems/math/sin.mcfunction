@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $sin_d macro.tmp $(deg)
 
 # Wrap to range 0-359

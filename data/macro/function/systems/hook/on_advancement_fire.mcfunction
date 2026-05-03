@@ -20,4 +20,6 @@
 # function macro:systems/hook/bind
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 function macro:systems/hook/internal/on_advancement_fire with storage macro:input {}

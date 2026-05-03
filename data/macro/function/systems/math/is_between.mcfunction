@@ -12,6 +12,8 @@
 # # macro:output result = 1b
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $ib_v macro.tmp $(value)
 $scoreboard players set $ib_lo macro.tmp $(min)
 $scoreboard players set $ib_hi macro.tmp $(max)

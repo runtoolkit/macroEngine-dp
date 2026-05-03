@@ -16,4 +16,6 @@
 # function macro:systems/string/separator with storage macro:input {}
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $tellraw $(target) ["",{"text":"──────────","color":"$(color)"},{"text":"$(label)","color":"$(color)","bold":true},{"text":"──────────","color":"$(color)"}]

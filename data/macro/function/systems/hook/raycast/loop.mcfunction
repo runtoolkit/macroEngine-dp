@@ -2,6 +2,8 @@
 # Check if there is a non-air block at the current position
 
 # Non-air block found → call found function
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless block ~ ~ ~ #minecraft:air run return run function macro:systems/hook/raycast/found
 
 # Still air → continue

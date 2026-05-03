@@ -14,6 +14,8 @@
 # → macro:output result = "apples"
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set #plr_c macro.tmp $(count)
 execute store result storage macro:output count int 1 run scoreboard players get #plr_c macro.tmp
 

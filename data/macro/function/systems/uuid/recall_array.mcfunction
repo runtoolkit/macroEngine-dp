@@ -15,4 +15,6 @@
 #
 # Use case: writing UUID to entity NBT (e.g. Owner field)
 # ============================================================
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 function macro:systems/uuid/internal/recall_arr_read with storage macro:input

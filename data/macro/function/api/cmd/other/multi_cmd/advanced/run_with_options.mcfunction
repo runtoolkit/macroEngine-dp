@@ -7,6 +7,8 @@
 # options → {priority_sort:1b, spread_ticks:0, error_mode:"continue", profile:1b}
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:engine _mcmd_queue set from storage macro:input list
 execute unless data storage macro:input options run data modify storage macro:input options set value {}
 data modify storage macro:engine _mcmd_options merge from storage macro:input options

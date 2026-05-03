@@ -5,5 +5,7 @@
 # EXAMPLE:
 #   function macro:api/security/allowlist_clear
 # ─────────────────────────────────────────────────────────────────
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:engine security.sandbox_allowlist set value []
 tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"security/allowlist_clear ","color":"aqua"},{"text":"✔ cleared","color":"green"}]

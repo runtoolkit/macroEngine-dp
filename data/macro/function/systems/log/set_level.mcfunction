@@ -6,6 +6,8 @@
 #   2 = warn + error
 #   3 = info + warn + error  (default)
 #   4 = debug (all)
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless entity @s[tag=macro.admin] run return 0
 $scoreboard players set #ame.log_level ame.log_level $(level)
 $tellraw @s ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"Log level set to ","color":"gray"},{"text":"$(level)","color":"white","bold":true}]

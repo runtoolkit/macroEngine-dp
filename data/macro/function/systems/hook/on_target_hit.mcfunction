@@ -11,5 +11,7 @@
 #   -- or --
 #   data modify storage macro:input cmd set value "say Target hit"
 #   function macro:systems/hook/on_target_hit
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:input event set value "target_hit"
 function macro:systems/hook/bind

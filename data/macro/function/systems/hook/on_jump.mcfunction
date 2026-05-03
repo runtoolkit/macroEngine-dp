@@ -11,5 +11,7 @@
 #   -- or --
 #   data modify storage macro:input cmd set value "say A player jumped"
 #   function macro:systems/hook/on_jump
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:input event set value "jumped"
 function macro:systems/hook/bind

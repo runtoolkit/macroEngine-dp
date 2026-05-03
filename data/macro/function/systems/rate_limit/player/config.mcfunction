@@ -13,5 +13,7 @@
 # To register a SHARED (global) rule use macro:systems/rate_limit/config directly.
 
 # Store template rule — concrete player buckets inherit limit+window on first hit
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $data modify storage macro:engine rate_limit.player_templates.$(key) set value {limit:$(limit),window:$(window)}
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"rate_limit/player/config ","color":"aqua"},{"text":"→ ","color":"#555555"},{"text":"player:$(key):<player>","color":"white"},{"text":" limit=","color":"#555555"},{"text":"$(limit)","color":"green"},{"text":" window=","color":"#555555"},{"text":"$(window)","color":"green"},{"text":"t","color":"#555555"}]

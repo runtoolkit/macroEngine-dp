@@ -17,6 +17,8 @@
 # ============================================================
 
 # Build UUID string → macro:input value
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 function macro:systems/uuid/from_entity
 
 # Also save array form (from_entity already filled _work)

@@ -10,5 +10,7 @@
 # EXAMPLE:
 #   function macro:api/security/allowlist_add {prefix:"say"}
 # ─────────────────────────────────────────────────────────────────
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $data modify storage macro:engine security.sandbox_allowlist append value "$(prefix)"
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"security/allowlist_add ","color":"aqua"},{"text":"$(prefix)","color":"green"}]

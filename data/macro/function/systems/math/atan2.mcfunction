@@ -13,6 +13,8 @@
 # - Both x and y zero → result = 0
 # - Result matches standard math convention (CCW from +X axis)
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $a2_y macro.tmp $(y)
 $scoreboard players set $a2_x macro.tmp $(x)
 

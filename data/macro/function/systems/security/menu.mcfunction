@@ -2,6 +2,8 @@
 # Security status panel — part of #macro:admin/menu.
 # 1.21.6+ overlay replaces this with an interactive dialog.
 # Requires: ame.perm_level >= security.admin_min_level
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless function macro:debug/tools/utils/perm_check run return 0
 tellraw @s ["",{"text":"─── AME Security ─────────────────────","color":"#00AAAA","bold":true}]
 tellraw @s ["",{"text":"  Version         ","color":"gray"},{"storage":"macro:engine","nbt":"global.version","color":"aqua"}]

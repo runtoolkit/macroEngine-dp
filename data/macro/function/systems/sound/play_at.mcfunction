@@ -16,5 +16,7 @@
 #      x:0,y:64,z:0,volume:1.0f,pitch:1.0f,min_volume:0.0f}
 #   function macro:systems/sound/play_at with storage macro:input sound
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $playsound $(sound) $(category) @a $(x) $(y) $(z) $(volume) $(pitch) $(min_volume)
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"sound/play_at ","color":"aqua"},{"text":"→ ","color":"#555555"},{"text":"$(sound)","color":"white"},{"text":" @ ","color":"#555555"},{"text":"$(x) $(y) $(z)","color":"#AAAAAA"},{"text":" vol:","color":"#555555"},{"text":"$(volume)","color":"yellow"}]

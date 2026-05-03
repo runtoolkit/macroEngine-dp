@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $clamp_v macro.tmp $(value)
 $scoreboard players set $clamp_lo macro.tmp $(min)
 $scoreboard players set $clamp_hi macro.tmp $(max)

@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless data storage macro:engine trigger_binds run return 0
 
 data modify storage macro:engine _tc_unbind set from storage macro:engine trigger_binds

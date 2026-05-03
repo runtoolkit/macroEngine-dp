@@ -11,5 +11,7 @@
 #   -- or --
 #   data modify storage macro:input cmd set value "give @s salmon 1"
 #   function macro:systems/hook/on_fish_caught
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:input event set value "fish_caught"
 function macro:systems/hook/bind

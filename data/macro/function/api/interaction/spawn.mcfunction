@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $summon minecraft:interaction ~ ~ ~ {width:$(width), height:$(height), response:$(response), Tags:["macro.interaction","macro.ia_new"]}
 
 $tag @e[type=minecraft:interaction,tag=macro.ia_new,limit=1,sort=nearest] add $(tag)

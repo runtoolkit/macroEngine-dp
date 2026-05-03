@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $pl_v macro.tmp $(value)
 $scoreboard players set $pl_w macro.tmp $(width)
 

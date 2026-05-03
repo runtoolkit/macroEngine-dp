@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless data storage macro:engine interaction_binds.attack[0] run return 0
 
 data modify storage macro:engine _ia_ubinds set from storage macro:engine interaction_binds.attack

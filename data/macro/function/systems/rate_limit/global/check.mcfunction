@@ -11,4 +11,6 @@
 #
 # Output → macro:output result 1b=ALLOWED 0b=DENIED
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $function macro:systems/rate_limit/check {key:"global:$(key)"}

@@ -18,6 +18,8 @@
 # # macro:output result = 2000000
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $md_a macro.tmp $(a)
 $scoreboard players set $md_b macro.tmp $(b)
 $scoreboard players set $md_c macro.tmp $(c)

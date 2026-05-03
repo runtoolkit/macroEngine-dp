@@ -1,6 +1,8 @@
 # macro:systems/log/add (internal)
 # Called by error/warn/info/debug — do not call directly.
 # Appends to the 30-entry ring buffer in macro:engine log_display.
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless data storage macro:engine log_display run data modify storage macro:engine log_display set value []
 
 $data modify storage macro:engine log_display append value {text:"[$(level)] $(message)",color:"$(color)"}

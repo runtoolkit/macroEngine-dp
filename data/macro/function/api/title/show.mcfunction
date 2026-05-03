@@ -19,6 +19,8 @@
 #   function macro:api/title/show {player:"Steve",title:"Hello",subtitle:"welcome back",\
 #     color:"gold",sub_color:"gray",fade_in:10,stay:60,fade_out:10}
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless function macro:debug/tools/utils/check_all run return 0
 
 $title @a[name=$(player),limit=1] times $(fade_in) $(stay) $(fade_out)

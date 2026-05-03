@@ -16,6 +16,8 @@
 # ============================================================
 
 # Read int[4] array directly from macro:input value
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute store result score $uuid.0 macro.tmp run data get storage macro:input value[0]
 execute store result score $uuid.1 macro.tmp run data get storage macro:input value[1]
 execute store result score $uuid.2 macro.tmp run data get storage macro:input value[2]

@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 scoreboard players set $pr_pid macro.tmp 0
 $execute store result score $pr_pid macro.tmp run data get storage macro:engine player_pids.$(player)
 execute if score $pr_pid macro.tmp matches 0 run return 0

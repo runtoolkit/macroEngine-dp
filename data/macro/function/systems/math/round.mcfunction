@@ -15,6 +15,8 @@
 # → macro:output result = 30
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set #rnd_v macro.tmp $(value)
 $scoreboard players set #rnd_s macro.tmp $(step)
 

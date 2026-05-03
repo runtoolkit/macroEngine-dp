@@ -3,5 +3,7 @@
 # Valid systems: time | queue | player | hud | admin
 # Delegates to macro:core/tick/channel/enable|disable internally.
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $data modify storage macro:tick_work _ftgl set from storage macro:engine tick.channels[{id:"$(system)_systems"}]
 function macro:systems/flag/toggle_system/exec with storage macro:tick_work _ftgl

@@ -11,5 +11,7 @@
 #     {target:"@a",category:"*",sound:"*"}
 #   function macro:systems/sound/stop with storage macro:input sound
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $stopsound $(target) $(category) $(sound)
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"sound/stop ","color":"aqua"},{"text":"→ ","color":"#555555"},{"text":"$(target)","color":"white"},{"text":" [","color":"#555555"},{"text":"$(category)","color":"green"},{"text":"] ","color":"#555555"},{"text":"$(sound)","color":"#AAAAAA"}]

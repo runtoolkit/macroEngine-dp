@@ -15,6 +15,8 @@
 # → macro:output result = 1b (if either is set)
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:output result_a set value 0b
 data modify storage macro:output result_b set value 0b
 data modify storage macro:output result set value 0b

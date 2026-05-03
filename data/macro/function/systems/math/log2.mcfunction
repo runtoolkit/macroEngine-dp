@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $lg2_v macro.tmp $(value)
 
 execute if score $lg2_v macro.tmp matches ..0 run data modify storage macro:output result set value -1

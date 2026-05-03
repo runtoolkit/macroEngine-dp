@@ -11,5 +11,7 @@
 #   -- or --
 #   data modify storage macro:input cmd set value "say A chest was opened"
 #   function macro:systems/hook/on_open_chest
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:input event set value "open_chest"
 function macro:systems/hook/bind

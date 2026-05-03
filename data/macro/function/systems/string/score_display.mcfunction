@@ -17,4 +17,6 @@
 # # Output: "Points 42" (42 from scoreboard)
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $tellraw $(target) ["",{"text":"$(label)","color":"gray"},{"text":"  ","color":"#555555"},{"score":{"name":"$(player)","objective":"$(objective)"},"color":"$(color)","bold":true}]

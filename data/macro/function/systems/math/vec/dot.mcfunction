@@ -7,4 +7,6 @@
 # OUTPUT: macro:output result (int)
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 function macro:systems/math/vec/internal/dot_exec with storage macro:input {}

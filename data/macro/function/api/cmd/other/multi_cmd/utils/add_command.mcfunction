@@ -6,6 +6,8 @@
 # cmd or func → command/function to add
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute if data storage macro:input cmd run data modify storage macro:engine _mcmd_queue append value {}
 execute if data storage macro:input cmd run data modify storage macro:engine _mcmd_queue[-1].cmd set from storage macro:input cmd
 

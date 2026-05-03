@@ -17,5 +17,7 @@
 #      target:"@a",volume:1.0f,pitch:1.0f}
 #   function macro:systems/sound/play with storage macro:input sound
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $playsound $(sound) $(category) $(target) ~ ~ ~ $(volume) $(pitch)
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"sound/play ","color":"aqua"},{"text":"→ ","color":"#555555"},{"text":"$(sound)","color":"white"},{"text":" [","color":"#555555"},{"text":"$(category)","color":"green"},{"text":"]","color":"#555555"},{"text":" vol:","color":"#555555"},{"text":"$(volume)","color":"yellow"},{"text":" pitch:","color":"#555555"},{"text":"$(pitch)","color":"yellow"}]

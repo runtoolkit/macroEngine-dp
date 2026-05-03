@@ -12,6 +12,8 @@
 # Output → macro:output result 1b=ALLOWED 0b=DENIED
 
 # Auto-seed: if bucket for this player+key doesn't exist, create from template
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $execute unless data storage macro:engine "rate_limit.rules.player:$(key):$(player)" run function macro:systems/rate_limit/player/internal/ensure {tpl:"$(key)",full:"player:$(key):$(player)"}
 
 # Delegate to generic check with full compound key

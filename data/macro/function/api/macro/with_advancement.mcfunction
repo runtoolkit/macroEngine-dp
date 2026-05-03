@@ -18,6 +18,8 @@
 # ─────────────────────────────────────────────
 
 # Clear pipe
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data remove storage macro:engine _macro_pipe
 
 # Default: not completed

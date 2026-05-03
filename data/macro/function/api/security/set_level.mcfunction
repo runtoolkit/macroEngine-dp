@@ -20,5 +20,7 @@
 # NOTE: admin_can_override:0b means even level-4 users are subject
 #       to the security.sandbox_cmd_min_level floor.
 # ─────────────────────────────────────────────────────────────────
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $execute as @a[name=$(player),limit=1] run scoreboard players set @s ame.perm_level $(level)
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"security/set_level ","color":"aqua"},{"text":"$(player)","color":"gold"},{"text":" → ","color":"#555555"},{"text":"$(level)","color":"green"}]

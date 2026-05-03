@@ -15,6 +15,8 @@
 # 1000000000 → "1B"
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $fn_v macro.tmp $(value)
 execute store result storage macro:output value int 1 run scoreboard players get $fn_v macro.tmp
 

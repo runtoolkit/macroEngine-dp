@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $lc_a macro.tmp $(a)
 $scoreboard players set $lc_b macro.tmp $(b)
 $scoreboard players set $lc_t macro.tmp $(t)

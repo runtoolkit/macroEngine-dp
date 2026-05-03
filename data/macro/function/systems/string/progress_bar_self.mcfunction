@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $pbs_max macro.tmp $(pb_max)
 execute if score $pbs_max macro.tmp matches ..0 run return fail
 

@@ -2,5 +2,7 @@
 # Advancement reward: runs when villager_trade triggers.
 # @s = the trading player
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 advancement revoke @s only macro:systems/hook/trade
 scoreboard players add @s macro.hook_traded 1

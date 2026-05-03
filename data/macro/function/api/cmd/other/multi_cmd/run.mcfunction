@@ -2,6 +2,7 @@
 # macro:api/cmd/other/multi_cmd/run
 # Execute queued commands
 # ─────────────────────────────────────────────────────────────────
+execute unless data storage macro:engine global{loaded:1b} run return 0
 
 # Reset statistics
 execute if data storage macro:engine _mcmd_options{profile:1b} run data modify storage macro:engine _mcmd_stats set value {total:0,success:0,failed:0,start_time:0}

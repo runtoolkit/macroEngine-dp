@@ -2,6 +2,8 @@
 # Usage: /function macro:systems/log/show
 # Prints the log buffer to the calling player.
 # Requires: macro.admin tag
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless entity @s[tag=macro.admin] run return 0
 
 tellraw @s ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"━━━ Log Buffer ","color":"aqua"},{"text":"(level: ","color":"#555555"},{"score":{"name":"#ame.log_level","objective":"ame.log_level"},"color":"white"},{"text":")","color":"#555555"},{"text":"━━━━━━━━━━━━━","color":"#555555"}]

@@ -8,4 +8,6 @@
 # EXAMPLE:
 #   function macro:api/security/get_level {player:"Steve"}
 # ─────────────────────────────────────────────────────────────────
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $execute as @a[name=$(player),limit=1] run tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"security/get_level ","color":"aqua"},{"text":"$(player)","color":"gold"},{"text":" → ","color":"#555555"},{"score":{"name":"@s","objective":"ame.perm_level"},"color":"green"}]

@@ -18,6 +18,8 @@
 # ─────────────────────────────────────────────
 
 # Write score into pipe under the requested variable name
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $execute store result storage macro:engine _macro_pipe.$(var) int 1 run scoreboard players get $(player) $(objective)
 
 # Call target function with pipe as macro source

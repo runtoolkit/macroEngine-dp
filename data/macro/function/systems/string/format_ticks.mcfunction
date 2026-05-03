@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $ft_t macro.tmp $(ticks)
 
 scoreboard players set $ft_20 macro.tmp 20

@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $if_a macro.tmp $(a)
 $scoreboard players set $if_b macro.tmp $(b)
 $data modify storage macro:engine _dispatch.func set value "$(func)"

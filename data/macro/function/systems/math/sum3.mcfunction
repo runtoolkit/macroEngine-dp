@@ -12,6 +12,8 @@
 # # macro:output result = 600
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $s3_a macro.tmp $(a)
 $scoreboard players set $s3_b macro.tmp $(b)
 $scoreboard players set $s3_c macro.tmp $(c)

@@ -14,6 +14,8 @@
 # ============================================================
 
 # Copy entity UUID as int[4] to working storage
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:uuid _work set from entity @s UUID
 
 # Load four ints to scoreboard (without writing scores to entity)

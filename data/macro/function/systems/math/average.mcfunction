@@ -14,6 +14,8 @@
 # # macro:output result = 20
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $avg_c macro.tmp $(count)
 
 execute if score $avg_c macro.tmp matches ..0 run data modify storage macro:output result set value 0

@@ -1,4 +1,6 @@
 # cos(x) = sin(x + 90)
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $cos_d macro.tmp $(deg)
 scoreboard players add $cos_d macro.tmp 90
 scoreboard players set $cos_360 macro.tmp 360

@@ -6,4 +6,6 @@
 # Equivalent to:
 # function macro:systems/rate_limit/config {key:"global:boss_spawn",limit:1,window:24000}
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $function macro:systems/rate_limit/config {key:"global:$(key)",limit:$(limit),window:$(window)}

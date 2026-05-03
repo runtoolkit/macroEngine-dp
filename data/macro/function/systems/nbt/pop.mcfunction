@@ -9,4 +9,6 @@
 # OUTPUT: macro:output result (popped element)
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 function macro:systems/nbt/internal/pop_exec with storage macro:input {}

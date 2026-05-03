@@ -22,6 +22,8 @@
 # ─────────────────────────────────────────────
 
 # Run provider function — it writes its output to _macro_pipe
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $function $(source)
 
 # Pass pipe to consumer as macro source

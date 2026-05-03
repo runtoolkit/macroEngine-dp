@@ -11,6 +11,8 @@
 # ─────────────────────────────────────────────────────────────────
 
 # Copy list to queue
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 data modify storage macro:engine _mcmd_queue set from storage macro:input list
 
 # Set default options

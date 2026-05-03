@@ -13,6 +13,8 @@
 # → macro:output result = 1
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set #snz_v macro.tmp $(value)
 data modify storage macro:output result set value 1
 execute if score #snz_v macro.tmp matches ..-1 run data modify storage macro:output result set value -1

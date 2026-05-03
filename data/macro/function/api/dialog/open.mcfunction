@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless data storage macro:engine dialog.DIALOG run return 0
 
 scoreboard players set @s macro.dialog_load -1

@@ -19,6 +19,8 @@
 #     subtitle:"Save your progress!",color:"red",sub_color:"yellow",\
 #     fade_in:20,stay:100,fade_out:20}
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 execute unless function macro:debug/tools/utils/check_all run return 0
 
 $title @a times $(fade_in) $(stay) $(fade_out)

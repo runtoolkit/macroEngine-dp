@@ -1,3 +1,5 @@
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $dvm_v macro.tmp $(value)
 $scoreboard players set $dvm_d macro.tmp $(divisor)
 

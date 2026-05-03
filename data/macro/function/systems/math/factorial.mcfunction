@@ -18,6 +18,8 @@
 # # macro:output result = 1
 # ─────────────────────────────────────────────────────────────────
 
+execute unless data storage macro:engine global{loaded:1b} run return 0
+
 $scoreboard players set $fact_n macro.tmp $(n)
 
 # Out-of-range guard

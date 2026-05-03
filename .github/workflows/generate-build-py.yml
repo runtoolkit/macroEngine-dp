@@ -1,0 +1,27 @@
+name: Generate Build.py
+
+on:
+  push:
+    branches: [ main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies (gerekirse)
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Run Generate Build Script
+        run: python .github/scripts/generate_build-py.py

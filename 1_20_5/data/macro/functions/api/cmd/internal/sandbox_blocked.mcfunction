@@ -1,9 +1,7 @@
 # macro:api/cmd/internal/sandbox_blocked [1.20.5 overlay]
-# Called by cmd/ files when macro:engine {sandbox:1b} is set.
-# Reads macro:engine _sandbox_cmd (set by the caller before this call).
-# Passes the entire macro:engine storage as macro input so that
-# sandbox_blocked_macro can read $(_sandbox_cmd) directly.
+# Called by cmd/ files when sandbox:1b is active AND command is NOT in allowlist.
+# Reads macro:engine _sandbox_cmd (set by caller), logs, notifies, and kicks.
 #
-# test_block server logging (added in 25w03a / 1.21.5) is NOT available
-# on this version — only the in-game log buffer is used.
+# NOTE (v5.1.0): Primary enforcement path now goes through sandbox_gate.
+# This function is retained for direct callers and backwards compatibility.
 function macro:api/cmd/internal/sandbox_blocked_macro with storage macro:engine {}

@@ -4,8 +4,8 @@
 #
 # INPUT (storage macro:input):
 # storage → storage namespace
-# from_path → kaynak path
-# to_path → hedef path
+# from_path → source path
+# to_path → destination path
 # ─────────────────────────────────────────────────────────────────
 
 function macro:systems/nbt/internal/move_exec with storage macro:input {}

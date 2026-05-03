@@ -5,8 +5,8 @@
 # INPUT (storage macro:input):
 # src_storage → source storage namespace (e.g. "macro:engine")
 # src_path → source NBT path (e.g. "players.Steve")
-# dst_storage → hedef storage namespace
-# dst_path → hedef NBT path
+# dst_storage → destination storage namespace
+# dst_path → destination NBT path
 #
 # EXAMPLE:
 # data modify storage macro:input src_storage set value "macro:engine"

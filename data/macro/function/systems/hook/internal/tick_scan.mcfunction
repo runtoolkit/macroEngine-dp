@@ -2,6 +2,9 @@
 # Her tick'te hook event'lerini tespit eder.
 # Runs only if hook_binds is non-empty.
 
+# Module toggle guard — skips this module when disabled via macro:api/toggle/hook/false
+execute unless data storage macro:engine {modules:{hook:1b}} run return 0
+
 execute unless data storage macro:engine hook_binds[0] run return 0
 
 # player_join — delegated to #player_action:v1/joined (fired by player_action when player_action.join >= 1)

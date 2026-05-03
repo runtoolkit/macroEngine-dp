@@ -1,6 +1,18 @@
 # macro:systems/security/menu  [1.21.6 OVERLAY]
 # Dialog-based security menu. Replaces tellraw version on 1.21.6+.
 # Requires: ame.perm_level >= security.admin_min_level
+#
+# NOTE: Dialog cannot read storage/score natively — values are injected
+# via macro ($) in menu_build.mcfunction.
 execute unless function macro:debug/tools/utils/perm_check run return 0
-data modify storage macro:engine dialog.DIALOG set value {type:"minecraft:multi_action",title:{text:"AME Security",color:"#00AAAA",bold:true},body:{type:"plain_message",contents:[{text:"sandbox: ",color:"gray"},{storage:"macro:engine",nbt:"sandbox",color:"gold"},{text:"  trust_players: ",color:"gray"},{storage:"macro:engine",nbt:"security.trust_players",color:"gold"},{text:"\ncmd_min_level: ",color:"gray"},{storage:"macro:engine",nbt:"security.cmd_min_level",color:"green"},{text:"  sandbox_level: ",color:"gray"},{storage:"macro:engine",nbt:"security.sandbox_cmd_min_level",color:"green"},{text:"\nadmin_min_level: ",color:"gray"},{storage:"macro:engine",nbt:"security.admin_min_level",color:"green"},{text:"  admin_override: ",color:"gray"},{storage:"macro:engine",nbt:"security.admin_can_override",color:"gold"},{text:"\n\nYour perm_level: ",color:"gray"},{score:{name:"@s",objective:"ame.perm_level"},color:"yellow",bold:true}]},actions:[{type:"run_command",label:{text:"Sandbox ON",color:"green"},command:"/data modify storage macro:engine sandbox set value 1b"},{type:"run_command",label:{text:"Sandbox OFF",color:"red"},command:"/data modify storage macro:engine sandbox set value 0b"},{type:"run_command",label:{text:"Refresh",color:"aqua"},command:"/function macro:menu"}],pause:false,can_close_with_escape:true,after_action:"none"}
-function macro:api/dialog/load
+
+# Collect dynamic values into macro:input for macro interpolation
+data modify storage macro:input sandbox          set from storage macro:engine sandbox
+data modify storage macro:input trust_players    set from storage macro:engine security.trust_players
+data modify storage macro:input cmd_min_level    set from storage macro:engine security.cmd_min_level
+data modify storage macro:input sandbox_lvl      set from storage macro:engine security.sandbox_cmd_min_level
+data modify storage macro:input admin_min_level  set from storage macro:engine security.admin_min_level
+data modify storage macro:input admin_override   set from storage macro:engine security.admin_can_override
+execute store result storage macro:input perm_level int 1 run scoreboard players get @s ame.perm_level
+
+function macro:systems/security/menu_build with storage macro:input {}

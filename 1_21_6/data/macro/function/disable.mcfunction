@@ -2,4 +2,4 @@ playsound minecraft:block.note_block.pling master @s ~ ~ ~ 4 2
 
 function macro:core/disable/main
 
-tellraw @s [{"text":"To restart:"}," ",{"text":"/function macro:core/disable/main","color":"aqua","bold":true,"italic":false}]
+tellraw @s [{"text":"To restart:"}," ",{"text":"/reload","color":"aqua","bold":true,"italic":false}]

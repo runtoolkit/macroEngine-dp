@@ -1,6 +1,6 @@
 # macro:api/cmd/internal/sandbox_blocked_macro [MACRO]
 # INPUT: $(_sandbox_cmd) — read from macro:engine storage via `with storage macro:engine {}`
-# Appends a WARN entry to the log buffer and notifies debug admins.
+# Logs WARN entry, notifies debug admins, and kicks the player.
 # Do NOT call directly — use macro:api/cmd/internal/sandbox_blocked.
 $data modify storage macro:input message set value "[SANDBOX] cmd/$(_sandbox_cmd) blocked"
 data modify storage macro:input level set value "WARN"
@@ -10,3 +10,5 @@ $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true}
 data remove storage macro:input message
 data remove storage macro:input level
 data remove storage macro:input color
+execute if entity @s[type=minecraft:player] run tellraw @s ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"✘ ","color":"red"},{"text":"Command blocked in sandbox mode.","color":"red"}]
+execute if entity @s[type=minecraft:player] run kick @s [AME] Sandbox violation — command blocked

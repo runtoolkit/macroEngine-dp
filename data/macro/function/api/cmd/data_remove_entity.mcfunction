@@ -9,8 +9,7 @@ execute unless entity @s[gamemode=creative] run return 0
 # Disable: /data modify storage macro:engine sandbox set value 0b
 # ─────────────────────────────────────────────────────────────────
 execute if data storage macro:engine {sandbox:1b} run data modify storage macro:engine _sandbox_cmd set value "data_remove_entity"
-execute if data storage macro:engine {sandbox:1b} run function macro:api/cmd/internal/sandbox_blocked
-execute if data storage macro:engine {sandbox:1b} run return 0
+execute if data storage macro:engine {sandbox:1b} run execute unless function macro:api/cmd/internal/sandbox_gate run return 0
 
 $data remove entity $(target) $(path)
 $tellraw @a[tag=macro.debug] ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"cmd/data_remove_entity ","color":"aqua"},{"text":"$(target) → $(path)","color":"#555555"}]

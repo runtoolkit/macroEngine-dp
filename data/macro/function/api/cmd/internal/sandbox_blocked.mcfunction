@@ -1,6 +1,4 @@
 # macro:api/cmd/internal/sandbox_blocked
-# Called by cmd/ files when macro:engine {sandbox:1b} is set.
-# Reads macro:engine _sandbox_cmd (set by the caller before this call).
-# Passes the entire macro:engine storage as macro input so that
-# sandbox_blocked_macro can read $(_sandbox_cmd) directly.
+# Called by cmd/ files when sandbox:1b is active AND command is NOT in allowlist.
+# Reads macro:engine _sandbox_cmd (set by caller), logs, notifies, and kicks.
 function macro:api/cmd/internal/sandbox_blocked_macro with storage macro:engine {}

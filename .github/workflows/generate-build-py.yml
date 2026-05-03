@@ -2,7 +2,7 @@ name: Generate Build.py
 
 on:
   push:
-    branches: [ main]
+    branches: [workflows]
   pull_request:
   workflow_dispatch:
 

@@ -10,9 +10,9 @@ data modify storage macro:engine multiCommands.type set value "multi_cmd_adv"
 data modify storage macro:engine multiCommands.active set value 1b
 
 # Validate type
-execute unless function macro:core/security/multi_type_check run data remove storage macro:engine multiCommands.type
-execute unless function macro:core/security/multi_type_check run data remove storage macro:engine multiCommands.active
-execute unless function macro:core/security/multi_type_check run return 0
+execute if data storage macro:engine {security:{multi_type_allowlist:{multi_cmd_adv:0b}}} run data remove storage macro:engine multiCommands.type
+execute if data storage macro:engine {security:{multi_type_allowlist:{multi_cmd_adv:0b}}} run data remove storage macro:engine multiCommands.active
+execute if data storage macro:engine {security:{multi_type_allowlist:{multi_cmd_adv:0b}}} run return run function macro:core/security/multi_type_check
 
 $data merge storage macro:input {list:$(list),options:$(options)}
 

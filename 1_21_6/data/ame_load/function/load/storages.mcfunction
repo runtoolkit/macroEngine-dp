@@ -83,3 +83,20 @@ data modify storage macro:engine batches set value {}
 
 # Wand cooldown module — separate storage (avoids collision with macro:cooldown)
 execute unless data storage macro:engine wand_cooldowns run data modify storage macro:engine wand_cooldowns set value {}
+
+# ─────────────────────────────────────────────────────────────────
+# Security module v5.1.0+ additions
+# BREAKING CHANGE: sandbox_allowlist is now a compound {} (was list []).
+# Empty compound {} = all sandbox commands blocked.
+# multi_type_allowlist: compound of permitted multiCommands.type values.
+# multiCommands: tracks active multi-command execution context.
+# ─────────────────────────────────────────────────────────────────
+# Reset security to new compound format (migration: [] → {})
+execute if data storage macro:engine security.sandbox_allowlist[] run data modify storage macro:engine security.sandbox_allowlist set value {}
+execute unless data storage macro:engine security run data modify storage macro:engine security set value {trust_players:0b,cmd_min_level:3,sandbox_cmd_min_level:4,admin_min_level:2,admin_can_override:0b,sandbox_allowlist:{}}
+execute unless data storage macro:engine security.sandbox_allowlist run data modify storage macro:engine security.sandbox_allowlist set value {}
+execute unless data storage macro:engine security.multi_type_allowlist run data modify storage macro:engine security.multi_type_allowlist set value {multi_cmd:1b,multi_cmd_adv:1b}
+
+# multiCommands context tracker (always reset on load — transient state)
+data remove storage macro:engine multiCommands
+data modify storage macro:engine multiCommands set value {type:"",active:0b}

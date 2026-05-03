@@ -7,7 +7,7 @@ Security updates are only provided for the following versions:
 
 | Version | Supported |
 | ------- | --------- |
-| 4.0.x   | :white_check_mark: |
+| 5.0.x   | :white_check_mark: |
 | 3.0.x   | :x: |
 | < 3.0   | :x: |
 

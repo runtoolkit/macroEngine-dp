@@ -4,7 +4,7 @@
 #
 # INPUT:
 #   $(player) → player name
-#   $(tag)    → kontrol edilecek wand tag
+#   $(tag)    → wand tag to check
 # OUTPUT:
 # macro:output result → 1b (found) / 0b (not found)
 # ─────────────────────────────────────────────────────────────────

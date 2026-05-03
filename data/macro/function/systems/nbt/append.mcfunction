@@ -3,9 +3,9 @@
 # Appends an element from another storage path to a list in storage.
 #
 # INPUT (storage macro:input):
-# dst_storage → hedef storage
-# dst_path → hedef list path
-# src_storage → kaynak storage
+# dst_storage → destination storage
+# dst_path → destination list path
+# src_storage → source storage
 # src_path → path of the value to append
 # ─────────────────────────────────────────────────────────────────
 

@@ -9,7 +9,7 @@
 [![license](https://img.shields.io/github/license/runtoolkit/macroEngine-dp)](https://github.com/runtoolkit/macroEngine-dp/blob/main/LICENSE)
 
 ---
-> Current version: **v5.0.0**
+> Current version: **v5.1.0**
 ---
 
 ---
@@ -36,7 +36,7 @@ Full API reference, guides, and examples are available in the **[GitHub Wiki](..
 ## 📦 Installation
 
 ```
-1. Place macroEngine-v5.0.0 into <world>/datapacks/
+1. Place macroEngine-v5.1.0 into <world>/datapacks/
 2. /reload
 3. /function ame_load:load/yes
 4. /tag @s add macro.admin
@@ -49,7 +49,7 @@ Full API reference, guides, and examples are available in the **[GitHub Wiki](..
 ```
 macro:engine  (persistent data)
 ├── global
-│   ├── version: "v5.0.0"
+│   ├── version: "v5.1.0"
 │   └── tick: <int>
 ├── players
 │   └── Steve { coins:150, level:5, xp:2300, online:1b, ... }
@@ -103,7 +103,7 @@ Provides deterministic load order, version tracking, and pre/load/post-load hook
 # Check if macroEngine is loaded
 execute if score macroEngine load.status matches 1.. run say macroEngine is loaded
 
-# Get version (major*10000 + minor*100 + patch → v5.0.0 = 50000)
+# Get version (major*10000 + minor*100 + patch → v5.1.0 = 50000)
 scoreboard players get macroEngine load.status
 ```
 
@@ -164,4 +164,4 @@ function macro:core/lib/string/replace
 
 ---
 
-*Advanced Macro Engine v5.0.0 | MC Java 1.20.3–26.1+ | Pure Datapack*
+*Advanced Macro Engine v5.1.0 | MC Java 1.20.3–26.1+ | Pure Datapack*

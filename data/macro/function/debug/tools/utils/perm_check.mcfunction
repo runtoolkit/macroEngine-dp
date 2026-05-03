@@ -2,7 +2,7 @@
 # Returns 1 if executor has sufficient ame.perm_level for admin commands.
 # Returns 0 (+ fallback) if not.
 #
-# BREAKING CHANGE (v5.0.0): macro.admin tag alone no longer grants access.
+# BREAKING CHANGE (v5.1.0): macro.admin tag alone no longer grants access.
 # Players must have ame.perm_level >= security.admin_min_level.
 # Non-player callers (server/datapack) are trusted and pass through.
 #

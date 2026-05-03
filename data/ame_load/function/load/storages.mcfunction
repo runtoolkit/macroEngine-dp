@@ -114,3 +114,17 @@ execute unless data storage macro:engine security.multi_type_allowlist run data 
 # multiCommands context tracker (always reset on load — transient state)
 data remove storage macro:engine multiCommands
 data modify storage macro:engine multiCommands set value {type:"",active:0b}
+
+# ─────────────────────────────────────────────────────────────────
+# Module toggle init (macro:api/toggle)
+# Each module defaults to enabled (1b) on first load.
+# Preserved across reloads via 'unless data' guards — admin toggles survive /reload.
+# Disable a module:  /function macro:api/toggle/<name>/false
+# Enable a module:   /function macro:api/toggle/<name>/true
+# List module states: /function macro:api/toggle/list
+# ─────────────────────────────────────────────────────────────────
+execute unless data storage macro:engine modules.hook        run data modify storage macro:engine modules.hook        set value 1b
+execute unless data storage macro:engine modules.interaction run data modify storage macro:engine modules.interaction set value 1b
+execute unless data storage macro:engine modules.perm        run data modify storage macro:engine modules.perm        set value 1b
+execute unless data storage macro:engine modules.wand        run data modify storage macro:engine modules.wand        set value 1b
+execute unless data storage macro:engine modules.geo         run data modify storage macro:engine modules.geo         set value 1b

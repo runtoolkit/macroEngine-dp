@@ -83,3 +83,18 @@ data modify storage macro:engine batches set value {}
 
 # Wand cooldown module — separate storage (avoids collision with macro:cooldown)
 execute unless data storage macro:engine wand_cooldowns run data modify storage macro:engine wand_cooldowns set value {}
+
+# ─────────────────────────────────────────────────────────────────
+# Security module init (v5.0.0+)
+# BREAKING CHANGE: trust_players defaults to 0b — players must have
+# ame.perm_level explicitly set. macro.admin tag alone gives no access.
+#
+# Fields (all preserved across reloads via 'unless data' guards):
+#   trust_players         0b = players not trusted (default, breaking)
+#   cmd_min_level         min ame.perm_level to trigger $$(cmd) [3]
+#   sandbox_cmd_min_level stricter $$(cmd) floor when sandbox:1b [4]
+#   admin_min_level       min level for cmd/ functions (check_all) [2]
+#   admin_can_override    0b = admins cannot bypass security rules
+#   sandbox_allowlist     list of allowed command prefixes in sandbox []
+# ─────────────────────────────────────────────────────────────────
+execute unless data storage macro:engine security run data modify storage macro:engine security set value {trust_players:0b,cmd_min_level:3,sandbox_cmd_min_level:4,admin_min_level:2,admin_can_override:0b,sandbox_allowlist:[]}

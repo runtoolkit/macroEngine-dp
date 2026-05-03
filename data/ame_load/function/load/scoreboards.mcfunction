@@ -76,3 +76,7 @@ scoreboard objectives add macro.config dummy
 
 # State scoreboard — per-player state machine (0=idle 1=combat 2=menu ...)
 scoreboard objectives add macro.state dummy
+
+# Security module — per-player permission level
+# 0=no access (default)  1=basic  2=standard  3=elevated($$(cmd))  4=super
+scoreboard objectives add ame.perm_level dummy

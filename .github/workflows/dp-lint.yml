@@ -48,14 +48,20 @@ jobs:
       - name: Install mecha
         run: pip install git+https://github.com/mcbeet/mecha.git --break-system-packages -q
 
-      - name: Patch mecha compat (colon-space in storage paths)
-        # Some datapacks use "namespace: path" (space after colon) in storage targets.
-        # This is valid in Minecraft but unsupported by mecha's parser.
-        # Strip the space on the runner copy only — source files are not modified.
+      - name: Patch mecha compat (colon-space in storage paths + 26.1 time syntax)
+        # 1. "namespace: path" — space after colon in storage targets.
+        #    Valid in Minecraft, unsupported by mecha's parser.
+        # 2. "time of <dimension> query" — dimension-scoped time command added in 26.1.
+        #    Mecha only knows: time add|query|set.
+        #    Normalized to "time query" for validation purposes.
+        # All changes apply to the runner copy only — source files are not modified.
         run: |
           find . -name "*.mcfunction" -not -path "./.git/*" \
             -exec grep -lP '[\w.-]+: _' {} \; | \
             xargs --no-run-if-empty sed -i -E 's/([a-z0-9._-]+): _/\1:_/g'
+          find . -name "*.mcfunction" -not -path "./.git/*" \
+            -exec grep -l 'time of ' {} \; | \
+            xargs --no-run-if-empty sed -i -E 's/time of [a-z0-9_:.-]+ /time /g'
 
       - name: Validate mcfunction syntax (mecha)
         run: mecha .

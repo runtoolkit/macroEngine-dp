@@ -12,4 +12,4 @@ data remove storage macro:engine schedules
 data remove storage macro:engine global.tick
 data remove storage macro:engine global.epoch
 
-tellraw @s ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"Engine disabled. ","color":"red"},{"text":"Restart → ","color":"#555555"},{"text":"/function macro:core/disable/main","color":"aqua","bold":true,"underlined":true}]
+tellraw @s ["",{"text":"[AME] ","color":"#00AAAA","bold":true},{"text":"Engine disabled. ","color":"red"},{"text":"Restart → ","color":"#555555"},{"text":"/reload","color":"aqua","bold":true,"underlined":true}]

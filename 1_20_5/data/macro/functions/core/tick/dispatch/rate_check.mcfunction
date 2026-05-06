@@ -20,5 +20,5 @@ execute if score #check macro.tick matches ..-1 run scoreboard players operation
 execute unless score #check macro.tick matches 0 run return 0
 
 # Passed → execute channel function
-function macro:core/tick/dispatch/exec with storage macro:tick_work channel
-function macro:core/tick/dispatch/exec2 with storage macro:tick_work channel
+execute unless data storage macro:tick_work channel{condition:""} run function macro:core/tick/dispatch/exec with storage macro:tick_work channel
+execute if data storage macro:tick_work channel{condition:""} run function macro:core/tick/dispatch/exec2 with storage macro:tick_work channel

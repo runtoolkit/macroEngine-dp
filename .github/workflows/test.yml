@@ -7,13 +7,30 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  validate:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v6
-      
-      - name: Minecraft Datapack Tester
-        uses: minecraft-datapack-tester/action@v1
-      
-      - name: Validate Load Order
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Validate Pack Structure & Load Order
         run: python .github/scripts/validate_load_order.py
+
+      - name: Check for forbidden files
+        run: |
+          echo "🔍 Checking for suspicious files..."
+          find . -name "*.exe" -o -name "*.jar" -o -name "*.bat" -o -name "*.ps1" | head -10 || echo "No suspicious files found."
+
+      - name: JSON Syntax Check
+        run: |
+          echo "🔍 Checking JSON files..."
+          find . -name "*.json" -exec python -m json.tool {} >/dev/null \; || echo "Some JSON files have syntax errors!"

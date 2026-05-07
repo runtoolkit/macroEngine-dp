@@ -1,0 +1,19 @@
+name: Test Datapack
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      
+      - name: Minecraft Datapack Tester
+        uses: minecraft-datapack-tester/action@v2
+      
+      - name: Validate Load Order
+        run: python .github/scripts/validate_load_order.py

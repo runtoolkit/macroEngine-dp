@@ -10,8 +10,10 @@ execute unless entity @a run return 0
 # Guard: engine not initialised
 execute unless data storage macro:engine global{loaded:1b} run return 0
 
+# Online player count — kept for compatibility
+execute store result score #online macro.onlinePlayers if entity @a
+
 # Guard: globally paused (macro:core/tick/pause / macro:core/tick/resume)
 execute if data storage macro:engine tick{paused:1b} run return 0
 
-# Online player count — kept for compatibility
-execute store result score #online macro.onlinePlayers if entity @a
+execute as @a run function macro:core/tick/dispatch

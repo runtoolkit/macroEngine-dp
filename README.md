@@ -1,7 +1,47 @@
 # 🔧 Advanced Macro Engine
 **Minecraft Java Edition 1.20.3–26.1+ | Multiplayer-Safe | Pure Datapack**
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
+> [!WARNING]
+> This repository is **archived**.
+> macroEngine has been superseded by [dataLib](https://github.com/runtoolkit/dataLib) — a modular, multi-version datapack library under the `runtoolkit` organization. No further updates will be made here.
+---
+
+
+
+
+
+
+
+
+
 
 [![commits](https://img.shields.io/github/commit-activity/t/runtoolkit/macroEngine-dp?label=commits&logo=github)](https://github.com/runtoolkit/macroEngine-dp/commits)
 [![issues](https://img.shields.io/github/issues/runtoolkit/macroEngine-dp?logo=github)](https://github.com/runtoolkit/macroEngine-dp/issues)
